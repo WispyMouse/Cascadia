@@ -10,13 +10,6 @@ namespace TicTacCOSTCO.Unity.UI
     public class RandomAudioPlayer : MonoBehaviour
     {
         /// <summary>
-        /// Reference to this Singleton. Once included in a Scene, should never unload.
-        /// Relies on placement of "Singletons.prefab" in some loaded scene.
-        /// Set in <see cref="Awake"/>; do not refer to Singleton in other <see cref="Awake"/> scripts.
-        /// </summary>
-        public static RandomAudioPlayer Singleton { get; private set; } = null;
-
-        /// <summary>
         /// Audio clips to choose from. One will be selected entirely at randomly.
         /// If empty, no sound will play.
         /// </summary>
@@ -48,20 +41,8 @@ namespace TicTacCOSTCO.Unity.UI
         [SerializeReference]
         private AnimationCurve pitchCurve;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            // If we already have an instance, don't make another
-            if (Singleton != null)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-
-            // This is now the singleton; unparent it so that we can mark as DontDestroyOnLoad
-            this.transform.SetParent(null);
-            Singleton = this;
-            DontDestroyOnLoad(this.gameObject);
-
             this.PoolAdditionalAudioSources(this.audioSourcesToPool);
         }
 

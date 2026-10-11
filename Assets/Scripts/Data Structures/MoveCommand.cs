@@ -2,24 +2,24 @@ namespace TicTacCOSTCO.DataStructures
 {
     using System.Collections.Generic;
 
-    public class MoveCommand
+    public struct MoveCommand
     {
-        public int SideIndex;
+        public int Side;
         public Coordinate Position;
 
         public IReadOnlyList<CellsConnection> ConnectionsMade;
 
         public int PreviousCascadeLevel;
 
-        public IReadOnlyList<int> PlayersRemoved;
+        public IReadOnlyList<int> PlayersSidesRemoved;
 
-        public MoveCommand(int sideIndex, Coordinate position, IReadOnlyList<CellsConnection> connectionsMade, int previousCascade, IReadOnlyList<int> playersRemoved)
+        public MoveCommand(int side, Coordinate position, IReadOnlyList<CellsConnection> connectionsMade, int previousCascade, IReadOnlyList<int> playersSidesRemoved)
         {
-            SideIndex = sideIndex;
-            Position = position;
-            ConnectionsMade = connectionsMade;
-            PreviousCascadeLevel = previousCascade;
-            this.PlayersRemoved = playersRemoved;
+            this.Side = side;
+            this.Position = position;
+            this.ConnectionsMade = connectionsMade;
+            this.PreviousCascadeLevel = previousCascade;
+            this.PlayersSidesRemoved = playersSidesRemoved;
         }
     }
 }

@@ -90,11 +90,11 @@ namespace TicTacCOSTCO.Unity.UI
 
         // Marks the player as back in the game, visually.
         // HACK: Assumes that it would be this player's turn.
-        public void RestorePlayer()
+        public void RestorePlayer(int sideOfCurrentPlayer)
         {
             this.KnockoutPanel.SetActive(false);
-            this.IsNotTurnIndicator.SetActive(false);
-            this.IsCurrentTurnIndicator.SetActive(true);
+            this.IsNotTurnIndicator.SetActive(sideOfCurrentPlayer != this.RepresentedProfile.Index);
+            this.IsCurrentTurnIndicator.SetActive(sideOfCurrentPlayer == this.RepresentedProfile.Index);
         }
 
         public void SetCurrentTurn(bool isTurn)

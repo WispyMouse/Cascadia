@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.2
+  m_fontSize: 37.7
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6506,48 +6506,16 @@ PrefabInstance:
       value: Singletons
       objectReference: {fileID: 0}
     - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: _StartWidth
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: _StartHeight
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: _StartStallTurn
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: _StartPlayerCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
       propertyPath: _coresByIndex.Array.size
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: '_coresByIndex.Array.data[0]'
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: '_coresByIndex.Array.data[1]'
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: '_coresByIndex.Array.data[2]'
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
-      propertyPath: '_coresByIndex.Array.data[3]'
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5460238996711962615, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 601.41
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5460238996711962615, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 687.5811
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5460238996711962615, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6674,7 +6642,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1894085268}
   - component: {fileID: 1894085269}
-  - component: {fileID: 1894085270}
   m_Layer: 0
   m_Name: Grid Painter
   m_TagString: Untagged
@@ -6710,25 +6677,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridPainter
   CellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
-  GameConductor: {fileID: 1339510086}
---- !u!114 &1894085270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1894085267}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf578f0ebbc5dd046bbd5b580c5ab2ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.GridCameraFitter
   GridCamera: {fileID: 519420031}
-  OrthographicSizeBase: 0
-  OrthographicSizeScalar: 0
-  WidthOrthographicViewMultiplier: 1.5
-  GameConductor: {fileID: 0}
-  GridPainter: {fileID: 0}
+  OrthographicSizeBase: 0.8
+  OrthographicSizeScalar: 0.48
+  WidthOrthographicViewMultiplier: 1
+  GameConductor: {fileID: 1339510086}
 --- !u!1 &1988924112
 GameObject:
   m_ObjectHideFlags: 0
@@ -7193,7 +7146,7 @@ PrefabInstance:
       objectReference: {fileID: 1075755429}
     - target: {fileID: 8501188839260201773, guid: 988e68654bf759f4c85bb8993de5f31b, type: 3}
       propertyPath: m_fontSize
-      value: 39.8
+      value: 44.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -57,13 +57,13 @@ namespace TicTacCOSTCO.Unity.UI
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
             this.CurrentBoardState.OnGameConclusion += DeclarePlayerVictorious;
             this.CurrentBoardState.OnGameConclusion += StallBanner.Clear;
+            this.CurrentBoardState.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
 
             this.PositionsToCells = this.GridPainter.Paint();
             this.CurrentTurnPanel.ResetGame();
             this.CascadeBanner.ResetGame();
-            this.TurnOrderHolder.ResetGame();
 
-            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.FirstPlayerToMove);
+            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide);
         }
 
         public void Update()
@@ -73,7 +73,7 @@ namespace TicTacCOSTCO.Unity.UI
                 return;
             }
 
-            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerIndex))
+            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
             {
                 this.HandleLeftClick();
             }
@@ -91,13 +91,13 @@ namespace TicTacCOSTCO.Unity.UI
                 curCell.SetHighlightStatus(false);
             }
 
-            RandomAudioPlayer.Singleton.PlayRandomSound();
+            RandomBlipPlayer.Singleton.PlayRandomSound();
 
-            int takingTurn = this.CurrentBoardState.CurrentPlayerIndex;
+            int takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn];
             int previousCascade = this.CurrentBoardState.CurrentCascadeLevel;
 
-            MoveCommand command = this.CurrentBoardState.GenerateCommandFromMove(this.CurrentBoardState.CurrentPlayerIndex, toChoose.Position);
+            MoveCommand command = this.CurrentBoardState.GenerateCommandFromMove(this.CurrentBoardState.CurrentPlayerSide, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
@@ -120,7 +120,7 @@ namespace TicTacCOSTCO.Unity.UI
 
             this.CurrentTurnPanel.SetCascade(takingTurn, command.ConnectionsMade.Count);
 
-            foreach (int sideRemoved in command.PlayersRemoved)
+            foreach (int sideRemoved in command.PlayersSidesRemoved)
             {
                 this.CurrentTurnPanel.KnockOutPlayer(sideRemoved);
             }
@@ -186,9 +186,8 @@ namespace TicTacCOSTCO.Unity.UI
 
         public void DeclarePlayerVictorious(int? winner)
         {
-            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerIndex];
+            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide];
 
-            this.TurnOrderHolder.UpdateTurn(this.CurrentBoardState.CurrentPlayerIndex);
             // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
             this.WinnerIcon.sprite = player.SpriteRepresentation;
 
@@ -223,7 +222,7 @@ namespace TicTacCOSTCO.Unity.UI
             while (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
                 MoveCommand undoneCommand = this.CurrentBoardState.ReversePreviousMoveCommand();
-                
+
                 foreach (CellsConnection connectionToRemove in undoneCommand.ConnectionsMade)
                 {
                     LineRenderer renderer = connectionToRenderer[connectionToRemove];
@@ -232,7 +231,7 @@ namespace TicTacCOSTCO.Unity.UI
                     Destroy(renderer.gameObject);
                 }
 
-                foreach (int playerRemoved in undoneCommand.PlayersRemoved)
+                foreach (int playerRemoved in undoneCommand.PlayersSidesRemoved)
                 {
                     this.CurrentTurnPanel.RestorePlayer(playerRemoved);
                 }
@@ -240,7 +239,7 @@ namespace TicTacCOSTCO.Unity.UI
                 this.PositionsToCells[undoneCommand.Position].Clear();
 
                 // When we reach a player, stop
-                if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerIndex].IsAI)
+                if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide].IsAI)
                 {
                     break;
                 }
@@ -256,9 +255,10 @@ namespace TicTacCOSTCO.Unity.UI
                 curCell.SetHighlightStatus(false);
             }
 
-            MoveCommand latestCommand = this.CurrentBoardState.MoveCommandsApplied.Count == 0 ? null : this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];
-            if (latestCommand != null)
+            if (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
+                MoveCommand latestCommand = this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];
+
                 this.PositionsToCells[latestCommand.Position].SetHighlightStatus(true);
 
                 foreach (Coordinate curCoordinate in latestCommand.ConnectionsMade.SelectMany(x => x.Cells))
@@ -266,6 +266,9 @@ namespace TicTacCOSTCO.Unity.UI
                     this.PositionsToCells[curCoordinate].SetHighlightStatus(true);
                 }
             }
+
+            // Remind it that it's now someone's turn, who might have been eliminated before
+
         }
     }
 }

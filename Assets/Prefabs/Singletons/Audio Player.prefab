@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 239435955531688623}
-  - component: {fileID: 1894499931961655563}
+  - component: {fileID: 8404284307523171825}
   m_Layer: 0
   m_Name: Audio Player
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1894499931961655563
+--- !u!114 &8404284307523171825
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,9 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5944043735000415015}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 784cf73d8168a464eaef92b18ab8364c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7396ff21677c03c4eaafdad248e10829, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.AudioPlayer
+  m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.RandomBlipPlayer
   audioClips:
   - {fileID: 8300000, guid: df18e7a21ba62b44da2c03c35a908f16, type: 3}
   - {fileID: 8300000, guid: 596971127da1915439824c43bf80db15, type: 3}
@@ -60,6 +60,28 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 156359132c8a6854dbf9d93fb51e2730, type: 3}
   - {fileID: 8300000, guid: 457a77b698e3e174bba5a2cfae97cfa7, type: 3}
   - {fileID: 8300000, guid: aa328e7e977aae44f81e6e6126377ca7, type: 3}
-  audioSourcesToCreate: 2
-  MinimumPitchForBlip: 0.7
-  MaximumPitchForBlip: 1.1
+  audioSourcesToPool: 3
+  pitchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.8
+      inSlope: 0.40000004
+      outSlope: 0.40000004
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1.2
+      inSlope: 0.40000004
+      outSlope: 0.40000004
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

@@ -18,7 +18,7 @@ namespace TicTacCOSTCO.AIs
             // Determine the most number of possible connections any opponent has, anywhere
             _mostOpponentConnections = 0;
 
-            foreach (int curSide in currentGameState.SideIndexesStillInGame)
+            foreach (int curSide in currentGameState.SidesStillInGame)
             {
                 if (curSide == forSide)
                 {

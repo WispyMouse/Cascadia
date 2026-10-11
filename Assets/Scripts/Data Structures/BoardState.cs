@@ -52,7 +52,7 @@ namespace TicTacCOSTCO.DataStructures
         public int InARowToSolve => this.GameConfiguration.InARowToSolve;
         public int StallTurn => this.GameConfiguration.StallTurn;
 
-        public readonly int FirstPlayerToMove;
+        public readonly List<int> PlayerOrder;
 
         public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership => this._SpotToSideOwnership;
 
@@ -62,7 +62,7 @@ namespace TicTacCOSTCO.DataStructures
         int IReadOnlyBoardState.InARowToSolve => this.InARowToSolve;
         int IReadOnlyBoardState.CurrentCascadeLevel => this.CurrentCascadeLevel;
         int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
-        IReadOnlyCollection<int> IReadOnlyBoardState.SideIndexesStillInGame => this.SideIndexesStillInGame;
+        IReadOnlyCollection<int> IReadOnlyBoardState.SidesStillInGame => this.SidesStillInGame;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         PossibilityContainer IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
@@ -70,7 +70,8 @@ namespace TicTacCOSTCO.DataStructures
 
         public int CurrentCascadeLevel { get; set; }
         public int CurrentPlayerIndex { get; set; }
-        public HashSet<int> SideIndexesStillInGame { get; set; }
+        public int CurrentPlayerSide => this.PlayerOrder[this.CurrentPlayerIndex];
+        public HashSet<int> SidesStillInGame { get; set; }
         public int CurrentRound { get; set; } = 1;
 
         private Dictionary<Coordinate, List<CellsConnection>> AcceptedSolutions;
@@ -108,8 +109,7 @@ namespace TicTacCOSTCO.DataStructures
         /// Constructor for a BoardState, the living definition of a game.
         /// </summary>
         /// <param name="gameConfiguration">The configuration to generate from. This cannot be changed during a game.</param>
-        /// <param name="firstPlayerToMove">The index of the player to move first. If this is null, a random player will be assigned.</param>
-        public BoardState(GameConfiguration gameConfiguration, int? firstPlayerToMove = null)
+        public BoardState(GameConfiguration gameConfiguration)
         {
             this.GameConfiguration = gameConfiguration;
 
@@ -124,10 +124,10 @@ namespace TicTacCOSTCO.DataStructures
                 }
             }
 
-            this.SideIndexesStillInGame = new HashSet<int>(this.PlayerCount);
+            this.SidesStillInGame = new HashSet<int>(this.PlayerCount);
             for (int ii = 0; ii < this.PlayerCount; ii++)
             {
-                this.SideIndexesStillInGame.Add(ii);
+                this.SidesStillInGame.Add(ii);
             }
 
             this.Winner = null;
@@ -137,15 +137,41 @@ namespace TicTacCOSTCO.DataStructures
             this.CurrentCascadeLevel = 0;
             this.CurrentGameState = 0;
 
-            if (firstPlayerToMove.HasValue)
+            if (gameConfiguration.ForceOrderlyTurn.HasValue)
             {
-                this.FirstPlayerToMove = firstPlayerToMove.Value;
-                this.CurrentPlayerIndex = firstPlayerToMove.Value;
+                // If there is a specific person who should go first, then everyone should be "in order"
+                // and that player should be at the top of the list, index 0
+
+                this.CurrentPlayerIndex = gameConfiguration.ForceOrderlyTurn.Value;
+                this.PlayerOrder = new List<int>(this.PlayerCount);
+
+                for (int ii = 0; ii < this.PlayerCount; ii++)
+                {
+                    int realIndex = (ii + this.CurrentPlayerIndex + this.PlayerCount) % this.PlayerCount;
+                    this.PlayerOrder.Add(realIndex);
+                }
             }
             else
             {
                 // Randomly select the player to move first
-                firstPlayerToMove = new Random().Next(this.PlayerCount);
+                gameConfiguration.ForceOrderlyTurn = new Random().Next(this.PlayerCount);
+
+                // First, fill the list with all of the possible sides
+                List<int> remainingSides = new List<int>();
+                for (int ii = 0; ii < this.PlayerCount; ii++)
+                {
+                    remainingSides.Add(ii);
+                }
+
+                // Then dress down that list and randomly pull out of it
+                this.PlayerOrder = new List<int>(this.PlayerCount);
+                while (remainingSides.Count > 0)
+                {
+                    int randomIndex = new Random().Next(remainingSides.Count);
+                    int side = remainingSides[randomIndex];
+                    remainingSides.RemoveAt(randomIndex);
+                    this.PlayerOrder.Add(side);
+                }
             }
         }
 
@@ -155,13 +181,12 @@ namespace TicTacCOSTCO.DataStructures
 
             this.CurrentCascadeLevel = toDeepClone.CurrentCascadeLevel;
             this.CurrentPlayerIndex = toDeepClone.CurrentPlayerIndex;
-            this.FirstPlayerToMove = toDeepClone.FirstPlayerToMove;
             this.CurrentGameState = toDeepClone.CurrentGameState;
             this.PossibilityContainer = toDeepClone.PossibilityContainer;
             this.Winner = toDeepClone.Winner;
 
             this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
-            this.SideIndexesStillInGame = new HashSet<int>(toDeepClone.SideIndexesStillInGame);
+            this.SidesStillInGame = new HashSet<int>(toDeepClone.SidesStillInGame);
 
             this.AcceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.AcceptedSolutions.Count);
             foreach (Coordinate coordinate in toDeepClone.AcceptedSolutions.Keys)
@@ -200,9 +225,9 @@ namespace TicTacCOSTCO.DataStructures
             return false;
         }
 
-        public MoveCommand GenerateCommandFromMove(int sideIndex, Coordinate position)
+        public MoveCommand GenerateCommandFromMove(int side, Coordinate position)
         {
-            IReadOnlyList<CellsConnection> connections = GetAllNewSolutions(sideIndex, position);
+            IReadOnlyList<CellsConnection> connections = GetAllNewSolutions(side, position);
             List<int> playersRemoved = new List<int>();
 
             // HACK SHOULD GENERALIZE: Would this move result in a loss
@@ -210,10 +235,10 @@ namespace TicTacCOSTCO.DataStructures
             // we want to only check new scoring connections in this process
             if (this.CurrentGameState == BoardState.GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
-                playersRemoved.Add(sideIndex);
+                playersRemoved.Add(side);
             }
 
-            return new MoveCommand(sideIndex, position, connections, this.CurrentCascadeLevel, playersRemoved);
+            return new MoveCommand(side, position, connections, this.CurrentCascadeLevel, playersRemoved);
         }
 
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition)
@@ -264,7 +289,7 @@ namespace TicTacCOSTCO.DataStructures
         /// TODO: Describe failures
         /// </summary>
         /// <returns>True if the command successfully applied. False otherwise.</returns>
-        public bool TryApplyMoveCommand(MoveCommand toApply)
+        public bool TryApplyMoveCommand(MoveCommand toApply, bool advancePlayer = true)
         {
             if (!this.MoveCommandLegalToPlay(toApply))
             {
@@ -276,7 +301,8 @@ namespace TicTacCOSTCO.DataStructures
                 this.CurrentGameState = BoardState.GameStateEnum.Playing;
             }
 
-            this._SpotToSideOwnership[toApply.Position] = toApply.SideIndex;
+            this._SpotToSideOwnership[toApply.Position] = toApply.Side;
+            this._MoveCommandsApplied.Add(toApply);
 
             int solutionsCount = toApply.ConnectionsMade.Count;
             this.CurrentCascadeLevel = Math.Max(this.CurrentCascadeLevel, solutionsCount);
@@ -296,20 +322,22 @@ namespace TicTacCOSTCO.DataStructures
             }
 
             // Removed knocked out players, and consider end game state
-            if (toApply.PlayersRemoved.Any())
+            if (toApply.PlayersSidesRemoved.Any())
             {
-                foreach (int playerRemoved in toApply.PlayersRemoved)
+                foreach (int playerRemoved in toApply.PlayersSidesRemoved)
                 {
                     // If there were no new solutions, or not enough solutions for previous cascade, and we're in cascade state,
                     // the current player should be knocked out
-                    this.SideIndexesStillInGame.Remove(playerRemoved);
+                    this.SidesStillInGame.Remove(playerRemoved);
                 }
 
-                if (this.SideIndexesStillInGame.Count == 1)
+                if (this.SidesStillInGame.Count == 1)
                 {
-                    this.CurrentPlayerIndex = this.SideIndexesStillInGame.First();
+                    this.CurrentPlayerIndex = this.SidesStillInGame.First();
                     this.Winner = this.CurrentPlayerIndex;
                     this.CurrentGameState = BoardState.GameStateEnum.End;
+
+                    this.OnGameConclusion?.Invoke(this.Winner);
                     return true;
                 }
             }
@@ -318,7 +346,7 @@ namespace TicTacCOSTCO.DataStructures
                 this.CurrentGameState = BoardState.GameStateEnum.Cascade;
             }
 
-            if (!this.AnyLegalMovesRemainForPlayer(toApply.SideIndex, out _))
+            if (!this.AnyLegalMovesRemainForPlayer(toApply.Side, out _))
             {
                 this.CurrentGameState = BoardState.GameStateEnum.End;
                 this.Winner = null;
@@ -331,18 +359,27 @@ namespace TicTacCOSTCO.DataStructures
                 {
                     this.Winner = null;
 
-                    for (int ii = 0; ii < this.PlayerCount; ii++)
+                    for (int ii = 0; ii <= this.PlayerCount; ii++)
                     {
                         // Count backwards through players to get most recent plays
                         int playerIndex = (this.CurrentPlayerIndex - ii + this.PlayerCount) % this.PlayerCount;
 
-                        if (!this.SideIndexesStillInGame.Contains(playerIndex))
+                        if (!this.SidesStillInGame.Contains(playerIndex))
                         {
                             continue;
                         }
 
                         this.Winner = playerIndex;
                     }
+
+                    this.OnGameConclusion?.Invoke(this.Winner);
+                }
+            }
+            else
+            {
+                if (advancePlayer)
+                {
+                    this.AdvancePlayer();
                 }
             }
 
@@ -598,7 +635,7 @@ namespace TicTacCOSTCO.DataStructures
             int moveCommandsApplied = this._MoveCommandsApplied.Count;
             if (moveCommandsApplied == 0)
             {
-                return null;
+                return default;
             }
 
             MoveCommand toRemove = this.MoveCommandsApplied[moveCommandsApplied - 1];
@@ -609,9 +646,9 @@ namespace TicTacCOSTCO.DataStructures
             this.ForceMarkOwnership(toRemove.Position, null);
             this.CurrentCascadeLevel = toRemove.PreviousCascadeLevel;
 
-            foreach (int playerRemoved in toRemove.PlayersRemoved)
+            foreach (int playerRemoved in toRemove.PlayersSidesRemoved)
             {
-                this.SideIndexesStillInGame.Add(playerRemoved);
+                this.SidesStillInGame.Add(playerRemoved);
             }
 
             // Remove any added connection
@@ -659,18 +696,20 @@ namespace TicTacCOSTCO.DataStructures
                 int nextProspectivePlayer = (this.CurrentPlayerIndex + (advancer * ii) + this.PlayerCount) % this.PlayerCount;
 
                 // If the previous player is the starting player, and we're reversing, go back a round
-                if (reversePlayer && previousPlayer == this.FirstPlayerToMove)
+                if (reversePlayer && previousPlayer == 0)
                 {
                     this.CurrentRound--;
                 }
 
                 // If we're going forward, and it would become the starting player's turn, go forward a round
-                if (!reversePlayer && nextProspectivePlayer == this.FirstPlayerToMove)
+                if (!reversePlayer && nextProspectivePlayer == 0)
                 {
                     this.CurrentRound++;
                 }
 
-                if (!this.SideIndexesStillInGame.Contains(nextProspectivePlayer))
+                int side = this.PlayerOrder[nextProspectivePlayer];
+
+                if (!this.SidesStillInGame.Contains(side))
                 {
                     continue;
                 }
@@ -679,33 +718,6 @@ namespace TicTacCOSTCO.DataStructures
                 this.OnPlayerStartTurn?.Invoke(this.CurrentPlayerIndex);
                 break;
             }
-        }
-
-        public bool TryApplyMoveCommand(MoveCommand toApply, bool advancePlayer = true)
-        {
-            bool applied = this.TryApplyMoveCommand(toApply);
-
-            if (!applied)
-            {
-                return false;
-            }
-
-            this._MoveCommandsApplied.Add(toApply);
-
-            if (this.CurrentGameState == BoardState.GameStateEnum.End)
-            {
-                this.OnGameConclusion?.Invoke(this.Winner);
-            }
-            else
-            {
-                // Only advance the player if the game isn't ending
-                if (advancePlayer)
-                {
-                    AdvancePlayer();
-                }
-            }
-
-            return true;
         }
     }
 }

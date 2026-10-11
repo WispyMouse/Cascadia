@@ -16,19 +16,6 @@ namespace TicTacCOSTCO.Unity.UI
         public GameConductor GameConductor;
         public int PlayerCount => this.GameConductor.CurrentBoardState == null ? 0 : this.GameConductor.CurrentBoardState.PlayerCount;
 
-        public void ResetGame()
-        {
-            int playerCount = this.GameConductor.CurrentBoardState.SideIndexesStillInGame.Count;
-
-            this.GameConductor.CurrentBoardState.OnPlayerStartTurn += UpdateTurn;
-        }
-
-        public void UpdateTurn(int toProfileIndex)
-        {
-            PlayerProfile profile = PersistentGameConfiguration.Singleton.Players[toProfileIndex];
-            OnTurnStarted?.Invoke(toProfileIndex);
-        }
-
         public bool PlayerIsHuman(int index)
         {
             return !PersistentGameConfiguration.Singleton.Players[index].IsAI;

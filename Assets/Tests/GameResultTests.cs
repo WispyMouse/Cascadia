@@ -30,7 +30,7 @@ namespace TicTacCOSTCO.Tests
         public static CoordinatesToPlay_DataSource_Object[] CoordinatesToPlay_DataSource =
         {
             // O moves three in a row and thus should win
-            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 3, 2, 3, 0), 
+            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 3, 2, 3, 0, forceOrderlyTurn: 0), 
                 new List<Coordinate>()
             {
                     new Coordinate(0, 0), new Coordinate(0, 1),
@@ -39,7 +39,7 @@ namespace TicTacCOSTCO.Tests
             }, 0),
 
             // O moves three in a row, X responds, X should win because there are no more moves
-            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 2, 2, 3, 0),
+            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 2, 2, 3, 0, forceOrderlyTurn: 0),
                 new List<Coordinate>()
             {
                     new Coordinate(0, 0), new Coordinate(0, 1),
@@ -47,8 +47,26 @@ namespace TicTacCOSTCO.Tests
                     new Coordinate(2, 0), new Coordinate(2, 1),
             }, 1),
 
+            // O moves three in a row, X responds, Y responds, Y should win because there are no more moves
+            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 3, 3, 3, 0, forceOrderlyTurn: 0),
+                new List<Coordinate>()
+            {
+                    new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2),
+                    new Coordinate(1, 0), new Coordinate(1, 1), new Coordinate(1, 2),
+                    new Coordinate(2, 0), new Coordinate(2, 1), new Coordinate(2, 2),
+            }, 2),
+
+            // O moves three in a row, X flops, Y flops, O should win
+            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(3, 3, 3, 3, 0, forceOrderlyTurn: 0),
+                new List<Coordinate>()
+            {
+                    new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2),
+                    new Coordinate(1, 0), new Coordinate(1, 2), new Coordinate(1, 1),
+                    new Coordinate(2, 0), new Coordinate(2, 1), new Coordinate(2, 2),
+            }, 0),
+
             // No one can make a connection on this tiny board, so no one wins
-            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(2, 2, 2, 3, 0),
+            new CoordinatesToPlay_DataSource_Object(new GameConfiguration(2, 2, 2, 3, 0, forceOrderlyTurn: 0),
                 new List<Coordinate>()
             {
                     new Coordinate(0, 0), new Coordinate(0, 1),
@@ -60,7 +78,7 @@ namespace TicTacCOSTCO.Tests
         [TestCaseSource(nameof(CoordinatesToPlay_DataSource))]
         public void ResultChecks(CoordinatesToPlay_DataSource_Object plan)
         {
-            BoardState holder = new BoardState(plan.GameConfiguration, firstPlayerToMove: 0);
+            BoardState holder = new BoardState(plan.GameConfiguration);
 
             for (int ii = 0; ii < plan.Coordinates.Count; ii++)
             {

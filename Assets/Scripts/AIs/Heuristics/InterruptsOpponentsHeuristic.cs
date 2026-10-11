@@ -15,7 +15,7 @@ namespace TicTacCOSTCO.AIs
         {
             int connectionsOpponentsCanMake = 0;
 
-            foreach (int playerIndex in currentGameState.SideIndexesStillInGame)
+            foreach (int playerIndex in currentGameState.SidesStillInGame)
             {
                 if (playerIndex == forSide)
                 {

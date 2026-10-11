@@ -41,42 +41,42 @@ namespace TicTacCOSTCO.Tests
         {
             // One action taken, undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero },
-                new GameConfiguration(5, 5, 2, 3, 0), 1, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
+                new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
 
             // Two actions taken, both undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right },
-                new GameConfiguration(5, 5, 2, 3, 0), 2, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
+                new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 2, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
 
             // Two actions taken, one undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right },
-                new GameConfiguration(5, 5, 2, 3, 0), 1, 1, BoardState.GameStateEnum.Playing, 0, 2),
+                new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 1, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Three-in-a-row for one player, undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
-                new GameConfiguration(5, 5, 1, 3, 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 1),
+                new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 1),
 
             // Three-in-a-row for one player in two player game, undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up * 2, Coordinate.right * 2 },
-                new GameConfiguration(5, 5, 2, 3, 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 2),
+                new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Three-in-a-row for one player, responded to with losing move, undone
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up * 2, Coordinate.right * 2, Coordinate.up + Coordinate.right },
-                new GameConfiguration(5, 5, 2, 3, 0), 1, 1, BoardState.GameStateEnum.Cascade, 1, 2),
+                new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 1, BoardState.GameStateEnum.Cascade, 1, 2),
 
             // In three-player-game, undo targets expected player
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
-                new GameConfiguration(5, 5, 3, 3, 0), 1, 2, BoardState.GameStateEnum.Playing, 0, 3),
+                new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 1, 2, BoardState.GameStateEnum.Playing, 0, 3),
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
-                new GameConfiguration(5, 5, 3, 3, 0), 2, 1, BoardState.GameStateEnum.Playing, 0, 3),
+                new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 2, 1, BoardState.GameStateEnum.Playing, 0, 3),
             new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2, Coordinate.up, Coordinate.up + Coordinate.right, Coordinate.up + Coordinate.right * 2 },
-                new GameConfiguration(5, 5, 3, 3, 0), 6, 0, BoardState.GameStateEnum.NotStarted, 0, 3),
+                new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 6, 0, BoardState.GameStateEnum.NotStarted, 0, 3),
         };
 
         [Test]
         [TestCaseSource(nameof(UndoTests_UndosAtEnd_DataSource))]
         public void KnockoutStatusAsExpected(UndoTests_UndosAtEnd_DataSource_Object plan)
         {
-            BoardState testState = new BoardState(plan.GameConfiguration, firstPlayerToMove: 0);
+            BoardState testState = new BoardState(plan.GameConfiguration);
             List<int> expectedOwnership = new List<int>();
 
             for (int ii = 0, count = plan.Placements.Count; ii < count; ii++)
@@ -93,7 +93,7 @@ namespace TicTacCOSTCO.Tests
             Assert.AreEqual(plan.ExpectedGameStateEnum, testState.CurrentGameState, $"Expecting game state to be in specific status");
             Assert.AreEqual(plan.ExpectedPlayerIndex, testState.CurrentPlayerIndex, $"Expecting current player index to be specific");
             Assert.AreEqual(plan.ExpectedCascade, testState.CurrentCascadeLevel, $"Expecting cascade to be specific");
-            Assert.AreEqual(plan.ExpectedRemainingPlayers, testState.SideIndexesStillInGame.Count, $"Expecting remaining player count to be specific");
+            Assert.AreEqual(plan.ExpectedRemainingPlayers, testState.SidesStillInGame.Count, $"Expecting remaining player count to be specific");
 
             for (int ii = 0, count = plan.Placements.Count - plan.UndosAtEnd; ii < count; ii++)
             {

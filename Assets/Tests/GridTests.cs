@@ -31,26 +31,26 @@ namespace TicTacCOSTCO.Tests
         // Simple single test cases
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right, Coordinate.right + Coordinate.right, Coordinate.zero, },
-            new GameConfiguration(3, 3, 1, 3, 0), 1),
+            new GameConfiguration(3, 3, 1, 3, 0, forceOrderlyTurn: 0), 1),
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right, Coordinate.zero, Coordinate.right + Coordinate.right },
-            new GameConfiguration(3, 3, 1, 3, 0), 1),
+            new GameConfiguration(3, 3, 1, 3, 0, forceOrderlyTurn: 0), 1),
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.zero, Coordinate.up, Coordinate.up * 2 },
-            new GameConfiguration(3, 3, 1, 3, 0), 1),
+            new GameConfiguration(3, 3, 1, 3, 0, forceOrderlyTurn: 0), 1),
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right, Coordinate.right + Coordinate.right + Coordinate.up, Coordinate.up * 2 + Coordinate.right * 3 },
-            new GameConfiguration(5, 5, 1, 3, 0), 1),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 1),
 
         // This shouldn't be a score
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right + Coordinate.up, Coordinate.right + Coordinate.up + Coordinate.up, Coordinate.zero },
-            new GameConfiguration(5, 5, 1, 3, 0), 0),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 0),
 
         // Double cascade
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right * 2, Coordinate.right, Coordinate.up, Coordinate.up * 2, Coordinate.zero },
-            new GameConfiguration(5, 5, 1, 3, 0), 2),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 2),
 
         // Quadruple Cascade
         new PlacementCausesSolve_DataSource_Object(
@@ -66,27 +66,27 @@ namespace TicTacCOSTCO.Tests
                 // Pop it!
                 Coordinate.up * 2 + Coordinate.right * 2
             },
-            new GameConfiguration(5, 5, 1, 3, 0), 4),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 4),
 
         // 4-in-a-row should count as one solution
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.zero, Coordinate.right * 2, Coordinate.right * 3, Coordinate.right },
-            new GameConfiguration(5, 5, 1, 3, 0), 1),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 1),
 
         // 5-in-a-row should count as one solution
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 3, Coordinate.right * 4, Coordinate.right * 2 },
-            new GameConfiguration(5, 5, 1, 3, 0), 1),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 1),
 
         // Shouldn't count as a new solution if you continue an old 3-of
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right, Coordinate.right * 2, Coordinate.right * 3, Coordinate.right * 4 },
-            new GameConfiguration(5, 5, 1, 3, 0), 0),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 0),
 
         // Shouldn't care that there was a previously made connection
         new PlacementCausesSolve_DataSource_Object(
             new List<Coordinate>() { Coordinate.right, Coordinate.right * 2, Coordinate.right * 3, Coordinate.up + Coordinate.right, Coordinate.up + Coordinate.right * 2 },
-            new GameConfiguration(5, 5, 1, 3, 0), 0),
+            new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 0),
     };
 
         [Test]
@@ -94,7 +94,7 @@ namespace TicTacCOSTCO.Tests
         public void PlacingThirdWouldResultInRow(PlacementCausesSolve_DataSource_Object plan)
         {
             int lastIndex = plan.Placements.Count - 1;
-            BoardState testState = new BoardState(plan.GameConfiguration, firstPlayerToMove: 0);
+            BoardState testState = new BoardState(plan.GameConfiguration);
 
             for (int ii = 0; ii < lastIndex; ii++)
             {

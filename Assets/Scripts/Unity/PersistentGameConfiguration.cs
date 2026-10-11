@@ -67,7 +67,7 @@ namespace TicTacCOSTCO.Unity
             this.transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
 
-            this._GameConfiguration = new GameConfiguration(this._StartWidth, this._StartHeight, this._StartPlayerCount, 3, this._StartStallTurn);
+            this._GameConfiguration = new GameConfiguration(this._StartWidth, this._StartHeight, this._StartPlayerCount, 3, this._StartStallTurn, forceOrderlyTurn: null);
 
             for (int ii = 0; ii < this._StartPlayerCount; ii++)
             {

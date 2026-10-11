@@ -20,8 +20,9 @@ namespace TicTacCOSTCO.DataStructures
         public int InARowToSolve { get; }
         public int CurrentCascadeLevel { get; }
         public int CurrentPlayerIndex { get; }
+        public int CurrentPlayerSide { get; }
 
-        public IReadOnlyCollection<int> SideIndexesStillInGame { get; }
+        public IReadOnlyCollection<int> SidesStillInGame { get; }
         public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership { get; }
         public GameStateEnum CurrentGameState { get; }
 

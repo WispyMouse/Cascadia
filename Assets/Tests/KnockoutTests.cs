@@ -41,26 +41,26 @@ namespace TicTacCOSTCO.Tests
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
                 Coordinate.zero, Coordinate.up, Coordinate.right,
-            }, new GameConfiguration(5, 5, 2, 3, 0), 1, BoardState.GameStateEnum.Playing, 0, 2),
+            }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Player 1 places three in a row while Player 2 doesn't
             // On Player 2's response turn, the cascade should be set, but the game isn't over
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
                 Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2
-            }, new GameConfiguration(5, 5, 2, 3, 0), 1, BoardState.GameStateEnum.Cascade, 1, 2),
+            }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.Cascade, 1, 2),
             
             // Player 2 makes a move that ends up losing them the game
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
                 Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2, Coordinate.up * 2
-            }, new GameConfiguration(5, 5, 2, 3, 0), 0, BoardState.GameStateEnum.End, 1, 1),
+            }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 0, BoardState.GameStateEnum.End, 1, 1),
 
             // Player 2 makes a move that keeps them in the game by placing three in a row
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
                 Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2, Coordinate.up + Coordinate.right * 2
-            }, new GameConfiguration(5, 5, 2, 3, 0), 0, BoardState.GameStateEnum.Cascade, 1, 2),
+            }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 0, BoardState.GameStateEnum.Cascade, 1, 2),
 
             // Player 0 responds with a move that should lose them the game
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
@@ -69,14 +69,14 @@ namespace TicTacCOSTCO.Tests
 
                 // Should not make a new cascade, thus should make the first player lose
                 Coordinate.right * 4
-            }, new GameConfiguration(5, 5, 2, 3, 0), 1, BoardState.GameStateEnum.End, 1, 1)
+            }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.End, 1, 1)
         };
 
         [Test]
         [TestCaseSource(nameof(Knockout_ExpectedPlayer_DataSource))]
         public void KnockoutStatusAsExpected(Knockout_ExpectedPlayer_DataSource_Object plan)
         {
-            BoardState testState = new BoardState(plan.GameConfiguration, firstPlayerToMove: 0);
+            BoardState testState = new BoardState(plan.GameConfiguration);
 
             for (int ii = 0, count = plan.Placements.Count; ii < count; ii++)
             {
@@ -86,7 +86,7 @@ namespace TicTacCOSTCO.Tests
             Assert.AreEqual(plan.ExpectedGameStateEnum, testState.CurrentGameState, $"Expecting game state to be in specific status");
             Assert.AreEqual(plan.ExpectedPlayerIndex, testState.CurrentPlayerIndex, $"Expecting current player index to be specific");
             Assert.AreEqual(plan.ExpectedCascade, testState.CurrentCascadeLevel, $"Expecting cascade to be specific");
-            Assert.AreEqual(plan.ExpectedRemainingPlayers, testState.SideIndexesStillInGame.Count, $"Expecting remaining player count to be specific");
+            Assert.AreEqual(plan.ExpectedRemainingPlayers, testState.SidesStillInGame.Count, $"Expecting remaining player count to be specific");
         }
     }
 

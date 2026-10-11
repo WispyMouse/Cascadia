@@ -45,7 +45,7 @@ namespace TicTacCOSTCO.Unity.UI
             }
 
             // If this side has been eliminated, skip them
-            if (!this.GameConductor.CurrentBoardState.SideIndexesStillInGame.Contains(turn))
+            if (!this.GameConductor.CurrentBoardState.SidesStillInGame.Contains(turn))
             {
                 return;
             }
@@ -67,7 +67,7 @@ namespace TicTacCOSTCO.Unity.UI
 
         IEnumerator AIThinksAndTakesTurn()
         {
-            int side = this.GameConductor.CurrentBoardState.CurrentPlayerIndex;
+            int side = this.GameConductor.CurrentBoardState.CurrentPlayerSide;
             float randomWait = TimeForAIToThinkAdditionalSeconds.Evaluate(Random.Range(0, 1f));
 
             if (this.GameConductor.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.Cascade)

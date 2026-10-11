@@ -3,6 +3,7 @@ namespace TicTacCOSTCO.Unity.UI
     using System.Collections;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
+    using TicTacCOSTCO.DataStructures;
     using UnityEngine;
     using UnityEngine.Profiling;
 
@@ -14,11 +15,6 @@ namespace TicTacCOSTCO.Unity.UI
 
         public TurnOrderHolder TurnOrderHolder;
         public HintController HintController;
-
-        public void Awake()
-        {
-            this.TurnOrderHolder.OnTurnStarted += this.UpdateToNewTurn;
-        }
 
         public void ResetGame()
         {
@@ -32,7 +28,9 @@ namespace TicTacCOSTCO.Unity.UI
             {
                 CurrentTurnPanelEntry newTurn = Instantiate(this.CurrentTurnPanelEntryPF, this.CurrentTurnPanelEntryParent);
                 this.entries.Add(newTurn);
-                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[playerIndex]);
+
+                int side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
+                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[side]);
 
                 newTurn.OnShowHints += SetHints;
                 newTurn.OnHideHints += HideHints;
@@ -41,11 +39,11 @@ namespace TicTacCOSTCO.Unity.UI
             this.UpdateToNewTurn(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerIndex);
         }
 
-        public void UpdateToNewTurn(int newTurn)
+        public void UpdateToNewTurn(int newTurnPlayerIndex)
         {
             for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerCount; ii++)
             {
-                this.entries[ii].SetCurrentTurn(ii == newTurn);
+                this.entries[ii].SetCurrentTurn(ii == newTurnPlayerIndex);
             }
 
             this.HideHints();
@@ -53,12 +51,19 @@ namespace TicTacCOSTCO.Unity.UI
 
         public void KnockOutPlayer(int index)
         {
-            this.entries[index].MarkKnockout();
+            for (int ii = 0; ii < this.entries.Count; ii++)
+            {
+                if (this.entries[ii].RepresentedProfile.Index == index)
+                {
+                    this.entries[ii].MarkKnockout();
+                    break;
+                }
+            }
         }
 
         public void RestorePlayer(int index)
         {
-            this.entries[index].RestorePlayer();
+            this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
         }
 
         public void SetCascade(int index, int cascadeLevel)
@@ -74,14 +79,15 @@ namespace TicTacCOSTCO.Unity.UI
             }
         }
 
-        public void SetHint(int index, bool shown)
+        public void SetHint(int playerIndex, bool shown)
         {
             if (!shown)
             {
                 return;
             }
 
-            this.HintController.ShowHints(index);
+            int side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
+            this.HintController.ShowHints(side);
         }
 
         public void HideHints()

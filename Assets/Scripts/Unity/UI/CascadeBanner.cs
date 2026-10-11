@@ -23,10 +23,10 @@ public class CascadeBanner : MonoBehaviour
 
     public void OnMoveUndone(MoveCommand undone)
     {
-        this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerIndex);
+        this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
     }
 
-    public void OnMoveMade(int player)
+    public void OnMoveMade(int playerSide)
     {
         if (this.GameConductor.CurrentBoardState.CurrentCascadeLevel == 0)
         {

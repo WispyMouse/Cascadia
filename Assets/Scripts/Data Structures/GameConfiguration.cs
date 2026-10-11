@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TicTacCOSTCO.DataStructures
 {
     /// <summary>
@@ -11,6 +13,8 @@ namespace TicTacCOSTCO.DataStructures
         public int PlayerCount;
         public int InARowToSolve;
         public int StallTurn;
+
+        public int MaximumDimensions => this.Width * this.Height;
 
         /// <summary>
         /// If null, then there is no preset first-going player.
@@ -28,6 +32,46 @@ namespace TicTacCOSTCO.DataStructures
             this.InARowToSolve = inARowToSolve;
             this.StallTurn = stallTurn;
             this.ForceOrderlyTurn = forceOrderlyTurn;
+        }
+
+        public readonly bool SpotIsInBounds(Coordinate position)
+        {
+            if (position.X >= this.Width)
+            {
+                return false;
+            }
+
+            if (position.X < 0)
+            {
+                return false;
+            }
+
+            if (position.Y >= this.Height)
+            {
+                return false;
+            }
+
+            if (position.Y < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public readonly IEnumerable<Coordinate> GetAllCoordinatesInMapDimensions()
+        {
+            List<Coordinate> coordinates = new List<Coordinate>();
+
+            for (int xx = 0; xx < Width; xx++)
+            {
+                for (int yy = 0; yy < Height; yy++)
+                {
+                    coordinates.Add(new Coordinate(xx, yy));
+                }
+            }
+
+            return coordinates;
         }
     }
 }

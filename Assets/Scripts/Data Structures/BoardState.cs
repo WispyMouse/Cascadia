@@ -64,7 +64,7 @@ namespace TicTacCOSTCO.DataStructures
         int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
         IReadOnlyCollection<int> IReadOnlyBoardState.SidesStillInGame => this.SidesStillInGame;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
-        PossibilityContainer IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
+        BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
         private readonly Dictionary<Coordinate, int?> _SpotToSideOwnership;
 
@@ -76,7 +76,7 @@ namespace TicTacCOSTCO.DataStructures
 
         private Dictionary<Coordinate, List<CellsConnection>> AcceptedSolutions;
 
-        public readonly PossibilityContainer PossibilityContainer;
+        public readonly BoardConnectionShapesSolver PossibilityContainer;
 
         public enum GameStateEnum
         {
@@ -113,8 +113,6 @@ namespace TicTacCOSTCO.DataStructures
         {
             this.GameConfiguration = gameConfiguration;
 
-            this.PossibilityContainer = new PossibilityContainer(this);
-
             this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(Width * Height);
             for (int xx = 0; xx < Width; xx++)
             {
@@ -137,42 +135,17 @@ namespace TicTacCOSTCO.DataStructures
             this.CurrentCascadeLevel = 0;
             this.CurrentGameState = 0;
 
+            this.PlayerOrder = new List<int>(this.PlayerCount);
             if (gameConfiguration.ForceOrderlyTurn.HasValue)
             {
-                // If there is a specific person who should go first, then everyone should be "in order"
-                // and that player should be at the top of the list, index 0
-
-                this.CurrentPlayerIndex = gameConfiguration.ForceOrderlyTurn.Value;
-                this.PlayerOrder = new List<int>(this.PlayerCount);
-
-                for (int ii = 0; ii < this.PlayerCount; ii++)
-                {
-                    int realIndex = (ii + this.CurrentPlayerIndex + this.PlayerCount) % this.PlayerCount;
-                    this.PlayerOrder.Add(realIndex);
-                }
+                AssignForceOrderlyTurn();
             }
             else
             {
-                // Randomly select the player to move first
-                gameConfiguration.ForceOrderlyTurn = new Random().Next(this.PlayerCount);
-
-                // First, fill the list with all of the possible sides
-                List<int> remainingSides = new List<int>();
-                for (int ii = 0; ii < this.PlayerCount; ii++)
-                {
-                    remainingSides.Add(ii);
-                }
-
-                // Then dress down that list and randomly pull out of it
-                this.PlayerOrder = new List<int>(this.PlayerCount);
-                while (remainingSides.Count > 0)
-                {
-                    int randomIndex = new Random().Next(remainingSides.Count);
-                    int side = remainingSides[randomIndex];
-                    remainingSides.RemoveAt(randomIndex);
-                    this.PlayerOrder.Add(side);
-                }
+                RandomlyAssignFirstPlayerTurn();
             }
+
+            this.PossibilityContainer = new BoardConnectionShapesSolver(this.GameConfiguration);
         }
 
         public BoardState(BoardState toDeepClone)
@@ -258,30 +231,7 @@ namespace TicTacCOSTCO.DataStructures
             return PruneSolutionsForNotAlreadySolved(newSolutions);
         }
 
-        public bool SpotIsInBounds(Coordinate position)
-        {
-            if (position.X >= this.Width)
-            {
-                return false;
-            }
-
-            if (position.X < 0)
-            {
-                return false;
-            }
-
-            if (position.Y >= this.Height)
-            {
-                return false;
-            }
-
-            if (position.Y < 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
+        public bool SpotIsInBounds(Coordinate position) => this.GameConfiguration.SpotIsInBounds(position);
 
         /// <summary>
         /// Attempts to apply a move command.
@@ -717,6 +667,40 @@ namespace TicTacCOSTCO.DataStructures
                 this.CurrentPlayerIndex = nextProspectivePlayer;
                 this.OnPlayerStartTurn?.Invoke(this.CurrentPlayerIndex);
                 break;
+            }
+        }
+
+        private void AssignForceOrderlyTurn()
+        {
+            // If there is a specific person who should go first, then everyone should be "in order"
+            // and that player should be at the top of the list, index 0
+
+            this.CurrentPlayerIndex = this.GameConfiguration.ForceOrderlyTurn.Value;
+
+            for (int ii = 0; ii < this.PlayerCount; ii++)
+            {
+                int realIndex = (ii + this.CurrentPlayerIndex + this.PlayerCount) % this.PlayerCount;
+                this.PlayerOrder.Add(realIndex);
+            }
+        }
+
+        private void RandomlyAssignFirstPlayerTurn()
+        {
+            // Randomly select the player to move first
+            // First, fill the list with all of the possible sides
+            List<int> remainingSides = new List<int>();
+            for (int ii = 0; ii < this.PlayerCount; ii++)
+            {
+                remainingSides.Add(ii);
+            }
+
+            // Then dress down that list and randomly pull out of it
+            while (remainingSides.Count > 0)
+            {
+                int randomIndex = new Random().Next(remainingSides.Count);
+                int side = remainingSides[randomIndex];
+                remainingSides.RemoveAt(randomIndex);
+                this.PlayerOrder.Add(side);
             }
         }
     }

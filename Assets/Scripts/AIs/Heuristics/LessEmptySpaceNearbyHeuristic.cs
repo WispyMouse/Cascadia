@@ -15,7 +15,7 @@ namespace TicTacCOSTCO.AIs
 
             int expectedCoordinates = Radius * 2 - 2;
             List<Coordinate> coordinatesToCheck = new List<Coordinate>(Radius * 2 - 2);
-            IReadOnlyList<Coordinate> coordinatesAround = currentGameState.PossibilityContainer.GetCoordinatesAround(currentGameState, position, this.Radius);
+            IReadOnlyCollection<Coordinate> coordinatesAround = currentGameState.PossibilityContainer.GetCoordinatesAround(currentGameState, position, this.Radius);
 
             // If there are areas that aren't on the grid, those are by definition unplayable
             // Imagine a query for the radius around a corner piece; it should add the missing space to the total

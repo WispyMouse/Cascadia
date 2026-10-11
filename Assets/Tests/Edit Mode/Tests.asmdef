@@ -1,11 +1,12 @@
 {
-    "name": "TicTacCOSTCO.Tests",
+    "name": "TicTacCOSTCO.EditModeTests",
     "rootNamespace": "TicTacCOSTCO.Tests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Scripts",
-        "TicTacCOSTCO.DataStructures"
+        "TicTacCOSTCO.DataStructures",
+        "TestData"
     ],
     "includePlatforms": [
         "Editor"

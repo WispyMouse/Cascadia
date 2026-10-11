@@ -182,5 +182,21 @@ namespace TicTacCOSTCO.Unity
 
             return newProfile;
         }
+
+        public void ForceSetConfig(GameConfiguration configuration)
+        {
+            this._GameConfiguration = configuration;
+        }
+
+        public void HumanitizeForTests()
+        {
+            this._coresByIndex.Clear();
+            this._Players.Clear();
+
+            for (int ii = 0; ii < this.GameConfiguration.PlayerCount; ii++)
+            {
+                AddPlayer();
+            }
+        }
     }
 }

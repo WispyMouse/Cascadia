@@ -26,6 +26,6 @@ namespace TicTacCOSTCO.DataStructures
         public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership { get; }
         public GameStateEnum CurrentGameState { get; }
 
-        public PossibilityContainer PossibilityContainer { get; }
+        public BoardConnectionShapesSolver PossibilityContainer { get; }
     }
 }

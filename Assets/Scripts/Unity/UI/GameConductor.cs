@@ -88,7 +88,7 @@
 
             int takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn];
-            MoveCommand command = this.CurrentBoardState.GenerateCommandFromMove(this.CurrentBoardState.CurrentPlayerSide, toChoose.Position);
+            MoveCommand command = new(takingTurn, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
@@ -97,9 +97,11 @@
                 return;
             }
 
+            MoveCommandConsequences consequences = this.CurrentBoardState.GenerateConsequencesFromMoveCommand(command);
+
             toChoose.SetSide(player);
 
-            foreach (CellsConnection solution in command.ConnectionsMade)
+            foreach (CellsConnection solution in consequences.ConnectionsMade)
             {
                 this.DrawLineBetween(solution, player);
 
@@ -109,9 +111,9 @@
                 }
             }
 
-            this.CurrentTurnPanel.SetCascade(takingTurn, command.ConnectionsMade.Count);
+            this.CurrentTurnPanel.SetCascade(takingTurn, consequences.ConnectionsMade.Count);
 
-            foreach (int sideRemoved in command.PlayersSidesRemoved)
+            foreach (int sideRemoved in consequences.PlayersSidesRemoved)
             {
                 this.CurrentTurnPanel.KnockOutPlayer(sideRemoved);
             }
@@ -207,7 +209,7 @@
             // Rewind until we reach the last human move, or the beginning of the game.
             while (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
-                MoveCommand undoneCommand = this.CurrentBoardState.ReversePreviousMoveCommand();
+                MoveCommandConsequences undoneCommand = this.CurrentBoardState.ReversePreviousMoveCommand();
 
                 foreach (CellsConnection connectionToRemove in undoneCommand.ConnectionsMade)
                 {
@@ -222,7 +224,7 @@
                     this.CurrentTurnPanel.RestorePlayer(playerRemoved);
                 }
 
-                this.PositionsToCells[undoneCommand.Position].Clear();
+                this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();
 
                 // When we reach a player, stop
                 if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide].IsAI)
@@ -243,9 +245,9 @@
 
             if (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
-                MoveCommand latestCommand = this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];
+                MoveCommandConsequences latestCommand = this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];
 
-                this.PositionsToCells[latestCommand.Position].SetHighlightStatus(true);
+                this.PositionsToCells[latestCommand.FromCommand.Position].SetHighlightStatus(true);
 
                 foreach (Coordinate curCoordinate in latestCommand.ConnectionsMade.SelectMany(x => x.Cells))
                 {

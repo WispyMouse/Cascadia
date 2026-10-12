@@ -35,14 +35,14 @@
         public OnPlayerTurnDelegate OnPlayerStartTurn;
         public OnPlayerTurnDelegate OnPlayerMadeMove;
 
-        public delegate void OnMoveUndoneDelegate(MoveCommand undone);
+        public delegate void OnMoveUndoneDelegate(MoveCommandConsequences undone);
         public OnMoveUndoneDelegate OnMoveUndone;
 
         public delegate void OnGameConclusionDelegate(int? winner);
         public OnGameConclusionDelegate OnGameConclusion;
 
-        public IReadOnlyList<MoveCommand> MoveCommandsApplied => this.moveCommandsApplied;
-        private List<MoveCommand> moveCommandsApplied { get; set; } = new List<MoveCommand>();
+        public IReadOnlyList<MoveCommandConsequences> MoveCommandsApplied => this.moveCommandsApplied;
+        private List<MoveCommandConsequences> moveCommandsApplied { get; set; } = new List<MoveCommandConsequences>();
 
         public int Height => this.GameConfiguration.Height;
         public int Width => this.GameConfiguration.Width;
@@ -196,9 +196,9 @@
             return false;
         }
 
-        public MoveCommand GenerateCommandFromMove(int side, Coordinate position)
+        public MoveCommandConsequences GenerateConsequencesFromMoveCommand(MoveCommand fromCommand)
         {
-            IReadOnlyList<CellsConnection> connections = this.GetAllNewSolutions(side, position);
+            IReadOnlyList<CellsConnection> connections = this.GetAllNewSolutions(fromCommand.Side, fromCommand.Position);
             List<int> playersRemoved = new();
 
             // HACK SHOULD GENERALIZE: Would this move result in a loss
@@ -206,10 +206,10 @@
             // we want to only check new scoring connections in this process
             if (this.CurrentGameState == GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
-                playersRemoved.Add(side);
+                playersRemoved.Add(fromCommand.Side);
             }
 
-            return new MoveCommand(side, position, connections, this.CurrentCascadeLevel, playersRemoved);
+            return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, playersRemoved);
         }
 
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition)
@@ -244,19 +244,21 @@
                 return false;
             }
 
+            MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);
+
             if (this.CurrentGameState == GameStateEnum.NotStarted)
             {
                 this.CurrentGameState = GameStateEnum.Playing;
             }
 
             this.spotToSideOwnership[toApply.Position] = toApply.Side;
-            this.moveCommandsApplied.Add(toApply);
+            this.moveCommandsApplied.Add(consequences);
 
-            int solutionsCount = toApply.ConnectionsMade.Count;
+            int solutionsCount = consequences.ConnectionsMade.Count;
             this.CurrentCascadeLevel = Math.Max(this.CurrentCascadeLevel, solutionsCount);
 
             // Notate all accepted connections
-            foreach (CellsConnection connection in toApply.ConnectionsMade)
+            foreach (CellsConnection connection in consequences.ConnectionsMade)
             {
                 foreach (Coordinate coordinate in connection.Cells)
                 {
@@ -270,9 +272,9 @@
             }
 
             // Removed knocked out players, and consider end game state
-            if (toApply.PlayersSidesRemoved.Any())
+            if (consequences.PlayersSidesRemoved.Any())
             {
-                foreach (int playerRemoved in toApply.PlayersSidesRemoved)
+                foreach (int playerRemoved in consequences.PlayersSidesRemoved)
                 {
                     // If there were no new solutions, or not enough solutions for previous cascade, and we're in cascade state,
                     // the current player should be knocked out
@@ -502,15 +504,20 @@
                 return false;
             }
 
-            if (!this.StallTurnEmbargoLifted() && toApply.ConnectionsMade.Count > 0)
+            // If the Stall Embargo is still in place, then a move that creates a connection is invalid
+            if (!this.StallTurnEmbargoLifted())
             {
-                return false;
+                MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);
+                if (consequences.ConnectionsMade.Count > 0)
+                {
+                    return false;
+                }
             }
 
             return true;
         }
 
-        public bool AnyLegalMovesRemainForPlayer(int player, out IReadOnlyList<Coordinate> possiblePlays)
+        public bool AnyLegalMovesRemainForPlayer(int playerSide, out IReadOnlyList<Coordinate> possiblePlays)
         {
             // No where left to play?
             if (!this.AnyEmptySpots())
@@ -533,7 +540,7 @@
 
             foreach (Coordinate place in emptyPlaces)
             {
-                MoveCommand command = this.GenerateCommandFromMove(player, place);
+                MoveCommandConsequences command = this.GenerateConsequencesFromMoveCommand(new MoveCommand(playerSide, place));
 
                 // If it makes any connections, it can't be played there
                 if (command.ConnectionsMade.Count > 0)
@@ -565,7 +572,7 @@
         /// Returns the <see cref="MoveCommand"/> that was undone from <see cref="MoveCommandsApplied"/>.
         /// Returns null if there was nothing that could be removed.
         /// </returns>
-        public MoveCommand ReversePreviousMoveCommand()
+        public MoveCommandConsequences ReversePreviousMoveCommand()
         {
             int moveCommandsApplied = this.moveCommandsApplied.Count;
             if (moveCommandsApplied == 0)
@@ -573,12 +580,12 @@
                 return default;
             }
 
-            MoveCommand toRemove = this.MoveCommandsApplied[moveCommandsApplied - 1];
+            MoveCommandConsequences toRemove = this.MoveCommandsApplied[moveCommandsApplied - 1];
             this.moveCommandsApplied.RemoveAt(moveCommandsApplied - 1);
 
             // HACK: At this point in the game's development, the only thing that *could* be placed during a reverse is a null
             // Will need to track what it used to be, if we can make it any other value while reversing
-            this.ForceMarkOwnership(toRemove.Position, null);
+            this.ForceMarkOwnership(toRemove.FromCommand.Position, null);
             this.CurrentCascadeLevel = toRemove.PreviousCascadeLevel;
 
             foreach (int playerRemoved in toRemove.PlayersSidesRemoved)

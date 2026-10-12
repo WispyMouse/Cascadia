@@ -21,7 +21,7 @@
             this.ToggleParent.SetActive(false);
         }
 
-        public void OnMoveUndone(MoveCommand undone) => this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
+        public void OnMoveUndone(MoveCommandConsequences undone) => this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
         public void OnMoveMade(int playerSide)
         {

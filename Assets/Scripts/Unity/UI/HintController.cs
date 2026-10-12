@@ -26,7 +26,7 @@
                     continue;
                 }
 
-                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateCommandFromMove(side, cell.Position).ConnectionsMade.Count);
+                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new DataStructures.MoveCommand(side, cell.Position)).ConnectionsMade.Count);
             }
             this.isOn = true;
         }

@@ -29,7 +29,7 @@
                 {
                     this.mostOpponentConnections = Mathf.Max(
                         this.mostOpponentConnections,
-                        currentGameState.GenerateCommandFromMove(curSide, playableSpot).ConnectionsMade.Count);
+                        currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(curSide, playableSpot)).ConnectionsMade.Count);
                 }
             }
         }
@@ -42,7 +42,7 @@
             }
 
             // If this spot would create more connections than any opponent can currently make, consider this
-            int creatableConnections = currentGameState.GenerateCommandFromMove(forSide, position).ConnectionsMade.Count;
+            int creatableConnections = currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(forSide, position)).ConnectionsMade.Count;
             if (creatableConnections > this.mostOpponentConnections)
             {
                 Debug.Log($"({this.name}) ({forSide}) Going for critical win against {this.mostOpponentConnections} connections max");

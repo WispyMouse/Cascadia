@@ -95,13 +95,13 @@
 
             for (int ii = 0; ii < lastIndex; ii++)
             {
-                Assert.IsTrue(testState.TryApplyMoveCommand(testState.GenerateCommandFromMove(0, plan.Placements[ii]), false));
+                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(0, plan.Placements[ii]), false));
             }
 
-            MoveCommand lastCommand = testState.GenerateCommandFromMove(0, plan.Placements[lastIndex]);
+            MoveCommandConsequences lastCommand = testState.GenerateConsequencesFromMoveCommand(new MoveCommand(0, plan.Placements[lastIndex]));
             Assert.AreEqual(plan.ExpectedSolutions, lastCommand.ConnectionsMade.Count, $"Especting a specific amount of solutions total");
 
-            Assert.IsTrue(testState.TryApplyMoveCommand(lastCommand, false));
+            Assert.IsTrue(testState.TryApplyMoveCommand(lastCommand.FromCommand, false));
 
             if (plan.ExpectedSolutions > 0)
             {

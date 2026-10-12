@@ -91,7 +91,7 @@
                 .DetermineMove(side, this.GameConductor.CurrentBoardState);
 
 #if UNITY_EDITOR
-            MoveCommand command = this.GameConductor.CurrentBoardState.GenerateCommandFromMove(side, move);
+            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
             Debug.Log($"({PersistentGameConfiguration.Singleton.Players[side].AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
 #endif
 

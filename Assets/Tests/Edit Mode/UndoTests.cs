@@ -78,7 +78,7 @@
 
             for (int ii = 0, count = plan.Placements.Count; ii < count; ii++)
             {
-                Assert.IsTrue(testState.TryApplyMoveCommand(testState.GenerateCommandFromMove(testState.CurrentPlayerIndex, plan.Placements[ii]), true));
+                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(testState.CurrentPlayerIndex, plan.Placements[ii]), true));
                 expectedOwnership.Add(testState.SpotToSideOwnership[plan.Placements[ii]].Value);
             }
 

@@ -6,7 +6,7 @@
     {
         public bool SpotIsInBounds(Coordinate position);
         public IReadOnlyList<Coordinate> GetEmptySpots();
-        public MoveCommand GenerateCommandFromMove(int sideIndex, Coordinate position);
+        public MoveCommandConsequences GenerateConsequencesFromMoveCommand(MoveCommand command);
         public IReadOnlyBoardState DeepClone();
         public bool TryGetConnectionsForCoordinate(Coordinate toGet, out IReadOnlyCollection<CellsConnection> connections);
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition);

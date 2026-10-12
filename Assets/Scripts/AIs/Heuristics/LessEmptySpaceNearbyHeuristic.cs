@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "Less Nearby Space Heuristic.asset", menuName = "COSTCO/AI Heuristic/Less Nearby Space")]
     public class LessEmptySpaceNearbyHeuristic : AIHeuristic

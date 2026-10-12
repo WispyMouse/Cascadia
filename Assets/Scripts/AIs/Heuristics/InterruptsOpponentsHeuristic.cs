@@ -1,8 +1,8 @@
-using TicTacCOSTCO.DataStructures;
-using UnityEngine;
-
-namespace TicTacCOSTCO.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Interupts Opponent Heuristic.asset", menuName = "COSTCO/AI Heuristic/Interrupts Opponent")]
     public class InterruptsOpponentHeuristic : AIHeuristic
     {

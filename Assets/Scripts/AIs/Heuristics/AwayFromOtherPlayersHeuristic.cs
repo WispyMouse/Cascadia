@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "Away From Other Players Heuristic.asset", menuName = "COSTCO/AI Heuristic/Away From Player")]
     public class AwayFromOtherPlayersHeuristic : AIHeuristic

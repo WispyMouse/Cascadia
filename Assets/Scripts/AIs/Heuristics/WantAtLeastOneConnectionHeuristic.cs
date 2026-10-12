@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using TicTacCOSTCO.DataStructures;
-using UnityEngine;
-
-namespace TicTacCOSTCO.AIs
+﻿namespace Cascadia.AIs
 {
+    using System.Collections.Generic;
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Wants At Least One Connection Heuristic.asset", menuName = "COSTCO/AI Heuristic/Wants At Least One Connection")]
     public class WantsAtLeastConnectionsHeuristic : AIHeuristic
     {

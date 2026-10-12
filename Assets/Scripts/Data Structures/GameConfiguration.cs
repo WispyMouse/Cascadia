@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TicTacCOSTCO.DataStructures
+namespace Cascadia.DataStructures
 {
     /// <summary>
     /// Concept representing what a game could be started as.

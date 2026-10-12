@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.DataStructures
+﻿namespace Cascadia.DataStructures
 {
     using NUnit.Framework;
     using System;
@@ -39,29 +39,20 @@ namespace TicTacCOSTCO.DataStructures
             return false;
         }
 
-        public readonly bool Equals(DirectionalityVector other)
-        {
-            return this.X == other.X && this.Y == other.Y;
-        }
+        public readonly bool Equals(DirectionalityVector other) => this.X == other.X && this.Y == other.Y;
 
-        public readonly bool Equals(DirectionalityVector a, DirectionalityVector b)
-        {
-            return a.X == b.X && a.Y == b.Y;
-        }
+        public readonly bool Equals(DirectionalityVector a, DirectionalityVector b) => a.X == b.X && a.Y == b.Y;
 
         public override readonly int GetHashCode() => HashCode.Combine(X, Y);
 
         public static bool operator ==(DirectionalityVector lhs, DirectionalityVector rhs) => lhs.X == rhs.X && lhs.Y == rhs.Y;
         public static bool operator !=(DirectionalityVector lhs, DirectionalityVector rhs) => !(lhs.X == rhs.X && lhs.Y == rhs.Y);
 
-        public static Coordinate operator *(int a, DirectionalityVector b) => new Coordinate(a * b.X, a * b.Y);
-        public static Coordinate operator *(DirectionalityVector a, int b) => new Coordinate(a.X * b, a.Y * b);
+        public static Coordinate operator *(int a, DirectionalityVector b) => new(a * b.X, a * b.Y);
+        public static Coordinate operator *(DirectionalityVector a, int b) => new(a.X * b, a.Y * b);
 
-        public static DirectionalityVector operator -(DirectionalityVector a) => new DirectionalityVector(a.X * -1, a.Y * -1);
+        public static DirectionalityVector operator -(DirectionalityVector a) => new(a.X * -1, a.Y * -1);
 
-        public override string ToString()
-        {
-            return $"{this.X} by {this.Y}";
-        }
+        public override readonly string ToString() => $"{this.X} by {this.Y}";
     }
 }

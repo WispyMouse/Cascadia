@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     public class CurrentTurnPanelEntry : MonoBehaviour
     {
@@ -29,8 +29,8 @@ namespace TicTacCOSTCO.Unity.UI
         public float TimeForCascadeLevelAtLevelOne = 1f;
 
         public TMP_Text NameText;
-        private float _curCascadeLevelVisibility { get; set; } = 0;
-        private float _curCascadeTimeLevel { get; set; } = 0;
+        private float curCascadeLevelVisibility { get; set; } = 0;
+        private float curCascadeTimeLevel { get; set; } = 0;
 
         /// <summary>
         /// When determining how fast to make the blinking, subtract out the multiple this by the number of connections above one.
@@ -77,7 +77,7 @@ namespace TicTacCOSTCO.Unity.UI
             this.CascadeLevelText.text = $"x{level}";
 
             // Blink faster for higher cascade levels
-            this._curCascadeTimeLevel = this.TimeForCascadeLevelAtLevelOne 
+            this.curCascadeTimeLevel = this.TimeForCascadeLevelAtLevelOne 
                 - Mathf.Lerp(0, this.TimeForCascadeLevelAtLevelOne, CascadeLerpPerLevel * (level - 1));
         }
 
@@ -116,10 +116,10 @@ namespace TicTacCOSTCO.Unity.UI
                 return;
             }
 
-            _curCascadeLevelVisibility = (_curCascadeLevelVisibility + Time.deltaTime) % this._curCascadeTimeLevel;
+            curCascadeLevelVisibility = (curCascadeLevelVisibility + Time.deltaTime) % this.curCascadeTimeLevel;
 
             this.VisibilityText.color = new Color(this.VisibilityText.color.r, this.VisibilityText.color.g, this.VisibilityText.color.b,
-                this.CascadeLevelVisibilityCurve.Evaluate(_curCascadeLevelVisibility / this._curCascadeTimeLevel));
+                this.CascadeLevelVisibilityCurve.Evaluate(curCascadeLevelVisibility / this.curCascadeTimeLevel));
         }
 
         public void ShowHints()

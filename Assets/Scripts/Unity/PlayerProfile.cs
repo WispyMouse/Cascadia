@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity
+namespace Cascadia.Unity
 {
     using UnityEngine;
 

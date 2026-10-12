@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-using static TicTacCOSTCO.DataStructures.BoardState;
-
-namespace TicTacCOSTCO.DataStructures
+﻿namespace Cascadia.DataStructures
 {
+    using System.Collections.Generic;
+    using static Cascadia.DataStructures.BoardState;
     public interface IReadOnlyBoardState
     {
         public bool SpotIsInBounds(Coordinate position);

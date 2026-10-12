@@ -1,8 +1,8 @@
-using TicTacCOSTCO.DataStructures;
-using UnityEngine;
-
-namespace TicTacCOSTCO.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Wants At Cascade Level Heuristic.asset", menuName = "COSTCO/AI Heuristic/Wants At Least Cacade Level")]
     public class WantsAvailableCascadeHeuristic : AIHeuristic
     {

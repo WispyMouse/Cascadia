@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using TicTacCOSTCO.AIs;
-using TicTacCOSTCO.DataStructures;
+﻿using System.Collections.Generic;
+using Cascadia.AIs;
+using Cascadia.DataStructures;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "AICore.asset", menuName = "COSTCO/AI Core")]
@@ -21,7 +21,7 @@ public class AICore : ScriptableObject
         if (!currentGameState.AnyLegalMovesRemainForPlayer(forSide, out IReadOnlyList<Coordinate> possibleMoves))
         {
             // TODO: This shouldn't be called in this state, but how do we signal that?
-            return Coordinate.zero;
+            return Coordinate.Zero;
         }
 
         // Determine the heuristic value for every possible move

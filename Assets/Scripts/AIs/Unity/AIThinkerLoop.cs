@@ -1,7 +1,7 @@
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     using System.Collections;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class AIThinkerLoop : MonoBehaviour

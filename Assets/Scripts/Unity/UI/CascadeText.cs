@@ -1,4 +1,4 @@
-using System.Text;
+﻿using System.Text;
 using TMPro;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ public class CascadeText : MonoBehaviour
 
         curTime += Time.deltaTime;
 
-        StringBuilder cascadeText = new StringBuilder();
+        StringBuilder cascadeText = new();
         float halfHeight = HeightDiffAtMaximum / 2f;
 
         for (int ii = 0; ii < TextString.Length; ii++)
@@ -49,8 +49,5 @@ public class CascadeText : MonoBehaviour
         this.Text.text = this.TextString;
     }
 
-    public void EnableAnimation(float timePerCycle)
-    {
-        this.SecondsPerCycle = timePerCycle;
-    }
+    public void EnableAnimation(float timePerCycle) => this.SecondsPerCycle = timePerCycle;
 }

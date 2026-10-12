@@ -1,9 +1,9 @@
-namespace TicTacCOSTCO.Tests
+﻿namespace Cascadia.Tests
 {
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class KnockoutTests
@@ -40,35 +40,35 @@ namespace TicTacCOSTCO.Tests
             // Early in the game, it's still in playing state
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
-                Coordinate.zero, Coordinate.up, Coordinate.right,
+                Coordinate.Zero, Coordinate.Up, Coordinate.Right,
             }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Player 1 places three in a row while Player 2 doesn't
             // On Player 2's response turn, the cascade should be set, but the game isn't over
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
-                Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2
+                Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up + Coordinate.Right, Coordinate.Right * 2
             }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.Cascade, 1, 2),
             
             // Player 2 makes a move that ends up losing them the game
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
-                Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2, Coordinate.up * 2
+                Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up + Coordinate.Right, Coordinate.Right * 2, Coordinate.Up * 2
             }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 0, BoardState.GameStateEnum.End, 1, 1),
 
             // Player 2 makes a move that keeps them in the game by placing three in a row
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
-                Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2, Coordinate.up + Coordinate.right * 2
+                Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up + Coordinate.Right, Coordinate.Right * 2, Coordinate.Up + Coordinate.Right * 2
             }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 0, BoardState.GameStateEnum.Cascade, 1, 2),
 
             // Player 0 responds with a move that should lose them the game
             new Knockout_ExpectedPlayer_DataSource_Object(new List<Coordinate>()
             {
-                Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up + Coordinate.right, Coordinate.right * 2, Coordinate.up + Coordinate.right * 2,
+                Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up + Coordinate.Right, Coordinate.Right * 2, Coordinate.Up + Coordinate.Right * 2,
 
                 // Should not make a new cascade, thus should make the first player lose
-                Coordinate.right * 4
+                Coordinate.Right * 4
             }, new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, BoardState.GameStateEnum.End, 1, 1)
         };
 

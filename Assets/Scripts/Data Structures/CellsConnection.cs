@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.DataStructures
+﻿namespace Cascadia.DataStructures
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +6,7 @@ namespace TicTacCOSTCO.DataStructures
     /// <summary>
     /// Describes a "Connection", starting from the <see cref="Root"/> and ending at the <see cref="Tail"/>.
     /// </summary>
-    public struct CellsConnection : IEquatable<CellsConnection>
+    public readonly struct CellsConnection : IEquatable<CellsConnection>
     {
         /// <summary>
         /// The <see cref="Coordinate"/> of cells making up this connection.
@@ -41,19 +41,13 @@ namespace TicTacCOSTCO.DataStructures
 
             this.Cells = cells;
             this.Root = cells[0];
-            this.Tail = cells[this.Cells.Count - 1];
+            this.Tail = cells[cellsCount - 1];
 
             this.Directionality = directionality;
         }
 
-        public bool Equals(CellsConnection other)
-        {
-            return this.GetHashCode() == other.GetHashCode();
-        }
+        public readonly bool Equals(CellsConnection other) => this.GetHashCode() == other.GetHashCode();
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(this.Root, this.Tail, this.Directionality);
-        }
+        public override readonly int GetHashCode() => HashCode.Combine(this.Root, this.Tail, this.Directionality);
     }
 }

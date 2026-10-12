@@ -1,8 +1,8 @@
-using System.Text;
+﻿using System.Text;
 using TMPro;
 using UnityEngine;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     public class GameDescriber : MonoBehaviour
     {
@@ -14,14 +14,11 @@ namespace TicTacCOSTCO.Unity.UI
             this.UpdateDescription();
         }
 
-        public void OnDisable()
-        {
-            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= UpdateDescription;
-        }
+        public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= UpdateDescription;
 
         public void UpdateDescription()
         {
-            StringBuilder description = new StringBuilder();
+            StringBuilder description = new();
 
             description.AppendLine($"{PersistentGameConfiguration.Singleton.Players.Count} players");
             description.AppendLine($"{PersistentGameConfiguration.Singleton.Width}x{PersistentGameConfiguration.Singleton.Height}");

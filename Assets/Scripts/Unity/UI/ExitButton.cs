@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     using UnityEngine;
 

@@ -1,8 +1,8 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     public class StallBanner : MonoBehaviour
     {
@@ -23,21 +23,21 @@ namespace TicTacCOSTCO.Unity.UI
         private void Awake()
         {
             this.TurnOrderHolder.OnTurnStarted += this.OnTurnUpdate;
-            Colorable.color = NeutralColor;
+            this.Colorable.color = this.NeutralColor;
             this.Clear(null);
         }
 
         public void OnTurnUpdate(int _)
         {
-            Colorable.color = NeutralColor;
+            this.Colorable.color = this.NeutralColor;
 
             if (this.GameConductor.CurrentBoardState.StallTurnEmbargoLifted())
             {
-                this.StallBannerGO.gameObject.SetActive(false);
+                this.StallBannerGO.SetActive(false);
                 return;
             }
 
-            this.StallBannerGO.gameObject.SetActive(true);
+            this.StallBannerGO.SetActive(true);
 
             int remainingTurns = this.GameConductor.CurrentBoardState.StallTurn - this.GameConductor.CurrentBoardState.CurrentRound;
 
@@ -51,26 +51,20 @@ namespace TicTacCOSTCO.Unity.UI
             }
         }
 
-        public void Clear(int? _)
-        {
-            this.StallBannerGO.gameObject.SetActive(false);
-        }
+        public void Clear(int? _) => this.StallBannerGO.SetActive(false);
 
-        public void CallAttention()
-        {
-            this.curTimeForAttentionState = this.TimeForAttentionState;
-        }
+        public void CallAttention() => this.curTimeForAttentionState = this.TimeForAttentionState;
 
         private void Update()
         {
             if (this.curTimeForAttentionState <= 0)
             {
-                Colorable.color = NeutralColor;
+                this.Colorable.color = this.NeutralColor;
                 return;
             }
 
             this.curTimeForAttentionState -= Time.deltaTime;
-            Colorable.color = Color.Lerp(NeutralColor, AttentionColor, this.curTimeForAttentionState / this.TimeForAttentionState);
+            this.Colorable.color = Color.Lerp(this.NeutralColor, this.AttentionColor, this.curTimeForAttentionState / this.TimeForAttentionState);
         }
     }
 }

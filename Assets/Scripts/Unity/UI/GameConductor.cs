@@ -1,8 +1,8 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
     using System.Linq;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
     using UnityEngine.EventSystems;
@@ -79,10 +79,7 @@ namespace TicTacCOSTCO.Unity.UI
             }
         }
 
-        public void ChooseCell(Coordinate toChoose)
-        {
-            ChooseCell(PositionsToCells[toChoose]);
-        }
+        public void ChooseCell(Coordinate toChoose) => this.ChooseCell(PositionsToCells[toChoose]);
 
         public void ChooseCell(Cell toChoose)
         {
@@ -95,8 +92,6 @@ namespace TicTacCOSTCO.Unity.UI
 
             int takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn];
-            int previousCascade = this.CurrentBoardState.CurrentCascadeLevel;
-
             MoveCommand command = this.CurrentBoardState.GenerateCommandFromMove(this.CurrentBoardState.CurrentPlayerSide, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
@@ -114,7 +109,7 @@ namespace TicTacCOSTCO.Unity.UI
 
                 foreach (Coordinate curCell in solution.Cells)
                 {
-                    PositionsToCells[curCell].SetHighlightStatus(true);
+                    this.PositionsToCells[curCell].SetHighlightStatus(true);
                 }
             }
 
@@ -131,7 +126,7 @@ namespace TicTacCOSTCO.Unity.UI
             toChoose.SetHighlightStatus(true);
         }
 
-        void HandleLeftClick()
+        private void HandleLeftClick()
         {
             Vector2 raycastPoint;
             if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
@@ -158,9 +153,7 @@ namespace TicTacCOSTCO.Unity.UI
                 return;
             }
 
-            Cell getCell = raycast.collider.gameObject.GetComponent<Cell>();
-
-            if (getCell == null)
+            if (!raycast.collider.TryGetComponent<Cell>(out Cell getCell))
             {
                 return;
             }
@@ -176,8 +169,8 @@ namespace TicTacCOSTCO.Unity.UI
         public void DrawLineBetween(CellsConnection connection, PlayerProfile faction)
         {
             LineRenderer newRenderer = Instantiate(this.LineRendererPF);
-            newRenderer.SetPosition(0, this.PositionsToCells[connection.Root].transform.position + Vector3.back * 5f);
-            newRenderer.SetPosition(1, this.PositionsToCells[connection.Tail].transform.position + Vector3.back * 5f);
+            newRenderer.SetPosition(0, this.PositionsToCells[connection.Root].transform.position + (Vector3.back * 5f));
+            newRenderer.SetPosition(1, this.PositionsToCells[connection.Tail].transform.position + (Vector3.back * 5f));
             newRenderer.startColor = faction.KnockoutColor;
             newRenderer.endColor = faction.KnockoutColor;
             this.SolutionLineRenderers.Add(newRenderer);

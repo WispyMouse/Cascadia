@@ -1,7 +1,9 @@
 {
-    "name": "TicTacCOSTCO.DataStructures",
-    "rootNamespace": "TicTacCOSTCO.DataStructures",
-    "references": [],
+    "name": "Cascadia.AIs",
+    "rootNamespace": "Cascadia.AIs",
+    "references": [
+        "GUID:3c9d604a283fa324ebe5a40228f15207"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
@@ -10,5 +12,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

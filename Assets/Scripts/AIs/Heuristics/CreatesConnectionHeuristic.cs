@@ -1,7 +1,7 @@
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "Creates Connection Heuristic.asset", menuName = "COSTCO/AI Heuristic/Creates Connection")]
     public class CreatesConnectionHeuristic : AIHeuristic

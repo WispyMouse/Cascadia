@@ -1,10 +1,10 @@
-namespace TicTacCOSTCO.Tests
+namespace Cascadia.Tests
 {
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Linq;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
 
     public class SortByDirectionalityTests
     {

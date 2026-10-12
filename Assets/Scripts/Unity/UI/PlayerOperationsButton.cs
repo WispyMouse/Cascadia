@@ -1,9 +1,9 @@
-using TicTacCOSTCO.DataStructures;
+﻿using Cascadia.DataStructures;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     public class PlayerOperationsButton : MonoBehaviour
     {
@@ -17,7 +17,7 @@ namespace TicTacCOSTCO.Unity.UI
 
         public PlayerProfile PlayerProfile { get; private set; }
         [SerializeReference]
-        private PlayerConfiguratorSelector PlayerConfiguratorSelector;
+        private PlayerConfiguratorSelector playerConfiguratorSelector;
 
         public void SetFromProfile(PlayerProfile profile)
         {
@@ -45,13 +45,13 @@ namespace TicTacCOSTCO.Unity.UI
             this.IconRepresenterBase.SetActive(false);
             this.TextOfPlayer.gameObject.SetActive(false);
 
-            this.PlayerConfiguratorSelector.UpdateFromMinusOrPlus();
+            this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
         }
 
         public void OnPlus()
         {
             SetFromProfile(PersistentGameConfiguration.Singleton.AddPlayer());
-            this.PlayerConfiguratorSelector.UpdateFromMinusOrPlus();
+            this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
         }
 
         public void Deactivate(bool showPlus)

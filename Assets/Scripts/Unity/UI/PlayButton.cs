@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     public class PlayButton : MonoBehaviour
     {

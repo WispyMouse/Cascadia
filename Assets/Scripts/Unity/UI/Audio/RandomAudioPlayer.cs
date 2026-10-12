@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
     using UnityEngine;
@@ -14,7 +14,7 @@ namespace TicTacCOSTCO.Unity.UI
         /// If empty, no sound will play.
         /// </summary>
         [SerializeField]
-        private List<AudioClip> audioClips = new List<AudioClip>();
+        private List<AudioClip> audioClips = new();
 
         /// <summary>
         /// Number of <see cref="AudioSource"/>s to pool. Will create up to this many, and attach them to
@@ -41,10 +41,7 @@ namespace TicTacCOSTCO.Unity.UI
         [SerializeReference]
         private AnimationCurve pitchCurve;
 
-        protected virtual void Awake()
-        {
-            this.PoolAdditionalAudioSources(this.audioSourcesToPool);
-        }
+        protected virtual void Awake() => this.PoolAdditionalAudioSources(this.audioSourcesToPool);
 
         /// <summary>
         /// Chooses a <see cref="AudioClip"/> from <see cref="audioClips"/> at random,
@@ -93,7 +90,7 @@ namespace TicTacCOSTCO.Unity.UI
         {
             for (int ii = 0; ii < count; ii++)
             {
-                GameObject audioSourceObject = new GameObject();
+                GameObject audioSourceObject = new();
                 audioSourceObject.transform.parent = this.transform;
                 AudioSource source = audioSourceObject.AddComponent<AudioSource>();
                 this.pooledAudioSources.Add(source);

@@ -1,8 +1,8 @@
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     using UnityEngine;
     using UnityEngine.UI;
-    using TicTacCOSTCO.Unity;
+    using Cascadia.Unity;
     using TMPro;
 
     public class SelectBoardScreen : MonoBehaviour

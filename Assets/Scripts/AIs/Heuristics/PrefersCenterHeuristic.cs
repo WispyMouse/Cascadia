@@ -1,7 +1,7 @@
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "Prefer Center Heuristic.asset", menuName = "COSTCO/AI Heuristic/Prefer Center")]
     public class PrefersCenterHeuristic : AIHeuristic

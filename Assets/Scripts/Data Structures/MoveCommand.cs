@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.DataStructures
+namespace Cascadia.DataStructures
 {
     using System.Collections.Generic;
 

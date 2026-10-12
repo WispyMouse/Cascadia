@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
     using TMPro;
@@ -71,10 +71,7 @@ namespace TicTacCOSTCO.Unity.UI
             this.OpenFromPlayer(this.ShowingProfile.Index);
         }
 
-        public void NameChanged(string newName)
-        {
-            this.ShowingProfile.PlayerName = newName;
-        }
+        public void NameChanged(string newName) => this.ShowingProfile.PlayerName = newName;
 
         public void NextIcon()
         {

@@ -1,7 +1,7 @@
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "COSTCO/AI Heuristic/Does Not Lose")]
     public class DoesNotLoseHeuristic : AIHeuristic

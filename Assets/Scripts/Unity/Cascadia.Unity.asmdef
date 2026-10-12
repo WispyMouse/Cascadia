@@ -1,8 +1,9 @@
 {
-    "name": "TestData",
-    "rootNamespace": "",
+    "name": "Cascadia.Unity",
+    "rootNamespace": "Cascadia.Unity",
     "references": [
-        "GUID:3c9d604a283fa324ebe5a40228f15207"
+        "GUID:3c9d604a283fa324ebe5a40228f15207",
+        "GUID:104e96fc51c35c243be8be7496568bcf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

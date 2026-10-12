@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
 
@@ -7,9 +7,6 @@ namespace TicTacCOSTCO.Unity.UI
     /// </summary>
     public class BlipPlayerInvoker : MonoBehaviour
     {
-        public void PlayBlip()
-        {
-            RandomBlipPlayer.Singleton.PlayRandomSound();
-        }
+        public void PlayBlip() => RandomBlipPlayer.Singleton.PlayRandomSound();
     }
 }

@@ -1,28 +1,21 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class PlayerConfiguratorSelector : MonoBehaviour
     {
-        public List<PlayerOperationsButton> PlayerButtons = new List<PlayerOperationsButton>();
+        public List<PlayerOperationsButton> PlayerButtons = new();
 
-        private void Start()
-        {
-        }
-
-        private void OnEnable()
-        {
-            UpdateFromMinusOrPlus();
-        }
+        private void OnEnable() => this.UpdateFromMinusOrPlus();
 
         public void UpdateFromMinusOrPlus()
         {
             int playerCount = PersistentGameConfiguration.Singleton.Players.Count;
             for (int ii = 0, count = this.PlayerButtons.Count; ii < count; ii++)
             {
-                this.PlayerButtons[ii].MinusButtonBase.gameObject.SetActive(ii > BoardState.MINIMUMPLAYERS);
+                this.PlayerButtons[ii].MinusButtonBase.SetActive(ii > BoardState.MINIMUMPLAYERS);
 
                 if (playerCount > ii)
                 {

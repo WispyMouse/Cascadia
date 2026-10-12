@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace TicTacCOSTCO.Unity.UI
+namespace Cascadia.Unity.UI
 {
     /// <summary>
     /// Plays basic UI interaction blip sounds.

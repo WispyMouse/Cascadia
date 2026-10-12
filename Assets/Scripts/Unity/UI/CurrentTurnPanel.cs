@@ -1,9 +1,9 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections;
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using UnityEngine;
     using UnityEngine.Profiling;
 
@@ -61,21 +61,15 @@ namespace TicTacCOSTCO.Unity.UI
             }
         }
 
-        public void RestorePlayer(int index)
-        {
-            this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
-        }
+        public void RestorePlayer(int index) => this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
-        public void SetCascade(int index, int cascadeLevel)
-        {
-            this.entries[index].SetCascade(cascadeLevel);
-        }
+        public void SetCascade(int index, int cascadeLevel) => this.entries[index].SetCascade(cascadeLevel);
 
         public void SetHints(int visibleHint)
         {
             for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerCount; ii++)
             {
-                SetHint(ii, ii == visibleHint);
+                this.SetHint(ii, ii == visibleHint);
             }
         }
 

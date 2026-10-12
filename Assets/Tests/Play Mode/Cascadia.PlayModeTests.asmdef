@@ -1,16 +1,15 @@
 {
-    "name": "TicTacCOSTCO.EditModeTests",
-    "rootNamespace": "TicTacCOSTCO.Tests",
+    "name": "Cascadia.PlayModeTests",
+    "rootNamespace": "Cascadia.PlayModeTests",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Scripts",
-        "TicTacCOSTCO.DataStructures",
-        "TestData"
+        "Cascadia.DataStructures",
+        "Cascadia.Unity.UI",
+        "Cascadia.Unity",
+        "Cascadia.TestData"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

@@ -1,5 +1,5 @@
-using TicTacCOSTCO.DataStructures;
-using TicTacCOSTCO.Unity;
+﻿using Cascadia.DataStructures;
+using Cascadia.Unity;
 using TMPro;
 using UnityEngine;
 
@@ -22,7 +22,7 @@ public class Cell : MonoBehaviour
     private void Awake()
     {
         this.SetHighlightStatus(false);
-        this.HintHolder.gameObject.SetActive(false);
+        this.HintHolder.SetActive(false);
     }
 
     public void SetSide(PlayerProfile player)
@@ -32,10 +32,7 @@ public class Cell : MonoBehaviour
         this.AlreadyPlaced = true;
     }
 
-    public void SetHighlightStatus(bool toHighlight)
-    {
-        this.CellSpriteRenderer.sprite = toHighlight ? this.RecentBorder : this.DefaultBorder;
-    }
+    public void SetHighlightStatus(bool toHighlight) => this.CellSpriteRenderer.sprite = toHighlight ? this.RecentBorder : this.DefaultBorder;
 
     public void SetHint(int amount)
     {

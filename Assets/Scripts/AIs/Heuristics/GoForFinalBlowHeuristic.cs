@@ -1,7 +1,7 @@
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
 
-namespace TicTacCOSTCO.AIs
+namespace Cascadia.AIs
 {
     [CreateAssetMenu(fileName = "Go For Final Blow Heuristic.asset", menuName = "COSTCO/AI Heuristic/Go For Final Blow Heuristic")]
     public class GoForFinalBlowHeuristic : AIHeuristic

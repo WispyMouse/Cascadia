@@ -1,7 +1,7 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -22,14 +22,11 @@ namespace TicTacCOSTCO.Unity.UI
         /// <summary>
         /// If this is called, we need to reconstruct the game.
         /// </summary>
-        public void Paint(float _)
-        {
-            this.GameConductor.ResetGame();
-        }
+        public void Paint(float _) => this.GameConductor.ResetGame();
 
         public Dictionary<Coordinate, Cell> Paint()
         {
-            Dictionary<Coordinate, Cell> cells = new Dictionary<Coordinate, Cell>();
+            Dictionary<Coordinate, Cell> cells = new(this.GameConductor.CurrentBoardState.GameConfiguration.MaximumDimensions);
 
             for (int ii = this.instantiatedCells.Count - 1; ii >= 0; ii--)
             {
@@ -45,17 +42,17 @@ namespace TicTacCOSTCO.Unity.UI
                 for (int yy = 0; yy < this.GameConductor.CurrentBoardState.Height; yy++)
                 {
                     Coordinate position = new Coordinate(xx, yy);
-                    Cell newCell = Instantiate(CellPF, this.transform);
+                    Cell newCell = Instantiate(this.CellPF, this.transform);
                     newCell.Position = position;
                     newCell.transform.localPosition = new Vector2(xx - xOffset, yy - yOffset);
-                    instantiatedCells.Add(newCell);
+                    this.instantiatedCells.Add(newCell);
                     cells.Add(position, newCell);
                 }
             }
 
-            GridCamera.orthographicSize = OrthographicSizeBase
-                + Mathf.Max(this.GameConductor.CurrentBoardState.Width * WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.Height)
-                * OrthographicSizeScalar;
+            this.GridCamera.orthographicSize = this.OrthographicSizeBase
+                + Mathf.Max(this.GameConductor.CurrentBoardState.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.Height)
+                * this.OrthographicSizeScalar;
 
             return cells;
         }

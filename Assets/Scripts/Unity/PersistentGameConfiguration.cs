@@ -1,9 +1,8 @@
-namespace TicTacCOSTCO.Unity
+﻿namespace Cascadia.Unity
 {
     using System.Collections.Generic;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
     using UnityEngine;
-    using UnityEngine.UIElements;
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
@@ -13,8 +12,8 @@ namespace TicTacCOSTCO.Unity
         public const string HUMAN = "Human";
         public static PersistentGameConfiguration Singleton { get; private set; } = null;
 
-        public GameConfiguration GameConfiguration => this._GameConfiguration;
-        private GameConfiguration _GameConfiguration;
+        public GameConfiguration GameConfiguration => this.gameConfiguration;
+        private GameConfiguration gameConfiguration;
         public int Width => this.GameConfiguration.Width;
         public int Height => this.GameConfiguration.Height;
 
@@ -26,32 +25,32 @@ namespace TicTacCOSTCO.Unity
 
         [Range(3, 12)]
         [SerializeField]
-        private int _StartWidth = 5;
+        private int startWidth = 5;
 
         [Range(3, 12)]
         [SerializeField]
-        private int _StartHeight = 5;
+        private int startHeight = 5;
 
         [Range(BoardState.MINIMUMPLAYERS, 6)]
         [SerializeField]
-        private int _StartPlayerCount = 2;
+        private int startPlayerCount = 2;
 
         [Range(0, 8)]
         [SerializeField]
-        public int _StartStallTurn = 0;
+        private int startStallTurn = 0;
 
-        public IReadOnlyList<PlayerProfile> Players => _Players;
-        private readonly List<PlayerProfile> _Players = new List<PlayerProfile>();
-
-        [SerializeField]
-        private List<int> _coresByIndex = new List<int>();
+        public IReadOnlyList<PlayerProfile> Players => players;
+        private readonly List<PlayerProfile> players = new();
 
         [SerializeField]
-        private List<Color> knockoutColorsForTurns = new List<Color>();
+        private List<int> coresByIndex = new();
 
-        public List<Sprite> PlayerIconOptions = new List<Sprite>();
+        [SerializeField]
+        private List<Color> knockoutColorsForTurns = new();
 
-        public List<AICore> AICores = new List<AICore>();
+        public List<Sprite> PlayerIconOptions = new();
+
+        public List<AICore> AICores = new();
 
         private void Awake()
         {
@@ -67,19 +66,19 @@ namespace TicTacCOSTCO.Unity
             this.transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
 
-            this._GameConfiguration = new GameConfiguration(this._StartWidth, this._StartHeight, this._StartPlayerCount, 3, this._StartStallTurn, forceOrderlyTurn: null);
+            this.gameConfiguration = new GameConfiguration(this.startWidth, this.startHeight, this.startPlayerCount, 3, this.startStallTurn, forceOrderlyTurn: null);
 
-            for (int ii = 0; ii < this._StartPlayerCount; ii++)
+            for (int ii = 0; ii < this.startPlayerCount; ii++)
             {
-                PlayerProfile newProfile = AddPlayer();
+                PlayerProfile newProfile = this.AddPlayer();
 
 #if UNITY_EDITOR
                 // Quick AI core test
-                if (this._coresByIndex.Count > ii && this._coresByIndex[ii] >= 0)
+                if (this.coresByIndex.Count > ii && this.coresByIndex[ii] >= 0)
                 {
-                    newProfile.AICoreIndex = this._coresByIndex[ii];
+                    newProfile.AICoreIndex = this.coresByIndex[ii];
                     newProfile.IsAI = true;
-                    newProfile.PlayerName = this.AICores[this._coresByIndex[ii]].name;
+                    newProfile.PlayerName = this.AICores[this.coresByIndex[ii]].name;
                 }
 #endif
             }
@@ -89,19 +88,19 @@ namespace TicTacCOSTCO.Unity
 
         public void UpdateWidth(int newValue)
         {
-            this._GameConfiguration.Width = newValue;
+            this.gameConfiguration.Width = newValue;
             this.OnGameplaySettingsUpdated?.Invoke();
         }
 
         public void UpdateHeight(int newValue)
         {
-            this._GameConfiguration.Height = newValue;
+            this.gameConfiguration.Height = newValue;
             this.OnGameplaySettingsUpdated?.Invoke();
         }
 
         public void UpdateStall(int newValue)
         {
-            this._GameConfiguration.StallTurn = newValue;
+            this.gameConfiguration.StallTurn = newValue;
             this.OnGameplaySettingsUpdated?.Invoke();
         }
 
@@ -118,7 +117,7 @@ namespace TicTacCOSTCO.Unity
                 // Reduce the index so that we have a stable 0-N
                 if (startRemoving)
                 {
-                    this._Players[ii].Index--;
+                    this.players[ii].Index--;
                     continue;
                 }
 
@@ -126,7 +125,7 @@ namespace TicTacCOSTCO.Unity
                 if (this.Players[ii] == toRemove)
                 {
                     startRemoving = true;
-                    this._Players.RemoveAt(ii);
+                    this.players.RemoveAt(ii);
 
                     // Move the iterator back one, since this has removed something
                     ii--;
@@ -145,7 +144,7 @@ namespace TicTacCOSTCO.Unity
         /// <returns></returns>
         public PlayerProfile AddPlayer()
         {
-            PlayerProfile newProfile = new PlayerProfile();
+            PlayerProfile newProfile = new();
 
             // Find the first index not used by anyone for the icon
             // It'll see if anyone is using the first, and if not, use that;
@@ -170,32 +169,29 @@ namespace TicTacCOSTCO.Unity
                 }
             }
 
-            newProfile.Index = this._Players.Count;
+            newProfile.Index = this.players.Count;
             newProfile.RepresenterSpriteIndex = Random.Range(0, this.PlayerIconOptions.Count);
-            newProfile.KnockoutColor = knockoutColorsForTurns[newProfile.Index];
+            newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.IsAI = false;
             newProfile.PlayerName = HUMAN;
 
-            this._Players.Add(newProfile);
+            this.players.Add(newProfile);
 
             this.OnGameplaySettingsUpdated?.Invoke();
 
             return newProfile;
         }
 
-        public void ForceSetConfig(GameConfiguration configuration)
-        {
-            this._GameConfiguration = configuration;
-        }
+        public void ForceSetConfig(GameConfiguration configuration) => this.gameConfiguration = configuration;
 
         public void HumanitizeForTests()
         {
-            this._coresByIndex.Clear();
-            this._Players.Clear();
+            this.coresByIndex.Clear();
+            this.players.Clear();
 
             for (int ii = 0; ii < this.GameConfiguration.PlayerCount; ii++)
             {
-                AddPlayer();
+                this.AddPlayer();
             }
         }
     }

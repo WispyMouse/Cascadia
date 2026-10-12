@@ -1,6 +1,6 @@
-using TicTacCOSTCO.DataStructures;
-using TicTacCOSTCO.Unity;
-using TicTacCOSTCO.Unity.UI;
+﻿using Cascadia.DataStructures;
+using Cascadia.Unity;
+using Cascadia.Unity.UI;
 using TMPro;
 using UnityEngine;
 
@@ -15,26 +15,23 @@ public class CascadeBanner : MonoBehaviour
 
     public void ResetGame()
     {
-        this.GameConductor.CurrentBoardState.OnPlayerMadeMove += OnMoveMade;
-        this.GameConductor.CurrentBoardState.OnMoveUndone += OnMoveUndone;
-        this.GameConductor.CurrentBoardState.OnGameConclusion += OnGameConclusion;
+        this.GameConductor.CurrentBoardState.OnPlayerMadeMove += this.OnMoveMade;
+        this.GameConductor.CurrentBoardState.OnMoveUndone += this.OnMoveUndone;
+        this.GameConductor.CurrentBoardState.OnGameConclusion += this.OnGameConclusion;
         this.ToggleParent.SetActive(false);
     }
 
-    public void OnMoveUndone(MoveCommand undone)
-    {
-        this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
-    }
+    public void OnMoveUndone(MoveCommand undone) => this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
     public void OnMoveMade(int playerSide)
     {
         if (this.GameConductor.CurrentBoardState.CurrentCascadeLevel == 0)
         {
-            ToggleParent.SetActive(false);
+            this.ToggleParent.SetActive(false);
             return;
         }
 
-        ToggleParent.SetActive(true);
+        this.ToggleParent.SetActive(true);
         if (this.GameConductor.CurrentBoardState.CurrentCascadeLevel == 1)
         {
             this.CascadeAnimator.TextString = "Row x1";

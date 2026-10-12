@@ -1,8 +1,8 @@
 using System.Collections;
 using NUnit.Framework;
-using TicTacCOSTCO.DataStructures;
-using TicTacCOSTCO.Unity;
-using TicTacCOSTCO.Unity.UI;
+using Cascadia.DataStructures;
+using Cascadia.Unity;
+using Cascadia.Unity.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;

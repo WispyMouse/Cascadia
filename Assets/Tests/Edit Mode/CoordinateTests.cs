@@ -1,7 +1,7 @@
-namespace TicTacCOSTCO.Tests
+namespace Cascadia.Tests
 {
     using NUnit.Framework;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
 
     public class CoordinateTests
     {

@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
 
@@ -17,7 +17,6 @@ namespace TicTacCOSTCO.Unity.UI
             // It doesn't become the new player's hints, but we may need to update the hints for the displaying player
             this.TurnOrderHolder.OnTurnStarted += RefreshHints;
         }
-
 
         public void ShowHints(int side)
         {

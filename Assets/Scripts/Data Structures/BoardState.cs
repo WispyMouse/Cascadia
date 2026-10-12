@@ -1,34 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-
-namespace TicTacCOSTCO.DataStructures
+﻿namespace Cascadia.DataStructures
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class BoardState : IReadOnlyBoardState
     {
         public const int MINIMUMPLAYERS = 2;
 
         public static IReadOnlyList<DirectionalityVector> Directionalities = new DirectionalityVector[]
         {
-            new DirectionalityVector(1, 0),
-            new DirectionalityVector(1, -1),
-            new DirectionalityVector(0, -1),
-            new DirectionalityVector(-1, -1),
+            new (1, 0),
+            new (1, -1),
+            new (0, -1),
+            new (-1, -1),
         };
 
         public static IReadOnlyList<DirectionalityVector> DirectionalitiesWithBackwards = new DirectionalityVector[]
         {
-            new DirectionalityVector(1, 0),
-            new DirectionalityVector(1, -1),
-            new DirectionalityVector(0, -1),
-            new DirectionalityVector(-1, -1),
+            new (1, 0),
+            new (1, -1),
+            new (0, -1),
+            new (-1, -1),
 
-            new DirectionalityVector(-1, 0),
-            new DirectionalityVector(-1, 1),
-            new DirectionalityVector(0, 1),
-            new DirectionalityVector(1, 1),
+            new (-1, 0),
+            new (-1, 1),
+            new (0, 1),
+            new (1, 1),
         };
 
         public readonly GameConfiguration GameConfiguration;
@@ -43,8 +41,8 @@ namespace TicTacCOSTCO.DataStructures
         public delegate void OnGameConclusionDelegate(int? winner);
         public OnGameConclusionDelegate OnGameConclusion;
 
-        public IReadOnlyList<MoveCommand> MoveCommandsApplied => this._MoveCommandsApplied;
-        private List<MoveCommand> _MoveCommandsApplied { get; set; } = new List<MoveCommand>();
+        public IReadOnlyList<MoveCommand> MoveCommandsApplied => this.moveCommandsApplied;
+        private List<MoveCommand> moveCommandsApplied { get; set; } = new List<MoveCommand>();
 
         public int Height => this.GameConfiguration.Height;
         public int Width => this.GameConfiguration.Width;
@@ -74,7 +72,7 @@ namespace TicTacCOSTCO.DataStructures
         public HashSet<int> SidesStillInGame { get; set; }
         public int CurrentRound { get; set; } = 1;
 
-        private Dictionary<Coordinate, List<CellsConnection>> AcceptedSolutions;
+        private Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
 
         public readonly BoardConnectionShapesSolver PossibilityContainer;
 
@@ -113,10 +111,10 @@ namespace TicTacCOSTCO.DataStructures
         {
             this.GameConfiguration = gameConfiguration;
 
-            this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(Width * Height);
-            for (int xx = 0; xx < Width; xx++)
+            this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(this.GameConfiguration.MaximumDimensions);
+            for (int xx = 0; xx < this.Width; xx++)
             {
-                for (int yy = 0; yy < Height; yy++)
+                for (int yy = 0; yy < this.Height; yy++)
                 {
                     this._SpotToSideOwnership.Add(new Coordinate(xx, yy), null);
                 }
@@ -125,11 +123,11 @@ namespace TicTacCOSTCO.DataStructures
             this.SidesStillInGame = new HashSet<int>(this.PlayerCount);
             for (int ii = 0; ii < this.PlayerCount; ii++)
             {
-                this.SidesStillInGame.Add(ii);
+                _ = this.SidesStillInGame.Add(ii);
             }
 
             this.Winner = null;
-            this.AcceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(Width * Height);
+            this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.GameConfiguration.MaximumDimensions);
 
             this.CurrentGameState = GameStateEnum.NotStarted;
             this.CurrentCascadeLevel = 0;
@@ -138,11 +136,11 @@ namespace TicTacCOSTCO.DataStructures
             this.PlayerOrder = new List<int>(this.PlayerCount);
             if (gameConfiguration.ForceOrderlyTurn.HasValue)
             {
-                AssignForceOrderlyTurn();
+                this.AssignForceOrderlyTurn();
             }
             else
             {
-                RandomlyAssignFirstPlayerTurn();
+                this.RandomlyAssignFirstPlayerTurn();
             }
 
             this.PossibilityContainer = new BoardConnectionShapesSolver(this.GameConfiguration);
@@ -161,10 +159,10 @@ namespace TicTacCOSTCO.DataStructures
             this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
             this.SidesStillInGame = new HashSet<int>(toDeepClone.SidesStillInGame);
 
-            this.AcceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.AcceptedSolutions.Count);
-            foreach (Coordinate coordinate in toDeepClone.AcceptedSolutions.Keys)
+            this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.acceptedSolutions.Count);
+            foreach (Coordinate coordinate in toDeepClone.acceptedSolutions.Keys)
             {
-                this.AcceptedSolutions.Add(coordinate, new List<CellsConnection>(toDeepClone.AcceptedSolutions[coordinate]));
+                this.acceptedSolutions.Add(coordinate, new List<CellsConnection>(toDeepClone.acceptedSolutions[coordinate]));
             }
         }
 
@@ -200,13 +198,13 @@ namespace TicTacCOSTCO.DataStructures
 
         public MoveCommand GenerateCommandFromMove(int side, Coordinate position)
         {
-            IReadOnlyList<CellsConnection> connections = GetAllNewSolutions(side, position);
-            List<int> playersRemoved = new List<int>();
+            IReadOnlyList<CellsConnection> connections = this.GetAllNewSolutions(side, position);
+            List<int> playersRemoved = new();
 
             // HACK SHOULD GENERALIZE: Would this move result in a loss
             // "newConnections" are determined by the number of actual new connections
             // we want to only check new scoring connections in this process
-            if (this.CurrentGameState == BoardState.GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
+            if (this.CurrentGameState == GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
                 playersRemoved.Add(side);
             }
@@ -216,7 +214,7 @@ namespace TicTacCOSTCO.DataStructures
 
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition)
         {
-            List<CellsConnection> newSolutions = new List<CellsConnection>(DirectionalitiesWithBackwards.Count);
+            List<CellsConnection> newSolutions = new(DirectionalitiesWithBackwards.Count);
 
             IReadOnlyCollection<CellsConnection> possibleConnections = this.PossibilityContainer.PossibleConnections[hypotheticalPosition];
 
@@ -246,13 +244,13 @@ namespace TicTacCOSTCO.DataStructures
                 return false;
             }
 
-            if (this.CurrentGameState == BoardState.GameStateEnum.NotStarted)
+            if (this.CurrentGameState == GameStateEnum.NotStarted)
             {
-                this.CurrentGameState = BoardState.GameStateEnum.Playing;
+                this.CurrentGameState = GameStateEnum.Playing;
             }
 
             this._SpotToSideOwnership[toApply.Position] = toApply.Side;
-            this._MoveCommandsApplied.Add(toApply);
+            this.moveCommandsApplied.Add(toApply);
 
             int solutionsCount = toApply.ConnectionsMade.Count;
             this.CurrentCascadeLevel = Math.Max(this.CurrentCascadeLevel, solutionsCount);
@@ -262,10 +260,10 @@ namespace TicTacCOSTCO.DataStructures
             {
                 foreach (Coordinate coordinate in connection.Cells)
                 {
-                    if (!this.AcceptedSolutions.TryGetValue(coordinate, out List<CellsConnection> existingConnections))
+                    if (!this.acceptedSolutions.TryGetValue(coordinate, out List<CellsConnection> existingConnections))
                     {
                         existingConnections = new List<CellsConnection>();
-                        this.AcceptedSolutions.Add(coordinate, existingConnections);
+                        this.acceptedSolutions.Add(coordinate, existingConnections);
                     }
                     existingConnections.Add(connection);
                 }
@@ -278,14 +276,14 @@ namespace TicTacCOSTCO.DataStructures
                 {
                     // If there were no new solutions, or not enough solutions for previous cascade, and we're in cascade state,
                     // the current player should be knocked out
-                    this.SidesStillInGame.Remove(playerRemoved);
+                    _ = this.SidesStillInGame.Remove(playerRemoved);
                 }
 
                 if (this.SidesStillInGame.Count == 1)
                 {
                     this.CurrentPlayerIndex = this.SidesStillInGame.First();
                     this.Winner = this.CurrentPlayerIndex;
-                    this.CurrentGameState = BoardState.GameStateEnum.End;
+                    this.CurrentGameState = GameStateEnum.End;
 
                     this.OnGameConclusion?.Invoke(this.Winner);
                     return true;
@@ -293,12 +291,12 @@ namespace TicTacCOSTCO.DataStructures
             }
             else if (solutionsCount > 0)
             {
-                this.CurrentGameState = BoardState.GameStateEnum.Cascade;
+                this.CurrentGameState = GameStateEnum.Cascade;
             }
 
             if (!this.AnyLegalMovesRemainForPlayer(toApply.Side, out _))
             {
-                this.CurrentGameState = BoardState.GameStateEnum.End;
+                this.CurrentGameState = GameStateEnum.End;
                 this.Winner = null;
 
                 // If there are no more empty spots, the winner is the player who most recently made a valid connection
@@ -342,8 +340,7 @@ namespace TicTacCOSTCO.DataStructures
 
             // Check if any new solutions should be banded together; 4-in-a-row is the same value as a 3-in-a-row
             // Any solutions that have the same directionality *must* be bandable
-            bool anyDiscarded = false;
-
+            bool anyDiscarded;
             do
             {
                 anyDiscarded = false;
@@ -363,7 +360,7 @@ namespace TicTacCOSTCO.DataStructures
 
                             // Add a new composite solution to the end of the list, which won't be evaluated again
                             List<Coordinate> Sorted = SortByDirectionality(leftCellsSolution.Cells.Union(rightCellsSolution.Cells), leftCellsSolution.Directionality);
-                            CellsConnection compositeSolution = new CellsConnection(Sorted, leftCellsSolution.Directionality);
+                            CellsConnection compositeSolution = new (Sorted, leftCellsSolution.Directionality);
                             remainingSolutions.Add(compositeSolution);
                             anyDiscarded = true;
                             break;
@@ -377,7 +374,6 @@ namespace TicTacCOSTCO.DataStructures
                 }
             } while (anyDiscarded);
 
-            anyDiscarded = false;
             do
             {
                 anyDiscarded = false;
@@ -389,7 +385,7 @@ namespace TicTacCOSTCO.DataStructures
 
                     foreach (Coordinate curCoordinate in remainingSolutions[ii].Cells)
                     {
-                        if (this.AcceptedSolutions.TryGetValue(curCoordinate, out List<CellsConnection> existingConnections))
+                        if (this.acceptedSolutions.TryGetValue(curCoordinate, out List<CellsConnection> existingConnections))
                         {
                             foreach (CellsConnection existingConnection in existingConnections)
                             {
@@ -435,7 +431,7 @@ namespace TicTacCOSTCO.DataStructures
 
         public bool TryGetConnectionsForCoordinate(Coordinate toGet, out IReadOnlyCollection<CellsConnection> connections)
         {
-            if (this.AcceptedSolutions.TryGetValue(toGet, out List<CellsConnection> writeableConnections))
+            if (this.acceptedSolutions.TryGetValue(toGet, out List<CellsConnection> writeableConnections))
             {
                 connections = writeableConnections;
                 return connections.Any();
@@ -445,16 +441,10 @@ namespace TicTacCOSTCO.DataStructures
             return false;
         }
 
-        public void ForceMarkOwnership(Coordinate position, int? ownership)
-        {
-            this._SpotToSideOwnership[position] = ownership;
-        }
+        public void ForceMarkOwnership(Coordinate position, int? ownership) => this._SpotToSideOwnership[position] = ownership;
 
-        public void RemoveConnection(Coordinate position, CellsConnection connection)
-        {
-            this.AcceptedSolutions[position].Remove(connection);
-        }
-    
+        public void RemoveConnection(Coordinate position, CellsConnection connection) => this.acceptedSolutions[position].Remove(connection);
+
         public bool OverlayConnectionOwned(CellsConnection connection, int side)
         {
             bool allMatch = true;
@@ -565,12 +555,7 @@ namespace TicTacCOSTCO.DataStructures
             return true;
         }
 
-        public IReadOnlyBoardState DeepClone()
-        {
-            return new BoardState(this);
-        }
-
-
+        public IReadOnlyBoardState DeepClone() => new BoardState(this);
 
         /// <summary>
         /// Reverse the previous move command, entirely undoing everything it did.
@@ -582,14 +567,14 @@ namespace TicTacCOSTCO.DataStructures
         /// </returns>
         public MoveCommand ReversePreviousMoveCommand()
         {
-            int moveCommandsApplied = this._MoveCommandsApplied.Count;
+            int moveCommandsApplied = this.moveCommandsApplied.Count;
             if (moveCommandsApplied == 0)
             {
                 return default;
             }
 
             MoveCommand toRemove = this.MoveCommandsApplied[moveCommandsApplied - 1];
-            this._MoveCommandsApplied.RemoveAt(moveCommandsApplied - 1);
+            this.moveCommandsApplied.RemoveAt(moveCommandsApplied - 1);
 
             // HACK: At this point in the game's development, the only thing that *could* be placed during a reverse is a null
             // Will need to track what it used to be, if we can make it any other value while reversing
@@ -598,7 +583,7 @@ namespace TicTacCOSTCO.DataStructures
 
             foreach (int playerRemoved in toRemove.PlayersSidesRemoved)
             {
-                this.SidesStillInGame.Add(playerRemoved);
+                _ = this.SidesStillInGame.Add(playerRemoved);
             }
 
             // Remove any added connection
@@ -612,15 +597,15 @@ namespace TicTacCOSTCO.DataStructures
 
             if (this.MoveCommandsApplied.Count == 0)
             {
-                this.CurrentGameState = BoardState.GameStateEnum.NotStarted;
+                this.CurrentGameState = GameStateEnum.NotStarted;
             }
             else if (this.CurrentCascadeLevel > 0)
             {
-                this.CurrentGameState = BoardState.GameStateEnum.Cascade;
+                this.CurrentGameState = GameStateEnum.Cascade;
             }
             else
             {
-                this.CurrentGameState = BoardState.GameStateEnum.Playing;
+                this.CurrentGameState = GameStateEnum.Playing;
             }
 
             this.AdvancePlayer(reversePlayer: true);
@@ -688,7 +673,7 @@ namespace TicTacCOSTCO.DataStructures
         {
             // Randomly select the player to move first
             // First, fill the list with all of the possible sides
-            List<int> remainingSides = new List<int>();
+            List<int> remainingSides = new(this.PlayerCount);
             for (int ii = 0; ii < this.PlayerCount; ii++)
             {
                 remainingSides.Add(ii);

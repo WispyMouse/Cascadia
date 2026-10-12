@@ -1,10 +1,10 @@
 using NUnit.Framework;
 using System.Collections.Generic;
-using TicTacCOSTCO.DataStructures;
+using Cascadia.DataStructures;
 using UnityEngine;
-using static TicTacCOSTCO.Tests.CoordinateTests;
+using static Cascadia.Tests.CoordinateTests;
 
-namespace TicTacCOSTCO.Tests
+namespace Cascadia.Tests
 {
     public class GameResultTests
     {

@@ -1,9 +1,9 @@
-namespace TicTacCOSTCO.Tests
+﻿namespace Cascadia.Tests
 {
     using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
-    using TicTacCOSTCO.DataStructures;
+    using Cascadia.DataStructures;
 
     public class UndoTests
     {
@@ -40,35 +40,35 @@ namespace TicTacCOSTCO.Tests
         public static UndoTests_UndosAtEnd_DataSource_Object[] UndoTests_UndosAtEnd_DataSource =
         {
             // One action taken, undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero },
                 new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
 
             // Two actions taken, both undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right },
                 new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 2, 0, BoardState.GameStateEnum.NotStarted, 0, 2),
 
             // Two actions taken, one undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right },
                 new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 1, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Three-in-a-row for one player, undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right, Coordinate.Right * 2 },
                 new GameConfiguration(5, 5, 1, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 1),
 
             // Three-in-a-row for one player in two player game, undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up * 2, Coordinate.right * 2 },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up * 2, Coordinate.Right * 2 },
                 new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 0, BoardState.GameStateEnum.Playing, 0, 2),
 
             // Three-in-a-row for one player, responded to with losing move, undone
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.up, Coordinate.right, Coordinate.up * 2, Coordinate.right * 2, Coordinate.up + Coordinate.right },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Up, Coordinate.Right, Coordinate.Up * 2, Coordinate.Right * 2, Coordinate.Up + Coordinate.Right },
                 new GameConfiguration(5, 5, 2, 3, 0, forceOrderlyTurn: 0), 1, 1, BoardState.GameStateEnum.Cascade, 1, 2),
 
             // In three-player-game, undo targets expected player
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right, Coordinate.Right * 2 },
                 new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 1, 2, BoardState.GameStateEnum.Playing, 0, 3),
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2 },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right, Coordinate.Right * 2 },
                 new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 2, 1, BoardState.GameStateEnum.Playing, 0, 3),
-            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.zero, Coordinate.right, Coordinate.right * 2, Coordinate.up, Coordinate.up + Coordinate.right, Coordinate.up + Coordinate.right * 2 },
+            new UndoTests_UndosAtEnd_DataSource_Object(new List<Coordinate>() { Coordinate.Zero, Coordinate.Right, Coordinate.Right * 2, Coordinate.Up, Coordinate.Up + Coordinate.Right, Coordinate.Up + Coordinate.Right * 2 },
                 new GameConfiguration(5, 5, 3, 3, 0, forceOrderlyTurn: 0), 6, 0, BoardState.GameStateEnum.NotStarted, 0, 3),
         };
 

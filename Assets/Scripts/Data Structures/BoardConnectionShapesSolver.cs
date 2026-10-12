@@ -1,4 +1,4 @@
-namespace TicTacCOSTCO.DataStructures
+namespace Cascadia.DataStructures
 {
     using NUnit.Framework;
     using System;

@@ -1,4 +1,4 @@
-namespace Cascadia.Tests
+﻿namespace Cascadia.Tests
 {
     using NUnit.Framework;
     using Cascadia.DataStructures;
@@ -18,20 +18,17 @@ namespace Cascadia.Tests
                 this.Expected = expected;
             }
 
-            public override string ToString()
-            {
-                return $"({A} + {B} = {Expected}";
-            }
+            public override string ToString() => $"({this.A} + {this.B} = {this.Expected}";
         }
 
         public static CoordinatePlusResult_DataSource_Object[] CoordinatePlusResult_DataSource =
         {
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(1, 0), new Coordinate(1, 0), new Coordinate(2, 0)),
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(1, 0), new Coordinate(1, -5), new Coordinate(2, -5)),
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(0, 0), new Coordinate(0, 0), new Coordinate(0, 0)),
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(3, 3), new Coordinate(-2, -3), new Coordinate(1, 0)),
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(-3, -3), new Coordinate(-2, -3), new Coordinate(-5, -6)),
-            new CoordinatePlusResult_DataSource_Object(new Coordinate(1999, -50), new Coordinate(2000, 25), new Coordinate(3999, -25))
+            new(new Coordinate(1, 0), new Coordinate(1, 0), new Coordinate(2, 0)),
+            new(new Coordinate(1, 0), new Coordinate(1, -5), new Coordinate(2, -5)),
+            new(new Coordinate(0, 0), new Coordinate(0, 0), new Coordinate(0, 0)),
+            new(new Coordinate(3, 3), new Coordinate(-2, -3), new Coordinate(1, 0)),
+            new(new Coordinate(-3, -3), new Coordinate(-2, -3), new Coordinate(-5, -6)),
+            new(new Coordinate(1999, -50), new Coordinate(2000, 25), new Coordinate(3999, -25))
         };
 
         /// <summary>
@@ -62,21 +59,18 @@ namespace Cascadia.Tests
                 this.Expected = expected;
             }
 
-            public override string ToString()
-            {
-                return $"({A} * {Multiplier} = {Expected}";
-            }
+            public override string ToString() => $"({this.A} * {this.Multiplier} = {this.Expected}";
         }
 
         public static CoordinateMultiplyResult_DataSource_Object[] CoordinateMultiplyResult_DataSource =
         {
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(1, 0), 3, new Coordinate(3, 0)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(1, 0), 4, new Coordinate(4, 0)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(0, 0), 5, new Coordinate(0, 0)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(3, 3), 1, new Coordinate(3, 3)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(-3, -3), 10, new Coordinate(-30, -30)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(-3, -3), -10, new Coordinate(30, 30)),
-            new CoordinateMultiplyResult_DataSource_Object(new Coordinate(1999, -50), 0, new Coordinate(0, 0))
+            new(new Coordinate(1, 0), 3, new Coordinate(3, 0)),
+            new(new Coordinate(1, 0), 4, new Coordinate(4, 0)),
+            new(new Coordinate(0, 0), 5, new Coordinate(0, 0)),
+            new(new Coordinate(3, 3), 1, new Coordinate(3, 3)),
+            new(new Coordinate(-3, -3), 10, new Coordinate(-30, -30)),
+            new(new Coordinate(-3, -3), -10, new Coordinate(30, 30)),
+            new(new Coordinate(1999, -50), 0, new Coordinate(0, 0))
         };
 
         /// <summary>

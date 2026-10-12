@@ -1,4 +1,4 @@
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using System.Collections;
     using Cascadia.DataStructures;
@@ -9,7 +9,7 @@ namespace Cascadia.Unity.UI
         public GameConductor GameConductor;
         public TurnOrderHolder TurnOrderHolder;
 
-        private Coroutine ThinkingCoroutine { get; set; }
+        private Coroutine thinkingCoroutine { get; set; }
 
         public float TimeForAIToThinkBase = .1f;
         public AnimationCurve TimeForAIToThinkAdditionalSeconds;
@@ -17,15 +17,15 @@ namespace Cascadia.Unity.UI
 
         private void Awake()
         {
-            this.TurnOrderHolder.OnTurnStarted += OnTurnStarted;
+            this.TurnOrderHolder.OnTurnStarted += this.OnTurnStarted;
         }
 
         private void OnTurnStarted(int turn)
         {
-            if (ThinkingCoroutine != null)
+            if (this.thinkingCoroutine != null)
             {
-                StopCoroutine(ThinkingCoroutine);
-                ThinkingCoroutine = null;
+                this.StopCoroutine(this.thinkingCoroutine);
+                this.thinkingCoroutine = null;
             }
 
             if (!this.GameConductor.CurrentBoardState.AnyEmptySpots())
@@ -56,23 +56,23 @@ namespace Cascadia.Unity.UI
                 return;
             }
 
-            if (this.ThinkingCoroutine != null)
+            if (this.thinkingCoroutine != null)
             {
                 Debug.Log($"Instructed to stop coroutine for thinking. This suggests we were told to make another AI turn action too early.");
-                StopCoroutine(this.ThinkingCoroutine);
+                this.StopCoroutine(this.thinkingCoroutine);
             }
 
-            this.ThinkingCoroutine = StartCoroutine(AIThinksAndTakesTurn());
+            this.thinkingCoroutine = this.StartCoroutine(this.AIThinksAndTakesTurn());
         }
 
-        IEnumerator AIThinksAndTakesTurn()
+        private IEnumerator AIThinksAndTakesTurn()
         {
             int side = this.GameConductor.CurrentBoardState.CurrentPlayerSide;
-            float randomWait = TimeForAIToThinkAdditionalSeconds.Evaluate(Random.Range(0, 1f));
+            float randomWait = this.TimeForAIToThinkAdditionalSeconds.Evaluate(Random.Range(0, 1f));
 
             if (this.GameConductor.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.Cascade)
             {
-                randomWait += AdditionalTimeDuringCascade.Evaluate(Random.Range(0, 1f));
+                randomWait += this.AdditionalTimeDuringCascade.Evaluate(Random.Range(0, 1f));
             }
 
             // Debug.Log($"Starting to think for {side}, waiting {randomWait} seconds...");
@@ -84,7 +84,7 @@ namespace Cascadia.Unity.UI
                 yield break;
             }
 
-            this.ThinkingCoroutine = null;
+            this.thinkingCoroutine = null;
 
             Coordinate move =
                 PersistentGameConfiguration.Singleton.Players[side].AICore

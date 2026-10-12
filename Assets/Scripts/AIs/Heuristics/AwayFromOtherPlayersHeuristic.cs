@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Away From Other Players Heuristic.asset", menuName = "COSTCO/AI Heuristic/Away From Player")]
     public class AwayFromOtherPlayersHeuristic : AIHeuristic
     {
@@ -37,9 +36,9 @@ namespace Cascadia.AIs
             }
 
             // Not too congested, ship it
-            if (occupiedNeighbors <= MaximumNeighbors)
+            if (occupiedNeighbors <= this.MaximumNeighbors)
             {
-                return Weight;
+                return this.Weight;
             }
 
             return 0;

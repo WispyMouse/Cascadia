@@ -1,6 +1,5 @@
 ﻿namespace Cascadia.Unity.UI
 {
-    using System.Collections.Generic;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -93,7 +92,7 @@
 
             int countWithIndex = 0;
 
-            for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii ++)
+            for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
             {
                 if (PersistentGameConfiguration.Singleton.Players[ii].RepresenterSpriteIndex == this.ShowingProfile.RepresenterSpriteIndex)
                 {

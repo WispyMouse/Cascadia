@@ -1,9 +1,8 @@
-using System.Linq;
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Do Not Start Cascade Heuristic.asset", menuName = "COSTCO/AI Heuristic/Do Not Start Cascade")]
     public class DoNotStartCascadeHeuristic : AIHeuristic
     {

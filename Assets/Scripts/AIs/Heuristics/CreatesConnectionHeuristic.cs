@@ -1,8 +1,8 @@
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Creates Connection Heuristic.asset", menuName = "COSTCO/AI Heuristic/Creates Connection")]
     public class CreatesConnectionHeuristic : AIHeuristic
     {

@@ -1,20 +1,18 @@
-using NUnit.Framework;
-using System.Collections.Generic;
-using Cascadia.DataStructures;
-using UnityEngine;
-using static Cascadia.Tests.CoordinateTests;
-
-namespace Cascadia.Tests
+﻿namespace Cascadia.EditModeTests
 {
+    using NUnit.Framework;
+    using Cascadia.DataStructures;
+    using Cascadia.TestData;
+
     public class GameResultTests
     {
-        public static ResultsTestsData.CoordinatesToPlay_DataSource_Object[] CoordinatesToPlay_DataSource => ResultsTestsData.CoordinatesToPlay_DataSource;
+        public static GameResultTestData.CoordinatesToPlay_DataSource_Object[] CoordinatesToPlay_DataSource => GameResultTestData.CoordinatesToPlay_DataSource;
 
         [Test]
         [TestCaseSource(nameof(CoordinatesToPlay_DataSource))]
-        public void ResultChecks(ResultsTestsData.CoordinatesToPlay_DataSource_Object plan)
+        public void ResultChecks(GameResultTestData.CoordinatesToPlay_DataSource_Object plan)
         {
-            BoardState holder = new BoardState(plan.GameConfiguration);
+            BoardState holder = new(plan.GameConfiguration);
 
             for (int ii = 0; ii < plan.Coordinates.Count; ii++)
             {

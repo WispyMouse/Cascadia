@@ -1,12 +1,12 @@
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Go For Final Blow Heuristic.asset", menuName = "COSTCO/AI Heuristic/Go For Final Blow Heuristic")]
     public class GoForFinalBlowHeuristic : AIHeuristic
     {
-        private int _mostOpponentConnections { get; set; } = 0;
+        private int mostOpponentConnections { get; set; } = 0;
 
         public override void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)
         {
@@ -16,7 +16,7 @@ namespace Cascadia.AIs
             }
 
             // Determine the most number of possible connections any opponent has, anywhere
-            _mostOpponentConnections = 0;
+            this.mostOpponentConnections = 0;
 
             foreach (int curSide in currentGameState.SidesStillInGame)
             {
@@ -27,8 +27,8 @@ namespace Cascadia.AIs
 
                 foreach (Coordinate playableSpot in currentGameState.GetEmptySpots())
                 {
-                    _mostOpponentConnections = Mathf.Max(
-                        _mostOpponentConnections,
+                    this.mostOpponentConnections = Mathf.Max(
+                        this.mostOpponentConnections,
                         currentGameState.GenerateCommandFromMove(curSide, playableSpot).ConnectionsMade.Count);
                 }
             }
@@ -43,9 +43,9 @@ namespace Cascadia.AIs
 
             // If this spot would create more connections than any opponent can currently make, consider this
             int creatableConnections = currentGameState.GenerateCommandFromMove(forSide, position).ConnectionsMade.Count;
-            if (creatableConnections > _mostOpponentConnections)
+            if (creatableConnections > this.mostOpponentConnections)
             {
-                UnityEngine.Debug.Log($"({this.name}) ({forSide}) Going for critical win against {_mostOpponentConnections} connections max");
+                Debug.Log($"({this.name}) ({forSide}) Going for critical win against {this.mostOpponentConnections} connections max");
                 return this.Weight;
             }
 

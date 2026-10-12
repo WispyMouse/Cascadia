@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
-namespace Cascadia.DataStructures
+﻿namespace Cascadia.DataStructures
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Concept representing what a game could be started as.
     /// How large, how many players, who goes first, etc.
@@ -14,7 +14,7 @@ namespace Cascadia.DataStructures
         public int InARowToSolve;
         public int StallTurn;
 
-        public int MaximumDimensions => this.Width * this.Height;
+        public readonly int MaximumDimensions => this.Width * this.Height;
 
         /// <summary>
         /// If null, then there is no preset first-going player.
@@ -61,11 +61,11 @@ namespace Cascadia.DataStructures
 
         public readonly IEnumerable<Coordinate> GetAllCoordinatesInMapDimensions()
         {
-            List<Coordinate> coordinates = new List<Coordinate>();
+            List<Coordinate> coordinates = new(this.MaximumDimensions);
 
-            for (int xx = 0; xx < Width; xx++)
+            for (int xx = 0; xx < this.Width; xx++)
             {
-                for (int yy = 0; yy < Height; yy++)
+                for (int yy = 0; yy < this.Height; yy++)
                 {
                     coordinates.Add(new Coordinate(xx, yy));
                 }

@@ -1,8 +1,5 @@
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
-    using System.Collections.Generic;
     using Cascadia.DataStructures;
     using UnityEngine;
 

@@ -1,8 +1,6 @@
-namespace Cascadia.DataStructures
+﻿namespace Cascadia.DataStructures
 {
-    using NUnit.Framework;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     /// <summary>
@@ -17,7 +15,7 @@ namespace Cascadia.DataStructures
         /// Used as a dictionary key for <see cref="coordinateToRadiusNearby"/>, such that we can quickly
         /// look up "nearby" coordinates quickly.
         /// </summary>
-        struct GetCoordinatesAroundKey
+        private readonly struct GetCoordinatesAroundKey
         {
             /// <summary>
             /// Coordinate center position.
@@ -37,10 +35,7 @@ namespace Cascadia.DataStructures
                 this.Radius = Math.Max(0, radius);
             }
 
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(this.Position, this.Radius);
-            }
+            public override int GetHashCode() => HashCode.Combine(this.Position, this.Radius);
         }
 
         /// <summary>
@@ -53,7 +48,7 @@ namespace Cascadia.DataStructures
         public BoardConnectionShapesSolver(GameConfiguration gameConfiguration)
         {
             this.coordinateToRadiusNearby = new Dictionary<GetCoordinatesAroundKey, IReadOnlyCollection<Coordinate>>(gameConfiguration.MaximumDimensions);
-            Dictionary<Coordinate, HashSet<CellsConnection>> possibleConnections = new Dictionary<Coordinate, HashSet<CellsConnection>>(gameConfiguration.MaximumDimensions);
+            Dictionary<Coordinate, HashSet<CellsConnection>> possibleConnections = new(gameConfiguration.MaximumDimensions);
 
             foreach (Coordinate coordinate in gameConfiguration.GetAllCoordinatesInMapDimensions())
             {
@@ -69,19 +64,19 @@ namespace Cascadia.DataStructures
                 {
                     // If this shape can't possibly extend to at least our in-a-row target, then this directionality
                     // can't be rooted from this cell
-                    if (!DirectionalityIsInBounds(gameConfiguration, rootedCoordinate, directionality))
+                    if (!this.DirectionalityIsInBounds(gameConfiguration, rootedCoordinate, directionality))
                     {
                         continue;
                     }
 
-                    List<Coordinate> coordinatesInConnection = new List<Coordinate>(gameConfiguration.InARowToSolve);
-                    List<CellsConnection> newConnections = new List<CellsConnection>();
+                    List<Coordinate> coordinatesInConnection = new(gameConfiguration.InARowToSolve);
+                    List<CellsConnection> newConnections = new();
 
                     coordinatesInConnection.Add(rootedCoordinate);
 
                     for (int ii = 1; ii < gameConfiguration.InARowToSolve; ii++)
                     {
-                        Coordinate resultingCoordinate = rootedCoordinate + directionality * ii;
+                        Coordinate resultingCoordinate = rootedCoordinate + (directionality * ii);
 
                         coordinatesInConnection.Add(resultingCoordinate);
 
@@ -91,7 +86,7 @@ namespace Cascadia.DataStructures
                             continue;
                         }
 
-                        CellsConnection thisConnection = new CellsConnection(new List<Coordinate>(coordinatesInConnection), directionality);
+                        CellsConnection thisConnection = new(new List<Coordinate>(coordinatesInConnection), directionality);
                         newConnections.Add(thisConnection);
                     }
 
@@ -105,7 +100,7 @@ namespace Cascadia.DataStructures
                 }
             }
 
-            Dictionary<Coordinate, IReadOnlyCollection<CellsConnection>> castConnections = new Dictionary<Coordinate, IReadOnlyCollection<CellsConnection>>(possibleConnections.Count);
+            Dictionary<Coordinate, IReadOnlyCollection<CellsConnection>> castConnections = new(possibleConnections.Count);
 
             foreach (Coordinate coordinate in possibleConnections.Keys)
             {
@@ -115,11 +110,11 @@ namespace Cascadia.DataStructures
             this.PossibleConnections = castConnections;
         }
 
-        bool DirectionalityIsInBounds(GameConfiguration gameConfiguration, Coordinate fromCell, DirectionalityVector fromDirection)
+        private bool DirectionalityIsInBounds(GameConfiguration gameConfiguration, Coordinate fromCell, DirectionalityVector fromDirection)
         {
             for (int ii = 1; ii < gameConfiguration.InARowToSolve; ii++)
             {
-                Coordinate resultingCoordinate = fromCell + fromDirection * ii;
+                Coordinate resultingCoordinate = fromCell + (fromDirection * ii);
                 if (!gameConfiguration.SpotIsInBounds(resultingCoordinate))
                 {
                     return false;
@@ -131,15 +126,15 @@ namespace Cascadia.DataStructures
 
         public IReadOnlyCollection<Coordinate> GetCoordinatesAround(IReadOnlyBoardState currentGameState, Coordinate position, int radius)
         {
-            GetCoordinatesAroundKey key = new GetCoordinatesAroundKey(position, radius);
+            GetCoordinatesAroundKey key = new(position, radius);
 
             if (this.coordinateToRadiusNearby.TryGetValue(key, out IReadOnlyCollection<Coordinate> coordinates))
             {
                 return coordinates;
             }
 
-            int span = radius * 2 - 1;
-            List<Coordinate> coordinatesToCheck = new List<Coordinate>(span);
+            int span = (radius * 2) - 1;
+            List<Coordinate> coordinatesToCheck = new(span);
 
             for (int xx = -radius; xx <= radius; xx++)
             {
@@ -161,7 +156,7 @@ namespace Cascadia.DataStructures
                 }
             }
 
-            this.coordinateToRadiusNearby.Add(key,  coordinatesToCheck);
+            this.coordinateToRadiusNearby.Add(key, coordinatesToCheck);
 
             return coordinatesToCheck;
         }

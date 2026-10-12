@@ -1,8 +1,7 @@
-namespace Cascadia.Tests
+﻿namespace Cascadia.Tests
 {
     using NUnit.Framework;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
     using Cascadia.DataStructures;
 
@@ -21,58 +20,55 @@ namespace Cascadia.Tests
                 this.ExpectedResults = expectedResults;
             }
 
-            public override string ToString()
-            {
-                return $"({Directionality}) => ({string.Join(", ", ExpectedResults.Select(x => x))}";
-            }
+            public override string ToString() => $"({this.Directionality}) => ({string.Join(", ", this.ExpectedResults.Select(x => x))}";
         }
 
         public static SortByDirectionality_Ordered_DataSource_Object[] SortByDirectionality_Ordered_DataSource =
         {
             // Already ordered list stays ordered
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(1, 0), new(2, 0) },
                 new DirectionalityVector(1, 0),
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) }
+                new List<Coordinate>() { new(0, 0), new(1, 0), new(2, 0) }
                 ),
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(0, 1), new(0, 2) },
                 new DirectionalityVector(1, 0),
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(0, 1), new Coordinate(0, 2) }
+                new List<Coordinate>() { new(0, 0), new(0, 1), new(0, 2) }
                 ),
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(2, 0), new Coordinate(1, 0), new Coordinate(0, 0) },
+            new(
+                new List<Coordinate>() { new(2, 0), new(1, 0), new(0, 0) },
                 new DirectionalityVector(-1, 0),
-                new List<Coordinate>() { new Coordinate(2, 0), new Coordinate(1, 0), new Coordinate(0, 0) }
+                new List<Coordinate>() { new(2, 0), new(1, 0), new(0, 0) }
                 ),
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(1, 1), new(2, 2) },
                 new DirectionalityVector(1, 1),
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2) }
+                new List<Coordinate>() { new(0, 0), new(1, 1), new(2, 2) }
                 ),
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(2, 0), new Coordinate(1, 1), new Coordinate(0, 2) },
+            new(
+                new List<Coordinate>() { new(2, 0), new(1, 1), new(0, 2) },
                 new DirectionalityVector(-1, 1),
-                new List<Coordinate>() { new Coordinate(2, 0), new Coordinate(1, 1), new Coordinate(0, 2) }
+                new List<Coordinate>() { new(2, 0), new(1, 1), new(0, 2) }
                 ),
 
             // Reverse list
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(1, 0), new(2, 0) },
                 new DirectionalityVector(-1, 0),
-                new List<Coordinate>() { new Coordinate(2, 0), new Coordinate(1, 0), new Coordinate(0, 0) }
+                new List<Coordinate>() { new(2, 0), new(1, 0), new(0, 0) }
                 ),
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 1), new Coordinate(2, 2) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(1, 1), new(2, 2) },
                 new DirectionalityVector(-1, -1),
-                new List<Coordinate>() { new Coordinate(2, 2), new Coordinate(1, 1), new Coordinate(0, 0) }
+                new List<Coordinate>() { new(2, 2), new(1, 1), new(0, 0) }
                 ),
 
             // Removes redundant pieces
-            new SortByDirectionality_Ordered_DataSource_Object(
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(0, 0), new Coordinate(2, 0), new Coordinate(0, 0) },
+            new(
+                new List<Coordinate>() { new(0, 0), new(1, 0), new(0, 0), new(2, 0), new(0, 0) },
                 new DirectionalityVector(1, 0),
-                new List<Coordinate>() { new Coordinate(0, 0), new Coordinate(1, 0), new Coordinate(2, 0) }
+                new List<Coordinate>() { new(0, 0), new(1, 0), new(2, 0) }
                 ),
         };
 

@@ -1,9 +1,8 @@
-using System.Collections.Generic;
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Near Other Players Heuristic.asset", menuName = "COSTCO/AI Heuristic/Near Other Players")]
     public class NearOtherPlayersHeuristic : AIHeuristic
     {
@@ -22,8 +21,6 @@ namespace Cascadia.AIs
         {
             int occupiedNeighbors = 0;
 
-            List<Coordinate> coordinatesToCheck = new List<Coordinate>(Radius * Radius);
-
             foreach (Coordinate resultingPosition in currentGameState.PossibilityContainer.GetCoordinatesAround(currentGameState, position, this.Radius))
             {
                 if (!currentGameState.SpotIsInBounds(resultingPosition))
@@ -39,9 +36,9 @@ namespace Cascadia.AIs
             }
 
             // Congested enough, ship it
-            if (occupiedNeighbors >= MinimumNeighbors)
+            if (occupiedNeighbors >= this.MinimumNeighbors)
             {
-                return Weight;
+                return this.Weight;
             }
 
             return 0;

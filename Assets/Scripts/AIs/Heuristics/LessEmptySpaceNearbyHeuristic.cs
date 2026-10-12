@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using System.Collections.Generic;
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Less Nearby Space Heuristic.asset", menuName = "COSTCO/AI Heuristic/Less Nearby Space")]
     public class LessEmptySpaceNearbyHeuristic : AIHeuristic
     {
@@ -13,8 +13,8 @@ namespace Cascadia.AIs
         {
             int unplayableSpaces = 0;
 
-            int expectedCoordinates = Radius * 2 - 2;
-            List<Coordinate> coordinatesToCheck = new List<Coordinate>(Radius * 2 - 2);
+            int expectedCoordinates = (this.Radius * 2) - 2;
+            List<Coordinate> coordinatesToCheck = new((this.Radius * 2) - 2);
             IReadOnlyCollection<Coordinate> coordinatesAround = currentGameState.PossibilityContainer.GetCoordinatesAround(currentGameState, position, this.Radius);
 
             // If there are areas that aren't on the grid, those are by definition unplayable

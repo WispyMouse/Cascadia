@@ -1,11 +1,7 @@
 ﻿namespace Cascadia.Unity.UI
 {
-    using System.Collections;
     using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using Cascadia.DataStructures;
     using UnityEngine;
-    using UnityEngine.Profiling;
 
     public class CurrentTurnPanel : MonoBehaviour
     {

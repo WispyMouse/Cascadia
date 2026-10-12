@@ -11,7 +11,7 @@ public class CascadeText : MonoBehaviour
     public float SecondsPerCycle = 1f;
     public float AdditionalSpacingPerIndex = .1f;
 
-    float curTime { get; set; } = 0;
+    private float curTime { get; set; } = 0;
 
     private void Update()
     {

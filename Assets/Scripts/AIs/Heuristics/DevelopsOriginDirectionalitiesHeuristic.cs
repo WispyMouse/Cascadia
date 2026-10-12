@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using System.Collections.Generic;
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "Develops Origin Directionalities Heuristic.asset", menuName = "COSTCO/AI Heuristic/Develops Origin Directionalities")]
     public class DevelopsOriginDirectionalitiesHeuristic : AIHeuristic
     {
@@ -25,7 +25,6 @@ namespace Cascadia.AIs
             // We're going to project a direction out in each of the directionalities, from this position
             // If the casted directionality is a possible development target, add to the weight
             // We're going to return the allowed weight divided by the shares
-            int directionalitiesCounts = BoardState.DirectionalitiesWithBackwards.Count;
             int directionalitiesThatCouldDevelop = 0;
 
             foreach (DirectionalityVector directionality in BoardState.DirectionalitiesWithBackwards)
@@ -37,7 +36,7 @@ namespace Cascadia.AIs
 
                     for (int ii = 1; ii < currentGameState.InARowToSolve; ii++)
                     {
-                        Coordinate resultingPosition = position + direction * ii;
+                        Coordinate resultingPosition = position + (direction * ii);
 
                         if (!currentGameState.SpotIsInBounds(resultingPosition))
                         {

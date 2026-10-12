@@ -1,6 +1,5 @@
 ﻿namespace Cascadia.AIs
 {
-    using System.Collections.Generic;
     using Cascadia.DataStructures;
     using UnityEngine;
 
@@ -18,7 +17,7 @@
         /// </summary>
         [Range(0, 6)]
         public int MinimumConnections = 1;
-        
+
         private int currentConnectionsCount { get; set; } = 0;
 
         public override void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)

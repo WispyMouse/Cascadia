@@ -1,4 +1,4 @@
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
     using UnityEngine.UI;
@@ -16,14 +16,14 @@ namespace Cascadia.Unity.UI
         public Slider StallSlider;
         public TMP_Text StallValueLabel;
 
-        void Start()
+        private void Start()
         {
             this.WidthSlider.SetValueWithoutNotify(PersistentGameConfiguration.Singleton.Width);
             this.WidthValueLabel.text = PersistentGameConfiguration.Singleton.Width.ToString();
             this.HeightSlider.SetValueWithoutNotify(PersistentGameConfiguration.Singleton.Height);
             this.HeightValueLabel.text = PersistentGameConfiguration.Singleton.Height.ToString();
             this.StallSlider.SetValueWithoutNotify(PersistentGameConfiguration.Singleton.StallTurn);
-            this.StallValueLabel.text = DescribeStallTurnLogic(PersistentGameConfiguration.Singleton.StallTurn);
+            this.StallValueLabel.text = this.DescribeStallTurnLogic(PersistentGameConfiguration.Singleton.StallTurn);
         }
 
         public void UpdateFromSliders(int _)
@@ -33,7 +33,7 @@ namespace Cascadia.Unity.UI
             PersistentGameConfiguration.Singleton.UpdateHeight(Mathf.RoundToInt(this.HeightSlider.value));
             this.HeightValueLabel.text = PersistentGameConfiguration.Singleton.Height.ToString();
             PersistentGameConfiguration.Singleton.UpdateStall(Mathf.RoundToInt(this.StallSlider.value));
-            this.StallValueLabel.text = DescribeStallTurnLogic(PersistentGameConfiguration.Singleton.StallTurn);
+            this.StallValueLabel.text = this.DescribeStallTurnLogic(PersistentGameConfiguration.Singleton.StallTurn);
         }
 
         private string DescribeStallTurnLogic(int stallTurn)

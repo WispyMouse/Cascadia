@@ -1,8 +1,8 @@
-using Cascadia.DataStructures;
-using UnityEngine;
-
-namespace Cascadia.AIs
+﻿namespace Cascadia.AIs
 {
+    using Cascadia.DataStructures;
+    using UnityEngine;
+
     [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "COSTCO/AI Heuristic/Does Not Lose")]
     public class DoesNotLoseHeuristic : AIHeuristic
     {
@@ -23,7 +23,7 @@ namespace Cascadia.AIs
             }
 
             // This move keeps us alive, so report positive for it
-            return Weight;
+            return this.Weight;
         }
     }
 }

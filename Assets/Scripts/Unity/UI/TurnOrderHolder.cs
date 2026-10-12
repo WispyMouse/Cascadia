@@ -1,24 +1,18 @@
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
-    using System;
     using System.Collections.Generic;
-    using TMPro;
     using UnityEngine;
-    using UnityEngine.UI;
 
     public class TurnOrderHolder : MonoBehaviour
     {
         public delegate void UITurnStarted(int playerProfileIndex);
         public UITurnStarted OnTurnStarted;
 
-        public HashSet<int> SidesThatAreAI = new HashSet<int>();
+        public HashSet<int> SidesThatAreAI = new();
 
         public GameConductor GameConductor;
         public int PlayerCount => this.GameConductor.CurrentBoardState == null ? 0 : this.GameConductor.CurrentBoardState.PlayerCount;
 
-        public bool PlayerIsHuman(int index)
-        {
-            return !PersistentGameConfiguration.Singleton.Players[index].IsAI;
-        }
+        public bool PlayerIsHuman(int index) => !PersistentGameConfiguration.Singleton.Players[index].IsAI;
     }
 }

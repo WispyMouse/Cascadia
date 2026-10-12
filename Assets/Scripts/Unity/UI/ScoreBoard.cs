@@ -1,7 +1,6 @@
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
-    using UnityEngine.Profiling;
     using UnityEngine.UI;
 
     public class ScoreBoard : MonoBehaviour
@@ -12,7 +11,7 @@ namespace Cascadia.Unity.UI
 
         public Transform WinnerIconHolder;
 
-        private int MaxDisplayedWins { get; set; } = 9;
+        private int maxDisplayedWins { get; set; } = 9;
 
         private void Awake()
         {
@@ -24,13 +23,13 @@ namespace Cascadia.Unity.UI
 
         public void AddToScoreboard(PlayerProfile winner)
         {
-            if (this.WinnerIconHolder.childCount >= this.MaxDisplayedWins)
+            if (this.WinnerIconHolder.childCount >= this.maxDisplayedWins)
             {
                 Destroy(this.WinnerIconHolder.GetChild(0).gameObject);
             }
 
             Sprite winnerSprite = winner.SpriteRepresentation;
-            Image newImage = Instantiate(WinnerIconImage, WinnerIconHolder);
+            Image newImage = Instantiate(this.WinnerIconImage, this.WinnerIconHolder);
             newImage.sprite = winnerSprite;
         }
 

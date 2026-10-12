@@ -7,7 +7,6 @@
     using UnityEngine;
     using UnityEngine.EventSystems;
     using UnityEngine.InputSystem;
-    using UnityEngine.Profiling;
     using UnityEngine.SceneManagement;
     using UnityEngine.UI;
 
@@ -29,7 +28,7 @@
         public Dictionary<Coordinate, Cell> PositionsToCells { get; set; } = new Dictionary<Coordinate, Cell>();
 
         public LineRenderer LineRendererPF;
-        private List<LineRenderer> SolutionLineRenderers { get; set; } = new List<LineRenderer>();
+        private List<LineRenderer> solutionLineRenderers { get; set; } = new List<LineRenderer>();
         private Dictionary<CellsConnection, LineRenderer> connectionToRenderer { get; set; } = new Dictionary<CellsConnection, LineRenderer>();
 
         public BoardState CurrentBoardState { get; set; }
@@ -40,11 +39,11 @@
 
         public void ResetGame()
         {
-            for (int ii = this.SolutionLineRenderers.Count - 1; ii >= 0; ii--)
+            for (int ii = this.solutionLineRenderers.Count - 1; ii >= 0; ii--)
             {
-                Destroy(this.SolutionLineRenderers[ii].gameObject);
+                Destroy(this.solutionLineRenderers[ii].gameObject);
             }
-            this.SolutionLineRenderers.Clear();
+            this.solutionLineRenderers.Clear();
             this.connectionToRenderer.Clear();
 
             this.WinnerPanel.transform.parent.gameObject.SetActive(false);
@@ -150,7 +149,7 @@
                 return;
             }
 
-            if (!raycast.collider.TryGetComponent<Cell>(out Cell getCell))
+            if (!raycast.collider.TryGetComponent(out Cell getCell))
             {
                 return;
             }
@@ -170,7 +169,7 @@
             newRenderer.SetPosition(1, this.PositionsToCells[connection.Tail].transform.position + (Vector3.back * 5f));
             newRenderer.startColor = faction.KnockoutColor;
             newRenderer.endColor = faction.KnockoutColor;
-            this.SolutionLineRenderers.Add(newRenderer);
+            this.solutionLineRenderers.Add(newRenderer);
             this.connectionToRenderer.Add(connection, newRenderer);
         }
 
@@ -214,7 +213,7 @@
                 {
                     LineRenderer renderer = this.connectionToRenderer[connectionToRemove];
                     this.connectionToRenderer.Remove(connectionToRemove);
-                    this.SolutionLineRenderers.Remove(renderer);
+                    this.solutionLineRenderers.Remove(renderer);
                     Destroy(renderer.gameObject);
                 }
 

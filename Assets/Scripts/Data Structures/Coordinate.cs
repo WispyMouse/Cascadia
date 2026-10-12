@@ -47,8 +47,7 @@
         public readonly string ToString(string format, IFormatProvider formatProvider)
         {
             formatProvider ??= CultureInfo.InvariantCulture.NumberFormat;
-                
-            return string.Format("({0}, {1})", X.ToString(format, formatProvider), Y.ToString(format, formatProvider));
+            return string.Format("({0}, {1})", this.X.ToString(format, formatProvider), this.Y.ToString(format, formatProvider));
         }
 
         public static readonly Coordinate Zero = new(0, 0);

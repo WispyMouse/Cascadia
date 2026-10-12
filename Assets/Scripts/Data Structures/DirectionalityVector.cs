@@ -1,6 +1,5 @@
 ﻿namespace Cascadia.DataStructures
 {
-    using NUnit.Framework;
     using System;
 
     /// <summary>
@@ -11,7 +10,7 @@
     /// </summary>
     public struct DirectionalityVector : IEquatable<DirectionalityVector>
     {
-        const string NOTZERO = "Directionality cannot be zero for both X and Y";
+        private const string NOTZEROEXCEPTIONSTRING = "Directionality cannot be zero for both X and Y";
 
         public int X;
         public int Y;
@@ -26,7 +25,7 @@
 
             if (this.X == 0 && this.Y == 0)
             {
-                throw new ArgumentException(NOTZERO);
+                throw new ArgumentException(NOTZEROEXCEPTIONSTRING);
             }
         }
 
@@ -43,7 +42,7 @@
 
         public readonly bool Equals(DirectionalityVector a, DirectionalityVector b) => a.X == b.X && a.Y == b.Y;
 
-        public override readonly int GetHashCode() => HashCode.Combine(X, Y);
+        public override readonly int GetHashCode() => HashCode.Combine(this.X, this.Y);
 
         public static bool operator ==(DirectionalityVector lhs, DirectionalityVector rhs) => lhs.X == rhs.X && lhs.Y == rhs.Y;
         public static bool operator !=(DirectionalityVector lhs, DirectionalityVector rhs) => !(lhs.X == rhs.X && lhs.Y == rhs.Y);

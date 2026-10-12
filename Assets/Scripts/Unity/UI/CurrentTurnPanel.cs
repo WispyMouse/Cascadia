@@ -32,8 +32,8 @@
                 int side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
                 newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[side]);
 
-                newTurn.OnShowHints += SetHints;
-                newTurn.OnHideHints += HideHints;
+                newTurn.OnShowHints += this.SetHints;
+                newTurn.OnHideHints += this.HideHints;
             }
 
             this.UpdateToNewTurn(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerIndex);
@@ -84,9 +84,6 @@
             this.HintController.ShowHints(side);
         }
 
-        public void HideHints()
-        {
-            this.HintController.HideHints();
-        }
+        public void HideHints() => this.HintController.HideHints();
     }
 }

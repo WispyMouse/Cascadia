@@ -52,7 +52,7 @@
 
         public readonly List<int> PlayerOrder;
 
-        public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership => this._SpotToSideOwnership;
+        public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership => this.spotToSideOwnership;
 
         int IReadOnlyBoardState.Height => this.Height;
         int IReadOnlyBoardState.Width => this.Width;
@@ -64,7 +64,7 @@
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
-        private readonly Dictionary<Coordinate, int?> _SpotToSideOwnership;
+        private readonly Dictionary<Coordinate, int?> spotToSideOwnership;
 
         public int CurrentCascadeLevel { get; set; }
         public int CurrentPlayerIndex { get; set; }
@@ -72,7 +72,7 @@
         public HashSet<int> SidesStillInGame { get; set; }
         public int CurrentRound { get; set; } = 1;
 
-        private Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
+        private readonly Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
 
         public readonly BoardConnectionShapesSolver PossibilityContainer;
 
@@ -111,12 +111,12 @@
         {
             this.GameConfiguration = gameConfiguration;
 
-            this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(this.GameConfiguration.MaximumDimensions);
+            this.spotToSideOwnership = new Dictionary<Coordinate, int?>(this.GameConfiguration.MaximumDimensions);
             for (int xx = 0; xx < this.Width; xx++)
             {
                 for (int yy = 0; yy < this.Height; yy++)
                 {
-                    this._SpotToSideOwnership.Add(new Coordinate(xx, yy), null);
+                    this.spotToSideOwnership.Add(new Coordinate(xx, yy), null);
                 }
             }
 
@@ -156,7 +156,7 @@
             this.PossibilityContainer = toDeepClone.PossibilityContainer;
             this.Winner = toDeepClone.Winner;
 
-            this._SpotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
+            this.spotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
             this.SidesStillInGame = new HashSet<int>(toDeepClone.SidesStillInGame);
 
             this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.acceptedSolutions.Count);
@@ -168,7 +168,7 @@
 
         public IReadOnlyList<Coordinate> GetEmptySpots()
         {
-            List<Coordinate> emptySpots = new List<Coordinate>(this.SpotToSideOwnership.Count);
+            List<Coordinate> emptySpots = new(this.SpotToSideOwnership.Count);
 
             foreach (KeyValuePair<Coordinate, int?> position in this.SpotToSideOwnership)
             {
@@ -220,13 +220,13 @@
 
             foreach (CellsConnection possibleConnection in possibleConnections)
             {
-                if (OverlayConnectionOwnedAfterPlacement(hypotheticalPosition, possibleConnection, sideIndex))
+                if (this.OverlayConnectionOwnedAfterPlacement(hypotheticalPosition, possibleConnection, sideIndex))
                 {
                     newSolutions.Add(possibleConnection);
                 }
             }
 
-            return PruneSolutionsForNotAlreadySolved(newSolutions);
+            return this.PruneSolutionsForNotAlreadySolved(newSolutions);
         }
 
         public bool SpotIsInBounds(Coordinate position) => this.GameConfiguration.SpotIsInBounds(position);
@@ -249,7 +249,7 @@
                 this.CurrentGameState = GameStateEnum.Playing;
             }
 
-            this._SpotToSideOwnership[toApply.Position] = toApply.Side;
+            this.spotToSideOwnership[toApply.Position] = toApply.Side;
             this.moveCommandsApplied.Add(toApply);
 
             int solutionsCount = toApply.ConnectionsMade.Count;
@@ -336,7 +336,7 @@
 
         private List<CellsConnection> PruneSolutionsForNotAlreadySolved(List<CellsConnection> solutions)
         {
-            List<CellsConnection> remainingSolutions = new List<CellsConnection>(solutions);
+            List<CellsConnection> remainingSolutions = new(solutions);
 
             // Check if any new solutions should be banded together; 4-in-a-row is the same value as a 3-in-a-row
             // Any solutions that have the same directionality *must* be bandable
@@ -360,7 +360,7 @@
 
                             // Add a new composite solution to the end of the list, which won't be evaluated again
                             List<Coordinate> Sorted = SortByDirectionality(leftCellsSolution.Cells.Union(rightCellsSolution.Cells), leftCellsSolution.Directionality);
-                            CellsConnection compositeSolution = new (Sorted, leftCellsSolution.Directionality);
+                            CellsConnection compositeSolution = new(Sorted, leftCellsSolution.Directionality);
                             remainingSolutions.Add(compositeSolution);
                             anyDiscarded = true;
                             break;
@@ -421,10 +421,10 @@
         public static List<Coordinate> SortByDirectionality(IEnumerable<Coordinate> coordinates, DirectionalityVector directionality)
         {
             // Place randomly in to list
-            List<Coordinate> ordered = new List<Coordinate>(coordinates.Distinct());
+            List<Coordinate> ordered = new(coordinates.Distinct());
 
             // Then sort by likeness to directionality
-            ordered.Sort((Coordinate x, Coordinate y) => { return (x.X * directionality.X + x.Y * directionality.Y).CompareTo(y.X * directionality.X + y.Y * directionality.Y); });
+            ordered.Sort((x, y) => ((x.X * directionality.X) + (x.Y * directionality.Y)).CompareTo((y.X * directionality.X) + (y.Y * directionality.Y)));
 
             return ordered;
         }
@@ -441,7 +441,7 @@
             return false;
         }
 
-        public void ForceMarkOwnership(Coordinate position, int? ownership) => this._SpotToSideOwnership[position] = ownership;
+        public void ForceMarkOwnership(Coordinate position, int? ownership) => this.spotToSideOwnership[position] = ownership;
 
         public void RemoveConnection(Coordinate position, CellsConnection connection) => this.acceptedSolutions[position].Remove(connection);
 
@@ -492,7 +492,7 @@
 
         public bool MoveCommandLegalToPlay(MoveCommand toApply)
         {
-            if (!SpotIsInBounds(toApply.Position))
+            if (!this.SpotIsInBounds(toApply.Position))
             {
                 return false;
             }
@@ -529,7 +529,7 @@
             }
 
             // Check possible moves
-            List<Coordinate> validPlaces = new List<Coordinate>(emptyPlaces.Count);
+            List<Coordinate> validPlaces = new(emptyPlaces.Count);
 
             foreach (Coordinate place in emptyPlaces)
             {

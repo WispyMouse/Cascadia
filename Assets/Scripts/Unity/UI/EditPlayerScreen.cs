@@ -117,7 +117,7 @@
             this.UpdateAICore();
         }
 
-        void UpdateAICore()
+        private void UpdateAICore()
         {
             if (this.ShowingProfile.IsAI)
             {

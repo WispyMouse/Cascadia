@@ -1,9 +1,9 @@
-﻿using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
+
     public class StallBanner : MonoBehaviour
     {
         public GameObject StallBannerGO;

@@ -21,7 +21,7 @@
             foreach (Coordinate coordinate in currentGameState.GetEmptySpots())
             {
                 int connectionsMade = currentGameState.GetAllNewSolutions(forSide, coordinate).Count;
-                if (connectionsMade >= currentGameState.CurrentCascadeLevel + MinimumRaisedLevel)
+                if (connectionsMade >= currentGameState.CurrentCascadeLevel + this.MinimumRaisedLevel)
                 {
                     this.currentConnectionsCount += 1;
                 }
@@ -52,7 +52,7 @@
 
                 foreach (Coordinate connectionComponent in possibleConnection.Cells)
                 {
-                    if (connectionComponent ==  position)
+                    if (connectionComponent == position)
                     {
                         continue;
                     }

@@ -8,19 +8,16 @@
         public TurnOrderHolder TurnOrderHolder;
         public GridPainter GridPainter;
 
-        bool isOn { get; set; } = false;
+        private bool isOn { get; set; } = false;
 
-
-        public void Start()
-        {
+        public void Start() =>
             // As it becomes a new player's turn, if hints are on, update them
             // It doesn't become the new player's hints, but we may need to update the hints for the displaying player
-            this.TurnOrderHolder.OnTurnStarted += RefreshHints;
-        }
+            this.TurnOrderHolder.OnTurnStarted += this.RefreshHints;
 
         public void ShowHints(int side)
         {
-            foreach (Cell cell in GameConductor.PositionsToCells.Values)
+            foreach (Cell cell in this.GameConductor.PositionsToCells.Values)
             {
                 cell.SetHint(0);
 
@@ -31,26 +28,26 @@
 
                 cell.SetHint(this.GameConductor.CurrentBoardState.GenerateCommandFromMove(side, cell.Position).ConnectionsMade.Count);
             }
-            isOn = true;
+            this.isOn = true;
         }
 
         public void HideHints()
         {
-            foreach (Cell cell in GameConductor.PositionsToCells.Values)
+            foreach (Cell cell in this.GameConductor.PositionsToCells.Values)
             {
                 cell.SetHint(0);
             }
-            isOn = false;
+            this.isOn = false;
         }
 
         public void RefreshHints(int side)
         {
-            if (!isOn)
+            if (!this.isOn)
             {
                 return;
             }
 
-            ShowHints(side);
+            this.ShowHints(side);
         }
     }
 }

@@ -13,31 +13,31 @@ public class CascadeText : MonoBehaviour
 
     float curTime { get; set; } = 0;
 
-    void Update()
+    private void Update()
     {
         if (this.SecondsPerCycle < 0)
         {
             return;
         }
 
-        curTime += Time.deltaTime;
+        this.curTime += Time.deltaTime;
 
         StringBuilder cascadeText = new();
-        float halfHeight = HeightDiffAtMaximum / 2f;
+        float halfHeight = this.HeightDiffAtMaximum / 2f;
 
-        for (int ii = 0; ii < TextString.Length; ii++)
+        for (int ii = 0; ii < this.TextString.Length; ii++)
         {
-            if (TextString[ii] == '\\' && TextString[ii + 1] == 'n')
+            if (this.TextString[ii] == '\\' && this.TextString[ii + 1] == 'n')
             {
                 cascadeText.Append("\n");
                 ii++;
                 continue;
             }
 
-            float sampledTime = Mathf.PingPong(this.curTime + AdditionalSpacingPerIndex * ii, this.SecondsPerCycle / 2f);
+            float sampledTime = Mathf.PingPong(this.curTime + (this.AdditionalSpacingPerIndex * ii), this.SecondsPerCycle / 2f);
             float sampledHeight = Mathf.Lerp(-halfHeight, halfHeight, Mathf.InverseLerp(0, this.SecondsPerCycle, sampledTime));
 
-            cascadeText.Append($"<voffset={sampledHeight}px>" + TextString[ii] + "</voffset>");
+            cascadeText.Append($"<voffset={sampledHeight}px>" + this.TextString[ii] + "</voffset>");
         }
 
         this.Text.text = cascadeText.ToString();

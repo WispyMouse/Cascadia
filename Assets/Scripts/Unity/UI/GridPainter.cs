@@ -2,9 +2,7 @@
 {
     using System.Collections.Generic;
     using Cascadia.DataStructures;
-    using TMPro;
     using UnityEngine;
-    using UnityEngine.UI;
 
     public class GridPainter : MonoBehaviour
     {
@@ -41,7 +39,7 @@
             {
                 for (int yy = 0; yy < this.GameConductor.CurrentBoardState.Height; yy++)
                 {
-                    Coordinate position = new Coordinate(xx, yy);
+                    Coordinate position = new(xx, yy);
                     Cell newCell = Instantiate(this.CellPF, this.transform);
                     newCell.Position = position;
                     newCell.transform.localPosition = new Vector2(xx - xOffset, yy - yOffset);
@@ -51,8 +49,8 @@
             }
 
             this.GridCamera.orthographicSize = this.OrthographicSizeBase
-                + Mathf.Max(this.GameConductor.CurrentBoardState.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.Height)
-                * this.OrthographicSizeScalar;
+                + (Mathf.Max(this.GameConductor.CurrentBoardState.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.Height)
+                * this.OrthographicSizeScalar);
 
             return cells;
         }

@@ -1,20 +1,20 @@
-﻿using System.Text;
-using TMPro;
-using UnityEngine;
-
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
+    using System.Text;
+    using TMPro;
+    using UnityEngine;
+
     public class GameDescriber : MonoBehaviour
     {
         public TMP_Text DescriptionText;
 
         public void OnEnable()
         {
-            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += UpdateDescription;
+            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
             this.UpdateDescription();
         }
 
-        public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= UpdateDescription;
+        public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
 
         public void UpdateDescription()
         {

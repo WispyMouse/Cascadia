@@ -1,6 +1,7 @@
-namespace Cascadia.Unity
+﻿namespace Cascadia.Unity
 {
     using UnityEngine;
+    using Cascadia.AIs;
 
     public class PlayerProfile
     {
@@ -12,20 +13,8 @@ namespace Cascadia.Unity
 
         public int AICoreIndex;
 
-        public Sprite SpriteRepresentation
-        {
-            get
-            {
-                return PersistentGameConfiguration.Singleton.PlayerIconOptions[this.RepresenterSpriteIndex];
-            }
-        }
+        public Sprite SpriteRepresentation => PersistentGameConfiguration.Singleton.PlayerIconOptions[this.RepresenterSpriteIndex];
 
-        public AICore AICore
-        {
-            get
-            {
-                return PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex];
-            }
-        }
+        public AICore AICore => PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex];
     }
 }

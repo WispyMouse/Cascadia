@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Cascadia.DataStructures;
+    using Cascadia.AIs;
     using UnityEngine;
 
     public class PersistentGameConfiguration : MonoBehaviour
@@ -39,7 +40,7 @@
         [SerializeField]
         private int startStallTurn = 0;
 
-        public IReadOnlyList<PlayerProfile> Players => players;
+        public IReadOnlyList<PlayerProfile> Players => this.players;
         private readonly List<PlayerProfile> players = new();
 
         [SerializeField]

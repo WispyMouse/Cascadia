@@ -273,9 +273,13 @@ dotnet_naming_rule.types_should_be_pascalcase.severity = warning
 dotnet_naming_rule.types_should_be_pascalcase.symbols = types
 dotnet_naming_rule.types_should_be_pascalcase.style = pascalcase
 
-dotnet_naming_rule.non_field_members_should_be_pascalcase.severity = warning
-dotnet_naming_rule.non_field_members_should_be_pascalcase.symbols = non_field_members
-dotnet_naming_rule.non_field_members_should_be_pascalcase.style = pascalcase
+dotnet_naming_rule.public_or_protected_non_field_members_should_be_pascalcase.severity = warning
+dotnet_naming_rule.public_or_protected_non_field_members_should_be_pascalcase.symbols = public_or_protected_non_field_members
+dotnet_naming_rule.public_or_protected_non_field_members_should_be_pascalcase.style = pascalcase
+
+dotnet_naming_rule.private_or_internal_non_field_members_should_be_camelcase.severity = warning
+dotnet_naming_rule.private_or_internal_non_field_members_should_be_camelcase.symbols = private_or_internal_non_field_members
+dotnet_naming_rule.private_or_internal_non_field_members_should_be_camelcase.style = camelcase
 
 dotnet_naming_rule.enum_should_be_begins_with_e.severity = error
 dotnet_naming_rule.enum_should_be_begins_with_e.symbols = enum
@@ -289,9 +293,17 @@ dotnet_naming_rule.private_or_internal_field_should_be_camelcasewith_.severity =
 dotnet_naming_rule.private_or_internal_field_should_be_camelcasewith_.symbols = private_or_internal_field
 dotnet_naming_rule.private_or_internal_field_should_be_camelcasewith_.style = camelcase
 
-# dotnet_naming_rule.property_should_be_pascalcase.severity = warning
-# dotnet_naming_rule.property_should_be_pascalcase.symbols = property
-# dotnet_naming_rule.property_should_be_pascalcase.style = camelcase
+dotnet_naming_rule.public_or_protected_property_should_be_pascalcase.severity = warning
+dotnet_naming_rule.public_or_protected_property_should_be_pascalcase.symbols = public_or_protected_property
+dotnet_naming_rule.public_or_protected_property_should_be_pascalcase.style = pascalcase
+
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.severity = warning
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.symbols = private_or_internal_property
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.style = camelcase
+
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.severity = warning
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.symbols = const
+dotnet_naming_rule.private_or_internal_property_should_be_camelcase.style = allcaps
 
 dotnet_naming_rule.method_should_be_pascalcase.severity = error
 dotnet_naming_rule.method_should_be_pascalcase.symbols = method
@@ -347,9 +359,13 @@ dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.types.required_modifiers = 
 
-dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
-dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.non_field_members.required_modifiers = 
+dotnet_naming_symbols.public_or_protected_non_field_members.applicable_kinds = property, event, method
+dotnet_naming_symbols.public_or_protected_non_field_members.applicable_accessibilities = public, protected, protected_internal
+dotnet_naming_symbols.public_or_protected_non_field_members.required_modifiers = 
+
+dotnet_naming_symbols.private_or_internal_non_field_members.applicable_kinds = property, event, method
+dotnet_naming_symbols.private_or_internal_non_field_members.applicable_accessibilities = internal, private, private_protected
+dotnet_naming_symbols.private_or_internal_non_field_members.required_modifiers = 
 
 dotnet_naming_symbols.enum.applicable_kinds = enum
 dotnet_naming_symbols.enum.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
@@ -363,9 +379,21 @@ dotnet_naming_symbols.private_or_internal_field.applicable_kinds = field
 dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected
 dotnet_naming_symbols.private_or_internal_field.required_modifiers = 
 
+dotnet_naming_symbols.public_or_protected_property.applicable_kinds = property
+dotnet_naming_symbols.public_or_protected_property.applicable_accessibilities = public, protected
+dotnet_naming_symbols.public_or_protected_property.required_modifiers = 
+
+dotnet_naming_symbols.private_or_internal_property.applicable_kinds = property
+dotnet_naming_symbols.private_or_internal_property.applicable_accessibilities = internal, private, private_protected
+dotnet_naming_symbols.private_or_internal_property.required_modifiers = 
+
 dotnet_naming_symbols.property.applicable_kinds = property
 dotnet_naming_symbols.property.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 dotnet_naming_symbols.property.required_modifiers = 
+
+dotnet_naming_symbols.const.applicable_kinds = field, property
+dotnet_naming_symbols.const.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_symbols.const.required_modifiers = const
 
 dotnet_naming_symbols.method.applicable_kinds = method
 dotnet_naming_symbols.method.applicable_accessibilities = public
@@ -443,6 +471,11 @@ dotnet_naming_style.pascalcase.required_prefix =
 dotnet_naming_style.pascalcase.required_suffix = 
 dotnet_naming_style.pascalcase.word_separator = 
 dotnet_naming_style.pascalcase.capitalization = pascal_case
+
+dotnet_naming_style.allcaps.required_prefix = 
+dotnet_naming_style.allcaps.required_suffix = 
+dotnet_naming_style.allcaps.word_separator = 
+dotnet_naming_style.allcaps.capitalization = all_upper
 
 tab_width = 4
 end_of_line = crlf

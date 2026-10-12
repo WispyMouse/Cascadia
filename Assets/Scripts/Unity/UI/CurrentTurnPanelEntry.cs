@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
+    using System.Collections.Generic;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
+
     public class CurrentTurnPanelEntry : MonoBehaviour
     {
         public delegate void OnShowHintsDelegate(int side);
@@ -77,8 +77,8 @@ namespace Cascadia.Unity.UI
             this.CascadeLevelText.text = $"x{level}";
 
             // Blink faster for higher cascade levels
-            this.curCascadeTimeLevel = this.TimeForCascadeLevelAtLevelOne 
-                - Mathf.Lerp(0, this.TimeForCascadeLevelAtLevelOne, CascadeLerpPerLevel * (level - 1));
+            this.curCascadeTimeLevel = this.TimeForCascadeLevelAtLevelOne
+                - Mathf.Lerp(0, this.TimeForCascadeLevelAtLevelOne, this.CascadeLerpPerLevel * (level - 1));
         }
 
         public void MarkKnockout()
@@ -116,20 +116,14 @@ namespace Cascadia.Unity.UI
                 return;
             }
 
-            curCascadeLevelVisibility = (curCascadeLevelVisibility + Time.deltaTime) % this.curCascadeTimeLevel;
+            this.curCascadeLevelVisibility = (this.curCascadeLevelVisibility + Time.deltaTime) % this.curCascadeTimeLevel;
 
             this.VisibilityText.color = new Color(this.VisibilityText.color.r, this.VisibilityText.color.g, this.VisibilityText.color.b,
-                this.CascadeLevelVisibilityCurve.Evaluate(curCascadeLevelVisibility / this.curCascadeTimeLevel));
+                this.CascadeLevelVisibilityCurve.Evaluate(this.curCascadeLevelVisibility / this.curCascadeTimeLevel));
         }
 
-        public void ShowHints()
-        {
-            OnShowHints?.Invoke(this.RepresentedProfile.Index);
-        }
+        public void ShowHints() => this.OnShowHints?.Invoke(this.RepresentedProfile.Index);
 
-        public void HideHints()
-        {
-            OnHideHints?.Invoke();
-        }
+        public void HideHints() => this.OnHideHints?.Invoke();
     }
 }

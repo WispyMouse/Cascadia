@@ -36,10 +36,7 @@
 
         public GameObject RewindButtonHolder;
 
-        public void Start()
-        {
-            this.ResetGame();
-        }
+        public void Start() => this.ResetGame();
 
         public void ResetGame()
         {
@@ -55,8 +52,8 @@
             this.NoMoreMovesPanel.SetActive(false);
 
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
-            this.CurrentBoardState.OnGameConclusion += DeclarePlayerVictorious;
-            this.CurrentBoardState.OnGameConclusion += StallBanner.Clear;
+            this.CurrentBoardState.OnGameConclusion += this.DeclarePlayerVictorious;
+            this.CurrentBoardState.OnGameConclusion += this.StallBanner.Clear;
             this.CurrentBoardState.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
 
             this.PositionsToCells = this.GridPainter.Paint();
@@ -79,7 +76,7 @@
             }
         }
 
-        public void ChooseCell(Coordinate toChoose) => this.ChooseCell(PositionsToCells[toChoose]);
+        public void ChooseCell(Coordinate toChoose) => this.ChooseCell(this.PositionsToCells[toChoose]);
 
         public void ChooseCell(Cell toChoose)
         {
@@ -195,13 +192,10 @@
                 this.WinnerText.gameObject.SetActive(false);
             }
 
-                this.ScoreBoard.AddToScoreboard(player);
+            this.ScoreBoard.AddToScoreboard(player);
         }
 
-        public void MainMenu()
-        {
-            SceneManager.LoadScene(0);
-        }
+        public void MainMenu() => SceneManager.LoadScene(0);
 
         public void Rewind()
         {
@@ -218,7 +212,7 @@
 
                 foreach (CellsConnection connectionToRemove in undoneCommand.ConnectionsMade)
                 {
-                    LineRenderer renderer = connectionToRenderer[connectionToRemove];
+                    LineRenderer renderer = this.connectionToRenderer[connectionToRemove];
                     this.connectionToRenderer.Remove(connectionToRemove);
                     this.SolutionLineRenderers.Remove(renderer);
                     Destroy(renderer.gameObject);

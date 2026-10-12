@@ -1,10 +1,10 @@
-﻿using Cascadia.DataStructures;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
+    using Cascadia.DataStructures;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
+
     public class PlayerOperationsButton : MonoBehaviour
     {
         public GameObject IconRepresenterBase;
@@ -50,7 +50,7 @@ namespace Cascadia.Unity.UI
 
         public void OnPlus()
         {
-            SetFromProfile(PersistentGameConfiguration.Singleton.AddPlayer());
+            this.SetFromProfile(PersistentGameConfiguration.Singleton.AddPlayer());
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
         }
 

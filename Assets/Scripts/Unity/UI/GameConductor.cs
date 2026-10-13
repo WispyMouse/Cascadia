@@ -69,7 +69,7 @@
                 return;
             }
 
-            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
+            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex))
             {
                 this.HandleLeftClick();
             }
@@ -86,9 +86,9 @@
 
             RandomBlipPlayer.Singleton.PlayRandomSound();
 
-            int takingTurn = this.CurrentBoardState.CurrentPlayerSide;
-            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn];
-            MoveCommand command = new(takingTurn, toChoose.Position);
+            PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
+            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn.PlayerProfileIndex];
+            MoveCommand command = new(takingTurn.PlayerProfileIndex, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
@@ -111,17 +111,19 @@
                 }
             }
 
-            this.CurrentTurnPanel.SetCascade(takingTurn, consequences.ConnectionsMade.Count);
+            this.CurrentTurnPanel.SetCascade(takingTurn.PlayerProfileIndex, consequences.ConnectionsMade.Count);
 
-            foreach (int sideRemoved in consequences.PlayersSidesRemoved)
+            foreach (int turnOrderRemoved in consequences.TurnOrdersRemoved)
             {
-                this.CurrentTurnPanel.KnockOutPlayer(sideRemoved);
+                this.CurrentTurnPanel.KnockOutPlayer(turnOrderRemoved);
             }
 
             this.CurrentBoardState.TryApplyMoveCommand(command);
             this.RewindButtonHolder.SetActive(true);
 
             toChoose.SetHighlightStatus(true);
+
+            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide);
         }
 
         private void HandleLeftClick()
@@ -177,7 +179,7 @@
 
         public void DeclarePlayerVictorious(int? winner)
         {
-            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide];
+            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex];
 
             // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
             this.WinnerIcon.sprite = player.SpriteRepresentation;
@@ -219,15 +221,16 @@
                     Destroy(renderer.gameObject);
                 }
 
-                foreach (int playerRemoved in undoneCommand.PlayersSidesRemoved)
+                foreach (int playerRemoved in undoneCommand.TurnOrdersRemoved)
                 {
-                    this.CurrentTurnPanel.RestorePlayer(playerRemoved);
+                    PlayerSide side = this.CurrentBoardState.PlayerOrder[playerRemoved];
+                    this.CurrentTurnPanel.RestorePlayer(side.PlayerProfileIndex);
                 }
 
                 this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();
 
                 // When we reach a player, stop
-                if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide].IsAI)
+                if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex].IsAI)
                 {
                     break;
                 }

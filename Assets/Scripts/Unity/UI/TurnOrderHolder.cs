@@ -1,11 +1,12 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class TurnOrderHolder : MonoBehaviour
     {
-        public delegate void UITurnStarted(int playerProfileIndex);
+        public delegate void UITurnStarted(PlayerSide playerProfileIndex);
         public UITurnStarted OnTurnStarted;
 
         public HashSet<int> SidesThatAreAI = new();

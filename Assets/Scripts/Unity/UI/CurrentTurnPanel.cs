@@ -1,6 +1,7 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using System.Collections.Generic;
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class CurrentTurnPanel : MonoBehaviour
@@ -20,44 +21,37 @@
             }
             this.entries.Clear();
 
-            for (int playerIndex = 0; playerIndex < this.TurnOrderHolder.PlayerCount; playerIndex++)
+            for (int playerIndex = 0, count = this.TurnOrderHolder.PlayerCount; playerIndex < this.TurnOrderHolder.PlayerCount; playerIndex++)
             {
                 CurrentTurnPanelEntry newTurn = Instantiate(this.CurrentTurnPanelEntryPF, this.CurrentTurnPanelEntryParent);
                 this.entries.Add(newTurn);
 
-                int side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
-                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[side]);
+                PlayerSide side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
+                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex]);
 
                 newTurn.OnShowHints += this.SetHints;
                 newTurn.OnHideHints += this.HideHints;
             }
 
-            this.UpdateToNewTurn(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerIndex);
+            this.UpdateToNewTurn(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
         }
 
-        public void UpdateToNewTurn(int newTurnPlayerIndex)
+        public void UpdateToNewTurn(PlayerSide newTurn)
         {
             for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerCount; ii++)
             {
-                this.entries[ii].SetCurrentTurn(ii == newTurnPlayerIndex);
+                this.entries[ii].SetCurrentTurn(ii == newTurn.TurnOrderIndex);
             }
 
             this.HideHints();
         }
 
-        public void KnockOutPlayer(int index)
+        public void KnockOutPlayer(int turnOrderIndex)
         {
-            for (int ii = 0; ii < this.entries.Count; ii++)
-            {
-                if (this.entries[ii].RepresentedProfile.Index == index)
-                {
-                    this.entries[ii].MarkKnockout();
-                    break;
-                }
-            }
+            this.entries[turnOrderIndex].MarkKnockout();
         }
 
-        public void RestorePlayer(int index) => this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
+        public void RestorePlayer(int index) => this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex);
 
         public void SetCascade(int index, int cascadeLevel) => this.entries[index].SetCascade(cascadeLevel);
 
@@ -76,7 +70,7 @@
                 return;
             }
 
-            int side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
+            PlayerSide side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
             this.HintController.ShowHints(side);
         }
 

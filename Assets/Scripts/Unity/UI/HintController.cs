@@ -1,5 +1,6 @@
 ﻿namespace Cascadia.Unity.UI
 {
+    using Cascadia.DataStructures;
     using UnityEngine;
 
     public class HintController : MonoBehaviour
@@ -15,7 +16,7 @@
             // It doesn't become the new player's hints, but we may need to update the hints for the displaying player
             this.TurnOrderHolder.OnTurnStarted += this.RefreshHints;
 
-        public void ShowHints(int side)
+        public void ShowHints(PlayerSide side)
         {
             foreach (Cell cell in this.GameConductor.PositionsToCells.Values)
             {
@@ -26,7 +27,7 @@
                     continue;
                 }
 
-                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new DataStructures.MoveCommand(side, cell.Position)).ConnectionsMade.Count);
+                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new(side.PlayerProfileIndex, cell.Position)).ConnectionsMade.Count);
             }
             this.isOn = true;
         }
@@ -40,7 +41,7 @@
             this.isOn = false;
         }
 
-        public void RefreshHints(int side)
+        public void RefreshHints(PlayerSide side)
         {
             if (!this.isOn)
             {

@@ -20,7 +20,7 @@
             this.TurnOrderHolder.OnTurnStarted += this.OnTurnStarted;
         }
 
-        private void OnTurnStarted(int turn)
+        private void OnTurnStarted(PlayerSide turn)
         {
             if (this.thinkingCoroutine != null)
             {
@@ -39,13 +39,13 @@
             }
 
             // If the current player is human, do nothing
-            if (this.TurnOrderHolder.PlayerIsHuman(turn))
+            if (this.TurnOrderHolder.PlayerIsHuman(turn.PlayerProfileIndex))
             {
                 return;
             }
 
             // If this side has been eliminated, skip them
-            if (!this.GameConductor.CurrentBoardState.SidesStillInGame.Contains(turn))
+            if (!this.GameConductor.CurrentBoardState.IsTurnOrderStillInGame(turn.TurnOrderIndex))
             {
                 return;
             }
@@ -67,7 +67,7 @@
 
         private IEnumerator AIThinksAndTakesTurn()
         {
-            int side = this.GameConductor.CurrentBoardState.CurrentPlayerSide;
+            PlayerSide side = this.GameConductor.CurrentBoardState.CurrentPlayerSide;
             float randomWait = this.TimeForAIToThinkAdditionalSeconds.Evaluate(Random.Range(0, 1f));
 
             if (this.GameConductor.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.Cascade)
@@ -87,12 +87,12 @@
             this.thinkingCoroutine = null;
 
             Coordinate move =
-                PersistentGameConfiguration.Singleton.Players[side].AICore
-                .DetermineMove(side, this.GameConductor.CurrentBoardState);
+                PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore
+                .DetermineMove(side.PlayerProfileIndex, this.GameConductor.CurrentBoardState);
 
 #if UNITY_EDITOR
-            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
-            Debug.Log($"({PersistentGameConfiguration.Singleton.Players[side].AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
+            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side.PlayerProfileIndex, move));
+            Debug.Log($"({PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
 #endif
 
             this.GameConductor.ChooseCell(move);

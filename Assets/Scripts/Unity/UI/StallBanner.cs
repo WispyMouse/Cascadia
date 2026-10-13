@@ -1,5 +1,6 @@
 ﻿namespace Cascadia.Unity.UI
 {
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -27,7 +28,7 @@
             this.Clear(null);
         }
 
-        public void OnTurnUpdate(int _)
+        public void OnTurnUpdate(PlayerSide _)
         {
             this.Colorable.color = this.NeutralColor;
 

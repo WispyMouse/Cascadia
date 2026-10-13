@@ -18,9 +18,9 @@
             // Determine the most number of possible connections any opponent has, anywhere
             this.mostOpponentConnections = 0;
 
-            foreach (int curSide in currentGameState.SidesStillInGame)
+            foreach (PlayerSide curSide in currentGameState.GetSidesStillInGame())
             {
-                if (curSide == forSide)
+                if (curSide.PlayerProfileIndex == forSide)
                 {
                     continue;
                 }
@@ -29,7 +29,7 @@
                 {
                     this.mostOpponentConnections = Mathf.Max(
                         this.mostOpponentConnections,
-                        currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(curSide, playableSpot)).ConnectionsMade.Count);
+                        currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(curSide.PlayerProfileIndex, playableSpot)).ConnectionsMade.Count);
                 }
             }
         }

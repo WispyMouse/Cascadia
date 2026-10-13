@@ -15,14 +15,14 @@
         {
             int connectionsOpponentsCanMake = 0;
 
-            foreach (int playerIndex in currentGameState.SidesStillInGame)
+            foreach (PlayerSide remainingSide in currentGameState.GetSidesStillInGame())
             {
-                if (playerIndex == forSide)
+                if (remainingSide.PlayerProfileIndex == forSide)
                 {
                     continue;
                 }
 
-                connectionsOpponentsCanMake += currentGameState.GetAllNewSolutions(playerIndex, position).Count;
+                connectionsOpponentsCanMake += currentGameState.GetAllNewSolutions(remainingSide.PlayerProfileIndex, position).Count;
             }
 
             if (connectionsOpponentsCanMake >= this.MinimumConnections)

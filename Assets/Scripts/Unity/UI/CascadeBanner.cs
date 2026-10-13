@@ -23,7 +23,7 @@
 
         public void OnMoveUndone(MoveCommandConsequences undone) => this.OnMoveMade(this.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
-        public void OnMoveMade(int playerSide)
+        public void OnMoveMade(PlayerSide playerSide)
         {
             if (this.GameConductor.CurrentBoardState.CurrentCascadeLevel == 0)
             {

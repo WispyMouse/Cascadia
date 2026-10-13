@@ -9096,6 +9096,10 @@ PrefabInstance:
       propertyPath: PlayerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 3985536501109037590, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 4889854520294922009, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
@@ -9352,8 +9356,16 @@ PrefabInstance:
       propertyPath: PlayerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 6189998742864561662, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 6803791396462232406, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: PlayerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 6803791396462232406, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 6945351689407429658, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
@@ -9688,12 +9700,24 @@ PrefabInstance:
       propertyPath: PlayerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 8477306881501232321, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 8528079748310707965, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: PlayerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 8528079748310707965, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 8638691117334281074, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: PlayerConfiguratorSelector
+      value: 
+      objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 8638691117334281074, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: playerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
     - target: {fileID: 9141414663781691813, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}

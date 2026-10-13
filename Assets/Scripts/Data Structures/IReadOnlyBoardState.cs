@@ -19,9 +19,10 @@
         public int InARowToSolve { get; }
         public int CurrentCascadeLevel { get; }
         public int CurrentPlayerIndex { get; }
-        public int CurrentPlayerSide { get; }
+        public PlayerSide CurrentPlayerSide { get; }
 
-        public IReadOnlyCollection<int> SidesStillInGame { get; }
+        public bool IsTurnOrderStillInGame(int turnOrder);
+        public IEnumerable<PlayerSide> GetSidesStillInGame();
         public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership { get; }
         public GameStateEnum CurrentGameState { get; }
 

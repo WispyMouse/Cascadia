@@ -89,6 +89,6 @@ public class PlayModeSmokeTests
         Assert.AreEqual(plan.ExpectedGameStateEnum, gameConductor.CurrentBoardState.CurrentGameState, $"Expecting game state to be in specific status");
         Assert.AreEqual(plan.ExpectedPlayerIndex, gameConductor.CurrentBoardState.CurrentPlayerIndex, $"Expecting current player index to be specific");
         Assert.AreEqual(plan.ExpectedCascade, gameConductor.CurrentBoardState.CurrentCascadeLevel, $"Expecting cascade to be specific");
-        Assert.AreEqual(plan.ExpectedRemainingPlayers, gameConductor.CurrentBoardState.SidesStillInGame.Count, $"Expecting remaining player count to be specific");
+        Assert.AreEqual(plan.ExpectedRemainingPlayers, gameConductor.CurrentBoardState.PlayerSidesStillInGame.Count, $"Expecting remaining player count to be specific");
     }
 }

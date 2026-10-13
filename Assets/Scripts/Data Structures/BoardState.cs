@@ -31,7 +31,7 @@
 
         public readonly GameConfiguration GameConfiguration;
 
-        public delegate void OnPlayerTurnDelegate(int turn);
+        public delegate void OnPlayerTurnDelegate(PlayerSide turn);
         public OnPlayerTurnDelegate OnPlayerStartTurn;
         public OnPlayerTurnDelegate OnPlayerMadeMove;
 
@@ -50,7 +50,8 @@
         public int InARowToSolve => this.GameConfiguration.InARowToSolve;
         public int StallTurn => this.GameConfiguration.StallTurn;
 
-        public readonly List<int> PlayerOrder;
+        public IReadOnlyList<PlayerSide> PlayerOrder => this.playerOrder;
+        private readonly List<PlayerSide> playerOrder = new();
 
         public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership => this.spotToSideOwnership;
 
@@ -60,7 +61,6 @@
         int IReadOnlyBoardState.InARowToSolve => this.InARowToSolve;
         int IReadOnlyBoardState.CurrentCascadeLevel => this.CurrentCascadeLevel;
         int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
-        IReadOnlyCollection<int> IReadOnlyBoardState.SidesStillInGame => this.SidesStillInGame;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
@@ -68,8 +68,8 @@
 
         public int CurrentCascadeLevel { get; set; }
         public int CurrentPlayerIndex { get; set; }
-        public int CurrentPlayerSide => this.PlayerOrder[this.CurrentPlayerIndex];
-        public HashSet<int> SidesStillInGame { get; set; }
+        public PlayerSide CurrentPlayerSide => this.PlayerOrder[this.CurrentPlayerIndex];
+        public HashSet<PlayerSide> PlayerSidesStillInGame { get; set; } = new HashSet<PlayerSide>();
         public int CurrentRound { get; set; } = 1;
 
         private readonly Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
@@ -120,12 +120,6 @@
                 }
             }
 
-            this.SidesStillInGame = new HashSet<int>(this.PlayerCount);
-            for (int ii = 0; ii < this.PlayerCount; ii++)
-            {
-                _ = this.SidesStillInGame.Add(ii);
-            }
-
             this.Winner = null;
             this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.GameConfiguration.MaximumDimensions);
 
@@ -133,7 +127,6 @@
             this.CurrentCascadeLevel = 0;
             this.CurrentGameState = 0;
 
-            this.PlayerOrder = new List<int>(this.PlayerCount);
             if (gameConfiguration.ForceOrderlyTurn.HasValue)
             {
                 this.AssignForceOrderlyTurn();
@@ -157,7 +150,7 @@
             this.Winner = toDeepClone.Winner;
 
             this.spotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
-            this.SidesStillInGame = new HashSet<int>(toDeepClone.SidesStillInGame);
+            this.PlayerSidesStillInGame = new HashSet<PlayerSide>(toDeepClone.PlayerSidesStillInGame);
 
             this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.acceptedSolutions.Count);
             foreach (Coordinate coordinate in toDeepClone.acceptedSolutions.Keys)
@@ -199,17 +192,17 @@
         public MoveCommandConsequences GenerateConsequencesFromMoveCommand(MoveCommand fromCommand)
         {
             IReadOnlyList<CellsConnection> connections = this.GetAllNewSolutions(fromCommand.Side, fromCommand.Position);
-            List<int> playersRemoved = new();
+            List<int> turnOrdersRemoved = new();
 
             // HACK SHOULD GENERALIZE: Would this move result in a loss
             // "newConnections" are determined by the number of actual new connections
             // we want to only check new scoring connections in this process
             if (this.CurrentGameState == GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
-                playersRemoved.Add(fromCommand.Side);
+                turnOrdersRemoved.Add(this.playerOrder[fromCommand.Side].TurnOrderIndex);
             }
 
-            return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, playersRemoved);
+            return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, turnOrdersRemoved);
         }
 
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition)
@@ -272,18 +265,18 @@
             }
 
             // Removed knocked out players, and consider end game state
-            if (consequences.PlayersSidesRemoved.Any())
+            if (consequences.TurnOrdersRemoved.Any())
             {
-                foreach (int playerRemoved in consequences.PlayersSidesRemoved)
+                foreach (int turnOrderRemoved in consequences.TurnOrdersRemoved)
                 {
                     // If there were no new solutions, or not enough solutions for previous cascade, and we're in cascade state,
                     // the current player should be knocked out
-                    _ = this.SidesStillInGame.Remove(playerRemoved);
+                    this.PlayerSidesStillInGame.RemoveWhere(x => x.TurnOrderIndex == turnOrderRemoved);
                 }
 
-                if (this.SidesStillInGame.Count == 1)
+                if (this.PlayerSidesStillInGame.Count == 1)
                 {
-                    this.CurrentPlayerIndex = this.SidesStillInGame.First();
+                    this.CurrentPlayerIndex = this.PlayerSidesStillInGame.First().TurnOrderIndex;
                     this.Winner = this.CurrentPlayerIndex;
                     this.CurrentGameState = GameStateEnum.End;
 
@@ -312,14 +305,14 @@
                     for (int ii = 0; ii <= this.PlayerCount; ii++)
                     {
                         // Count backwards through players to get most recent plays
-                        int playerIndex = (this.CurrentPlayerIndex - ii + this.PlayerCount) % this.PlayerCount;
+                        int turnIndex = (this.CurrentPlayerIndex - ii + this.PlayerCount) % this.PlayerCount;
 
-                        if (!this.SidesStillInGame.Contains(playerIndex))
+                        if (!this.IsTurnOrderStillInGame(turnIndex))
                         {
                             continue;
                         }
 
-                        this.Winner = playerIndex;
+                        this.Winner = turnIndex;
                     }
 
                     this.OnGameConclusion?.Invoke(this.Winner);
@@ -588,9 +581,9 @@
             this.ForceMarkOwnership(toRemove.FromCommand.Position, null);
             this.CurrentCascadeLevel = toRemove.PreviousCascadeLevel;
 
-            foreach (int playerRemoved in toRemove.PlayersSidesRemoved)
+            foreach (int turnOrderRemoved in toRemove.TurnOrdersRemoved)
             {
-                _ = this.SidesStillInGame.Add(playerRemoved);
+                this.PlayerSidesStillInGame.Add(this.PlayerOrder[turnOrderRemoved]);
             }
 
             // Remove any added connection
@@ -626,7 +619,7 @@
 
         public void AdvancePlayer(bool reversePlayer = false)
         {
-            this.OnPlayerMadeMove?.Invoke(this.CurrentPlayerIndex);
+            this.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
 
             // If we're advancing, add one. Reversing, minus one
             // This will modulo around the player count and let us find the next valid player
@@ -649,15 +642,15 @@
                     this.CurrentRound++;
                 }
 
-                int side = this.PlayerOrder[nextProspectivePlayer];
+                PlayerSide side = this.PlayerOrder[nextProspectivePlayer];
 
-                if (!this.SidesStillInGame.Contains(side))
+                if (!this.IsTurnOrderStillInGame(side.TurnOrderIndex))
                 {
                     continue;
                 }
 
                 this.CurrentPlayerIndex = nextProspectivePlayer;
-                this.OnPlayerStartTurn?.Invoke(this.CurrentPlayerIndex);
+                this.OnPlayerStartTurn?.Invoke(this.CurrentPlayerSide);
                 break;
             }
         }
@@ -668,11 +661,15 @@
             // and that player should be at the top of the list, index 0
 
             this.CurrentPlayerIndex = this.GameConfiguration.ForceOrderlyTurn.Value;
+            List<PlayerSide> playerOrder = new(this.PlayerCount);
 
-            for (int ii = 0; ii < this.PlayerCount; ii++)
+            for (int ii = 0, count = this.PlayerCount; ii < count; ii++)
             {
                 int realIndex = (ii + this.CurrentPlayerIndex + this.PlayerCount) % this.PlayerCount;
-                this.PlayerOrder.Add(realIndex);
+
+                PlayerSide newSide = new(ii, realIndex);
+                this.playerOrder.Add(newSide);
+                this.PlayerSidesStillInGame.Add(newSide);
             }
         }
 
@@ -687,13 +684,32 @@
             }
 
             // Then dress down that list and randomly pull out of it
+            int orderIndex = 0;
             while (remainingSides.Count > 0)
             {
                 int randomIndex = new Random().Next(remainingSides.Count);
                 int side = remainingSides[randomIndex];
                 remainingSides.RemoveAt(randomIndex);
-                this.PlayerOrder.Add(side);
+                PlayerSide newSide = new(orderIndex, side);
+                this.playerOrder.Add(newSide);
+                orderIndex++;
+                this.PlayerSidesStillInGame.Add(newSide);
             }
+        }
+
+        public IEnumerable<PlayerSide> GetSidesStillInGame() => this.PlayerSidesStillInGame;
+
+        public bool IsTurnOrderStillInGame(int sideIndex)
+        {
+            foreach (PlayerSide remainingSide in this.PlayerSidesStillInGame)
+            {
+                if (remainingSide.PlayerProfileIndex == sideIndex)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

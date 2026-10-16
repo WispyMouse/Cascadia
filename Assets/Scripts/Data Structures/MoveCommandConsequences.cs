@@ -8,15 +8,15 @@
 
         public IReadOnlyList<CellsConnection> ConnectionsMade;
 
-        public IEnumerable<int> TurnOrdersRemoved;
+        public IReadOnlyCollection<PlayerSide> PlayerSidesRemoved;
         public int PreviousCascadeLevel;
 
-        public MoveCommandConsequences(MoveCommand fromCommand, IReadOnlyList<CellsConnection> connectionsMade, int previousCascadeLevel, IEnumerable<int> turnOrdersRemoved)
+        public MoveCommandConsequences(MoveCommand fromCommand, IReadOnlyList<CellsConnection> connectionsMade, int previousCascadeLevel, IReadOnlyCollection<PlayerSide> playerSidesRemoved)
         {
             this.FromCommand = fromCommand;
             this.ConnectionsMade = connectionsMade;
             this.PreviousCascadeLevel = previousCascadeLevel;
-            this.TurnOrdersRemoved = turnOrdersRemoved;
+            this.PlayerSidesRemoved = playerSidesRemoved;
         }
     }
 }

@@ -46,12 +46,14 @@
             this.HideHints();
         }
 
-        public void KnockOutPlayer(int turnOrderIndex)
+        public void KnockOutPlayer(PlayerSide playerSide)
         {
-            this.entries[turnOrderIndex].MarkKnockout();
+            // We're assuming that entries are arranged in turn order index, so we can knockout
+            // whatever entry is mapped to that turn order
+            this.entries[playerSide.TurnOrderIndex].MarkKnockout();
         }
 
-        public void RestorePlayer(int index) => this.entries[index].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex);
+        public void RestorePlayer(PlayerSide side) => this.entries[side.TurnOrderIndex].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
         public void SetCascade(int index, int cascadeLevel) => this.entries[index].SetCascade(cascadeLevel);
 

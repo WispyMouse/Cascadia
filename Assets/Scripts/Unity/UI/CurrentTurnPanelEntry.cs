@@ -1,5 +1,6 @@
 ﻿namespace Cascadia.Unity.UI
 {
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -89,11 +90,11 @@
 
         // Marks the player as back in the game, visually.
         // HACK: Assumes that it would be this player's turn.
-        public void RestorePlayer(int sideOfCurrentPlayer)
+        public void RestorePlayer(PlayerSide sideToRestore)
         {
             this.KnockoutPanel.SetActive(false);
-            this.IsNotTurnIndicator.SetActive(sideOfCurrentPlayer != this.RepresentedProfile.Index);
-            this.IsCurrentTurnIndicator.SetActive(sideOfCurrentPlayer == this.RepresentedProfile.Index);
+            this.IsNotTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex != this.RepresentedProfile.Index);
+            this.IsCurrentTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex == this.RepresentedProfile.Index);
         }
 
         public void SetCurrentTurn(bool isTurn)

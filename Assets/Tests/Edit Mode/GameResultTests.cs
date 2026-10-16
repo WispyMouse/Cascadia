@@ -16,7 +16,7 @@
 
             for (int ii = 0; ii < plan.Coordinates.Count; ii++)
             {
-                Assert.IsTrue(holder.TryApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide, plan.Coordinates[ii])));
+                holder.ApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide, plan.Coordinates[ii]));
             }
 
             Assert.AreEqual(BoardState.GameStateEnum.End, holder.CurrentGameState, $"Expecting board state to result in the end of a game.");

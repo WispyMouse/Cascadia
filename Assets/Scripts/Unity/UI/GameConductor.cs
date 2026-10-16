@@ -56,6 +56,7 @@
             this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.DeclarePlayerVictorious;
             this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.StallBanner.Clear;
             this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
+            this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.CurrentTurnPanel.RestorePlayer;
 
             this.PositionsToCells = this.GridPainter.Paint();
             this.CurrentTurnPanel.ResetGame();
@@ -115,12 +116,12 @@
 
             this.CurrentTurnPanel.SetCascade(takingTurn.PlayerProfileIndex, consequences.ConnectionsMade.Count);
 
-            foreach (int turnOrderRemoved in consequences.TurnOrdersRemoved)
+            foreach (PlayerSide playerSideRemoved in consequences.PlayerSidesRemoved)
             {
-                this.CurrentTurnPanel.KnockOutPlayer(turnOrderRemoved);
+                this.CurrentTurnPanel.KnockOutPlayer(playerSideRemoved);
             }
 
-            this.CurrentBoardState.TryApplyMoveCommand(command);
+            this.CurrentBoardState.ApplyMoveCommand(command);
             this.RewindButtonHolder.SetActive(true);
 
             toChoose.SetHighlightStatus(true);
@@ -226,12 +227,6 @@
                     this.connectionToRenderer.Remove(connectionToRemove);
                     this.solutionLineRenderers.Remove(renderer);
                     Destroy(renderer.gameObject);
-                }
-
-                foreach (int playerRemoved in undoneCommand.TurnOrdersRemoved)
-                {
-                    PlayerSide side = this.CurrentBoardState.PlayerOrder[playerRemoved];
-                    this.CurrentTurnPanel.RestorePlayer(side.PlayerProfileIndex);
                 }
 
                 this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();

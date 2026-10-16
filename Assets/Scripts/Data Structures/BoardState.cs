@@ -176,17 +176,17 @@
         public MoveCommandConsequences GenerateConsequencesFromMoveCommand(MoveCommand fromCommand)
         {
             IReadOnlyList<CellsConnection> connections = this.GetAllNewSolutions(fromCommand.Side, fromCommand.Position);
-            List<int> turnOrdersRemoved = new();
+            List<PlayerSide> playerSidesRemoved = new();
 
             // HACK SHOULD GENERALIZE: Would this move result in a loss
             // "newConnections" are determined by the number of actual new connections
             // we want to only check new scoring connections in this process
             if (this.CurrentGameState == GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
-                turnOrdersRemoved.Add(fromCommand.Side.TurnOrderIndex);
+                playerSidesRemoved.Add(fromCommand.Side);
             }
 
-            return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, turnOrdersRemoved);
+            return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, playerSidesRemoved);
         }
 
         public IReadOnlyList<CellsConnection> GetAllNewSolutions(PlayerSide side, Coordinate hypotheticalPosition)
@@ -210,15 +210,14 @@
 
         /// <summary>
         /// Attempts to apply a move command.
-        /// Checks the legality of the move and forbids invalid moves.
-        /// TODO: Describe failures
+        /// If the move is not legal, an exception is thrown.
+        /// Check legality using <see cref="MoveCommandLegalToPlay(MoveCommand)"/> first.
         /// </summary>
-        /// <returns>True if the command successfully applied. False otherwise.</returns>
-        public bool TryApplyMoveCommand(MoveCommand toApply, bool advancePlayer = true)
+        public void ApplyMoveCommand(MoveCommand toApply, bool advancePlayer = true)
         {
             if (!this.MoveCommandLegalToPlay(toApply))
             {
-                return false;
+                throw new System.ArgumentException($"Attempted to play illegal move. Check legality using {nameof(this.MoveCommandLegalToPlay)}.");
             }
 
             MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);
@@ -249,15 +248,16 @@
             }
 
             // Removed knocked out players, and consider end game state
-            if (consequences.TurnOrdersRemoved.Any())
+            if (consequences.PlayerSidesRemoved.Any())
             {
-                foreach (int turnOrderRemoved in consequences.TurnOrdersRemoved)
+                foreach (PlayerSide playerSideRemoved in consequences.PlayerSidesRemoved)
                 {
                     // If there were no new solutions, or not enough solutions for previous cascade, and we're in cascade state,
                     // the current player should be knocked out
-                    this.PlayerSidesStillInGame.RemoveWhere(x => x.TurnOrderIndex == turnOrderRemoved);
+                    this.PlayerSidesStillInGame.Remove(playerSideRemoved);
                 }
 
+                // If there's only one remaining player, they must win
                 if (this.PlayerSidesStillInGame.Count == 1)
                 {
                     this.CurrentPlayerIndex = this.PlayerSidesStillInGame.First().TurnOrderIndex;
@@ -265,7 +265,17 @@
                     this.CurrentGameState = GameStateEnum.End;
 
                     this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
-                    return true;
+                    return;
+                }
+
+                // If there are some how no remaining players, I guess this game is a draw
+                if (this.PlayerSidesStillInGame.Count == 0)
+                {
+                    this.Winner = null;
+                    this.CurrentGameState = GameStateEnum.End;
+
+                    this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
+                    return;
                 }
             }
             else if (solutionsCount > 0)
@@ -309,8 +319,6 @@
                     this.AdvancePlayer();
                 }
             }
-
-            return true;
         }
 
         private List<CellsConnection> PruneSolutionsForNotAlreadySolved(List<CellsConnection> solutions)
@@ -570,9 +578,11 @@
             this.ForceMarkOwnership(toRemove.FromCommand.Position, null);
             this.CurrentCascadeLevel = toRemove.PreviousCascadeLevel;
 
-            foreach (int turnOrderRemoved in toRemove.TurnOrdersRemoved)
+            // If anyone was knocked out, add them back to the game
+            foreach (PlayerSide playerSideRemovedToRestore in toRemove.PlayerSidesRemoved)
             {
-                this.PlayerSidesStillInGame.Add(this.PlayerOrder[turnOrderRemoved]);
+                this.PlayerSidesStillInGame.Add(playerSideRemovedToRestore);
+                this.BoardStateEvents.OnPlayerRestored?.Invoke(playerSideRemovedToRestore);
             }
 
             // Remove any added connection

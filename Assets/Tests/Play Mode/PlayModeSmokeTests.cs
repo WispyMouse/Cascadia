@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Cascadia.DataStructures;
+using Cascadia.PlayModeTests;
 using Cascadia.TestData;
 using Cascadia.Unity;
 using Cascadia.Unity.UI;
@@ -10,9 +11,6 @@ using UnityEngine.TestTools;
 
 public class PlayModeSmokeTests
 {
-    public const string TESTINGSTARTSCENE = "TestingStartScene";
-    public const string GAMEPLAYSCENE = "GameplayScene";
-
     public static GameResultTestData.CoordinatesToPlay_DataSource_Object[] CoordinatesToPlay_DataSource => GameResultTestData.CoordinatesToPlay_DataSource;
     public static KnockoutTestsData.Knockout_ExpectedPlayer_DataSource_Object[] KnockoutToPlay_DataSource => KnockoutTestsData.Knockout_ExpectedPlayer_DataSource;
 
@@ -23,39 +21,21 @@ public class PlayModeSmokeTests
     [UnityTest]
     public IEnumerator LoadGameplayWithoutError()
     {
-        yield return this.LoadStartScene();
-        yield return this.LoadGameplayScene();
+        yield return PlayModeTestUtility.LoadStartScene();
+        yield return PlayModeTestUtility.LoadGameplayScene();
         Assert.Pass();
-    }
-
-    private IEnumerator LoadStartScene()
-    {
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(TESTINGSTARTSCENE);
-        while (!loadOp.isDone)
-        {
-            yield return null;
-        }
-    }
-
-    private IEnumerator LoadGameplayScene()
-    {
-        AsyncOperation loadOp = SceneManager.LoadSceneAsync(GAMEPLAYSCENE);
-        while (!loadOp.isDone)
-        {
-            yield return null;
-        }
     }
 
     [UnityTest]
     public IEnumerator ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] GameResultTestData.CoordinatesToPlay_DataSource_Object plan)
     {
-        yield return this.LoadStartScene();
+        yield return PlayModeTestUtility.LoadStartScene();
 
         PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
         config.ForceSetConfig(plan.GameConfiguration);
         config.HumanitizeForTests();
 
-        yield return this.LoadGameplayScene();
+        yield return PlayModeTestUtility.LoadGameplayScene();
 
         GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
 
@@ -65,19 +45,19 @@ public class PlayModeSmokeTests
         }
 
         Assert.AreEqual(BoardState.GameStateEnum.End, gameConductor.CurrentBoardState.CurrentGameState, $"Expecting board state to result in the end of a game.");
-        Assert.AreEqual(plan.Winner, gameConductor.CurrentBoardState.Winner, $"Expecting a predicted winner / null lack of winner.");
+        Assert.AreEqual(plan.Winner, gameConductor.CurrentBoardState.Winner?.PlayerProfileIndex, $"Expecting a predicted winner / null lack of winner.");
     }
 
     [UnityTest]
     public IEnumerator KnockoutChecks([ValueSource(nameof(KnockoutToPlay_DataSource))] KnockoutTestsData.Knockout_ExpectedPlayer_DataSource_Object plan)
     {
-        yield return this.LoadStartScene();
+        yield return PlayModeTestUtility.LoadStartScene();
 
         PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
         config.ForceSetConfig(plan.GameConfiguration);
         config.HumanitizeForTests();
 
-        yield return this.LoadGameplayScene();
+        yield return PlayModeTestUtility.LoadGameplayScene();
 
         GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
 

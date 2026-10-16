@@ -1,22 +1,21 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using System.Text;
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
 
+    /// <summary>
+    /// Describes the current game configuration and outputs it in the Game Setup menu.
+    /// </summary>
     public class GameDescriber : MonoBehaviour
     {
         public TMP_Text DescriptionText;
 
-        public void OnEnable()
-        {
-            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
-            this.UpdateDescription();
-        }
-
+        public void OnEnable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
         public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
 
-        public void UpdateDescription()
+        public void UpdateDescription(GameConfiguration newConfiguration)
         {
             StringBuilder description = new();
 

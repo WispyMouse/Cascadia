@@ -1,7 +1,6 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
-    using UnityEngine.InputSystem.UI;
     using UnityEngine.UI;
 
     public class WinnerAnimationItem : MonoBehaviour

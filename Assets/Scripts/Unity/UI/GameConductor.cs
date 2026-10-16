@@ -53,9 +53,9 @@
             this.NoMoreMovesPanel.SetActive(false);
 
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
-            this.CurrentBoardState.OnGameConclusion += this.DeclarePlayerVictorious;
-            this.CurrentBoardState.OnGameConclusion += this.StallBanner.Clear;
-            this.CurrentBoardState.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
+            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.DeclarePlayerVictorious;
+            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.StallBanner.Clear;
+            this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
 
             this.PositionsToCells = this.GridPainter.Paint();
             this.CurrentTurnPanel.ResetGame();

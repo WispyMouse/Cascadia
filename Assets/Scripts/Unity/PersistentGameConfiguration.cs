@@ -7,7 +7,7 @@
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
-        public delegate void GameplaySettingsUpdated();
+        public delegate void GameplaySettingsUpdated(GameConfiguration newConfiguration);
         public GameplaySettingsUpdated OnGameplaySettingsUpdated;
 
         public const string HUMAN = "Human";
@@ -24,34 +24,70 @@
         /// </summary>
         public int StallTurn => this.GameConfiguration.StallTurn;
 
+        #region Debug Values
+        [Header("Debug Values")]
+
+        /// When starting the game from in editor, set <see cref="GameConfiguration.Width"/> to this.
         [Range(3, 12)]
         [SerializeField]
-        private int startWidth = 5;
+        private int debugWidth = 5;
 
+        /// When starting the game from in editor, set <see cref="GameConfiguration.Height"/> to this.
         [Range(3, 12)]
         [SerializeField]
-        private int startHeight = 5;
+        private int debugHeight = 5;
 
+        /// When starting the game from in editor, set <see cref="GameConfiguration.PlayerCount"/> to this.
         [Range(BoardState.MINIMUMPLAYERS, 6)]
         [SerializeField]
-        private int startPlayerCount = 2;
+        private int debugPlayerCount = 2;
 
+        /// When starting the game from in editor, set <see cref="GameConfiguration.StallTurn"/> to this.
         [Range(0, 8)]
         [SerializeField]
-        private int startStallTurn = 0;
+        private int debugStallTurn = 0;
+
+        /// <summary>
+        /// For each player (counting up to <see cref="debugPlayerCount"/>), assign them the AICore.
+        /// present at the corresponding index in <see cref="AICores"/>.
+        /// </summary>
+        [SerializeField]
+        private List<int> debugAICores = new();
+        #endregion
 
         public IReadOnlyList<PlayerProfile> Players => this.players;
         private readonly List<PlayerProfile> players = new();
 
-        [SerializeField]
-        private List<int> coresByIndex = new();
-
+        /// <summary>
+        /// When a player makes a connection, behind each connection there will be a line.
+        /// This line helps the user coordinate their eyes to a knocked out connection.
+        /// The <see cref="PlayerProfile.Index"/> corresponds to the Color they will be assigned.
+        /// TODO: This should likely be generated *by the emoji used*, not at design time.
+        /// </summary>
         [SerializeField]
         private List<Color> knockoutColorsForTurns = new();
 
-        public List<Sprite> PlayerIconOptions = new();
+        /// <summary>
+        /// All possible emojis players can be assigned.
+        /// TODO: This should certainly load from addressables!
+        /// </summary>
+        public IReadOnlyList<Sprite> PlayerIconOptions => this.playerIconOptions;
+        [SerializeField]
+        private List<Sprite> playerIconOptions = new();
 
-        public List<AICore> AICores = new();
+        /// <summary>
+        /// List of all <see cref="AICore"/>s that can be assigned.
+        /// Ordered in the editor. The indexes need to correspond to
+        /// other configured index values, so be careful about rearranging.
+        /// All of these AIs will appear in the player configuration UI (PlayerConfiguratorSelector)
+        /// </summary>
+        public IReadOnlyList<AICore> AICores => this.aiCores;
+
+        /// <summary>
+        /// List of all <see cref="AICore"/>s that can be assigned.
+        /// </summary>
+        [SerializeField]
+        private List<AICore> aiCores = new();
 
         private void Awake()
         {
@@ -67,42 +103,47 @@
             this.transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
 
-            this.gameConfiguration = new GameConfiguration(this.startWidth, this.startHeight, this.startPlayerCount, 3, this.startStallTurn, forceOrderlyTurn: null);
+            this.gameConfiguration = new GameConfiguration(this.debugWidth, this.debugHeight, this.debugPlayerCount, 3, this.debugStallTurn, forceOrderlyTurn: null);
 
-            for (int ii = 0; ii < this.startPlayerCount; ii++)
+            for (int ii = 0; ii < this.debugPlayerCount; ii++)
             {
                 PlayerProfile newProfile = this.AddPlayer();
 
 #if UNITY_EDITOR
-                // Quick AI core test
-                if (this.coresByIndex.Count > ii && this.coresByIndex[ii] >= 0)
+                // Quick AI core test; assign AI cores to players based on editor-only debug variables
+                if (this.debugAICores.Count > ii && this.debugAICores[ii] >= 0)
                 {
-                    newProfile.AICoreIndex = this.coresByIndex[ii];
+                    newProfile.AICoreIndex = this.debugAICores[ii];
                     newProfile.IsAI = true;
-                    newProfile.PlayerName = this.AICores[this.coresByIndex[ii]].name;
+                    newProfile.PlayerName = this.AICores[this.debugAICores[ii]].name;
                 }
 #endif
             }
+        }
 
-            this.OnGameplaySettingsUpdated?.Invoke();
+        private void Start()
+        {
+            // After starting, send up the event that the game configuration has changed
+            // This will help UI items decide to update, which should assign in OnEnable
+            this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
         }
 
         public void UpdateWidth(int newValue)
         {
             this.gameConfiguration.Width = newValue;
-            this.OnGameplaySettingsUpdated?.Invoke();
+            this.OnGameplaySettingsUpdated?.Invoke(this.GameConfiguration);
         }
 
         public void UpdateHeight(int newValue)
         {
             this.gameConfiguration.Height = newValue;
-            this.OnGameplaySettingsUpdated?.Invoke();
+            this.OnGameplaySettingsUpdated?.Invoke(this.GameConfiguration);
         }
 
         public void UpdateStall(int newValue)
         {
             this.gameConfiguration.StallTurn = newValue;
-            this.OnGameplaySettingsUpdated?.Invoke();
+            this.OnGameplaySettingsUpdated?.Invoke(this.GameConfiguration);
         }
 
         /// <summary>
@@ -135,7 +176,7 @@
                 }
             }
 
-            this.OnGameplaySettingsUpdated?.Invoke();
+            this.OnGameplaySettingsUpdated?.Invoke(this.GameConfiguration);
         }
 
         /// <summary>
@@ -151,7 +192,7 @@
             // It'll see if anyone is using the first, and if not, use that;
             // otherwise check the second, etc.
             int iconIndex = 0;
-            for (int ii = 0, count = this.PlayerIconOptions.Count; ii < count; ii++)
+            for (int ii = 0, count = this.playerIconOptions.Count; ii < count; ii++)
             {
                 // Check each player to see if they're using this index
                 bool unused = true;
@@ -171,14 +212,12 @@
             }
 
             newProfile.Index = this.players.Count;
-            newProfile.RepresenterSpriteIndex = Random.Range(0, this.PlayerIconOptions.Count);
+            newProfile.RepresenterSpriteIndex = Random.Range(0, this.playerIconOptions.Count);
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.IsAI = false;
             newProfile.PlayerName = HUMAN;
 
             this.players.Add(newProfile);
-
-            this.OnGameplaySettingsUpdated?.Invoke();
 
             return newProfile;
         }
@@ -187,7 +226,7 @@
 
         public void HumanitizeForTests()
         {
-            this.coresByIndex.Clear();
+            this.debugAICores.Clear();
             this.players.Clear();
 
             for (int ii = 0; ii < this.GameConfiguration.PlayerCount; ii++)

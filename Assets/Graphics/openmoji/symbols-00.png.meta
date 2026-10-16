@@ -752,50 +752,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: symbols-00_9
-      rect:
-        serializedVersion: 2
-        x: 648
-        y: 432
-        width: 72
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5a5775b1808a86460800000000000000
-      internalID: 7235217554142623141
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: symbols-00_10
-      rect:
-        serializedVersion: 2
-        x: 720
-        y: 432
-        width: 72
-        height: 72
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2aa90292e27524e50800000000000000
-      internalID: 6792087043798244002
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: symbols-00_11
       rect:
         serializedVersion: 2

@@ -15,9 +15,9 @@
 
         public void ResetGame()
         {
-            this.GameConductor.CurrentBoardState.OnPlayerMadeMove += this.OnMoveMade;
-            this.GameConductor.CurrentBoardState.OnMoveUndone += this.OnMoveUndone;
-            this.GameConductor.CurrentBoardState.OnGameConclusion += this.OnGameConclusion;
+            this.GameConductor.CurrentBoardState.BoardStateEvents.OnPlayerMadeMove += this.OnMoveMade;
+            this.GameConductor.CurrentBoardState.BoardStateEvents.OnMoveUndone += this.OnMoveUndone;
+            this.GameConductor.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.OnGameConclusion;
             this.ToggleParent.SetActive(false);
         }
 

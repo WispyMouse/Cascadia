@@ -32,16 +32,6 @@
         public GameConfiguration BasedOnConfiguration => this.basedOnConfiguration;
         private readonly GameConfiguration basedOnConfiguration;
 
-        public delegate void OnPlayerTurnDelegate(PlayerSide turn);
-        public OnPlayerTurnDelegate OnPlayerStartTurn;
-        public OnPlayerTurnDelegate OnPlayerMadeMove;
-
-        public delegate void OnMoveUndoneDelegate(MoveCommandConsequences undone);
-        public OnMoveUndoneDelegate OnMoveUndone;
-
-        public delegate void OnGameConclusionDelegate(PlayerSide winner);
-        public OnGameConclusionDelegate OnGameConclusion;
-
         public IReadOnlyList<MoveCommandConsequences> MoveCommandsApplied => this.moveCommandsApplied;
         private List<MoveCommandConsequences> moveCommandsApplied { get; set; } = new List<MoveCommandConsequences>();
 
@@ -65,6 +55,7 @@
         private readonly Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
 
         public readonly BoardConnectionShapesSolver PossibilityContainer;
+        public readonly BoardStateEvents BoardStateEvents;
 
         public enum GameStateEnum
         {
@@ -100,6 +91,7 @@
         public BoardState(GameConfiguration gameConfiguration)
         {
             this.basedOnConfiguration = gameConfiguration;
+            this.BoardStateEvents = new BoardStateEvents();
 
             this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(this.BasedOnConfiguration.MaximumDimensions);
 
@@ -127,9 +119,13 @@
             this.PossibilityContainer = new BoardConnectionShapesSolver(this.BasedOnConfiguration);
         }
 
-        public BoardState(BoardState toDeepClone)
+        /// <summary>
+        /// Clones a provided BoardState.
+        /// Does not copy <see cref="BoardStateEvents"/>.
+        /// </summary>
+        public BoardState(BoardState toDeepClone) : this(toDeepClone.basedOnConfiguration)
         {
-            this.basedOnConfiguration = toDeepClone.BasedOnConfiguration;
+            this.BoardStateEvents = new BoardStateEvents();
 
             this.CurrentCascadeLevel = toDeepClone.CurrentCascadeLevel;
             this.CurrentPlayerIndex = toDeepClone.CurrentPlayerIndex;
@@ -268,7 +264,7 @@
                     this.Winner = this.CurrentPlayerSide;
                     this.CurrentGameState = GameStateEnum.End;
 
-                    this.OnGameConclusion?.Invoke(this.Winner);
+                    this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
                     return true;
                 }
             }
@@ -303,7 +299,7 @@
                         this.Winner = this.playerOrder[turnIndex];
                     }
 
-                    this.OnGameConclusion?.Invoke(this.Winner);
+                    this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
                 }
             }
             else
@@ -605,14 +601,14 @@
             // We certainly no longer have a winner
             this.Winner = null;
 
-            this.OnMoveUndone?.Invoke(toRemove);
+            this.BoardStateEvents.OnMoveUndone?.Invoke(toRemove);
 
             return toRemove;
         }
 
         public void AdvancePlayer(bool reversePlayer = false)
         {
-            this.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
+            this.BoardStateEvents.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
 
             // If we're advancing, add one. Reversing, minus one
             // This will modulo around the player count and let us find the next valid player
@@ -643,7 +639,7 @@
                 }
 
                 this.CurrentPlayerIndex = nextProspectivePlayer;
-                this.OnPlayerStartTurn?.Invoke(this.CurrentPlayerSide);
+                this.BoardStateEvents.OnPlayerStartTurn?.Invoke(this.CurrentPlayerSide);
                 break;
             }
         }

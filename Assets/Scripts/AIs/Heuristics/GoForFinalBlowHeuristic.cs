@@ -8,7 +8,7 @@
     {
         private int mostOpponentConnections { get; set; } = 0;
 
-        public override void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)
+        public override void BakeInformation(PlayerSide forSide, IReadOnlyBoardState currentGameState)
         {
             if (!currentGameState.StallTurnEmbargoLifted())
             {
@@ -20,7 +20,7 @@
 
             foreach (PlayerSide curSide in currentGameState.GetSidesStillInGame())
             {
-                if (curSide.PlayerProfileIndex == forSide)
+                if (curSide == forSide)
                 {
                     continue;
                 }
@@ -29,12 +29,12 @@
                 {
                     this.mostOpponentConnections = Mathf.Max(
                         this.mostOpponentConnections,
-                        currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(curSide.PlayerProfileIndex, playableSpot)).ConnectionsMade.Count);
+                        currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(curSide, playableSpot)).ConnectionsMade.Count);
                 }
             }
         }
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             if (!currentGameState.StallTurnEmbargoLifted())
             {

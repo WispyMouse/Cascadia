@@ -29,7 +29,8 @@
             new (1, 1),
         };
 
-        public readonly GameConfiguration GameConfiguration;
+        public GameConfiguration BasedOnConfiguration => this.basedOnConfiguration;
+        private readonly GameConfiguration basedOnConfiguration;
 
         public delegate void OnPlayerTurnDelegate(PlayerSide turn);
         public OnPlayerTurnDelegate OnPlayerStartTurn;
@@ -38,33 +39,22 @@
         public delegate void OnMoveUndoneDelegate(MoveCommandConsequences undone);
         public OnMoveUndoneDelegate OnMoveUndone;
 
-        public delegate void OnGameConclusionDelegate(int? winner);
+        public delegate void OnGameConclusionDelegate(PlayerSide winner);
         public OnGameConclusionDelegate OnGameConclusion;
 
         public IReadOnlyList<MoveCommandConsequences> MoveCommandsApplied => this.moveCommandsApplied;
         private List<MoveCommandConsequences> moveCommandsApplied { get; set; } = new List<MoveCommandConsequences>();
 
-        public int Height => this.GameConfiguration.Height;
-        public int Width => this.GameConfiguration.Width;
-        public int PlayerCount => this.GameConfiguration.PlayerCount;
-        public int InARowToSolve => this.GameConfiguration.InARowToSolve;
-        public int StallTurn => this.GameConfiguration.StallTurn;
-
         public IReadOnlyList<PlayerSide> PlayerOrder => this.playerOrder;
         private readonly List<PlayerSide> playerOrder = new();
 
-        public IReadOnlyDictionary<Coordinate, int?> SpotToSideOwnership => this.spotToSideOwnership;
-
-        int IReadOnlyBoardState.Height => this.Height;
-        int IReadOnlyBoardState.Width => this.Width;
-        int IReadOnlyBoardState.PlayerCount => this.PlayerCount;
-        int IReadOnlyBoardState.InARowToSolve => this.InARowToSolve;
+        public IReadOnlyDictionary<Coordinate, PlayerSide> SpotToSideOwnership => this.spotToSideOwnership;
         int IReadOnlyBoardState.CurrentCascadeLevel => this.CurrentCascadeLevel;
         int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
-        private readonly Dictionary<Coordinate, int?> spotToSideOwnership;
+        private readonly Dictionary<Coordinate, PlayerSide> spotToSideOwnership;
 
         public int CurrentCascadeLevel { get; set; }
         public int CurrentPlayerIndex { get; set; }
@@ -101,7 +91,7 @@
         }
 
         public GameStateEnum CurrentGameState;
-        public int? Winner;
+        public PlayerSide Winner { get; set; }
 
         /// <summary>
         /// Constructor for a BoardState, the living definition of a game.
@@ -109,19 +99,17 @@
         /// <param name="gameConfiguration">The configuration to generate from. This cannot be changed during a game.</param>
         public BoardState(GameConfiguration gameConfiguration)
         {
-            this.GameConfiguration = gameConfiguration;
+            this.basedOnConfiguration = gameConfiguration;
 
-            this.spotToSideOwnership = new Dictionary<Coordinate, int?>(this.GameConfiguration.MaximumDimensions);
-            for (int xx = 0; xx < this.Width; xx++)
+            this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(this.BasedOnConfiguration.MaximumDimensions);
+
+            foreach (Coordinate coordinate in this.basedOnConfiguration.GetAllCoordinatesInMapDimensions())
             {
-                for (int yy = 0; yy < this.Height; yy++)
-                {
-                    this.spotToSideOwnership.Add(new Coordinate(xx, yy), null);
-                }
+                this.spotToSideOwnership.Add(coordinate, null);
             }
 
             this.Winner = null;
-            this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.GameConfiguration.MaximumDimensions);
+            this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.BasedOnConfiguration.MaximumDimensions);
 
             this.CurrentGameState = GameStateEnum.NotStarted;
             this.CurrentCascadeLevel = 0;
@@ -136,12 +124,12 @@
                 this.RandomlyAssignFirstPlayerTurn();
             }
 
-            this.PossibilityContainer = new BoardConnectionShapesSolver(this.GameConfiguration);
+            this.PossibilityContainer = new BoardConnectionShapesSolver(this.BasedOnConfiguration);
         }
 
         public BoardState(BoardState toDeepClone)
         {
-            this.GameConfiguration = toDeepClone.GameConfiguration;
+            this.basedOnConfiguration = toDeepClone.BasedOnConfiguration;
 
             this.CurrentCascadeLevel = toDeepClone.CurrentCascadeLevel;
             this.CurrentPlayerIndex = toDeepClone.CurrentPlayerIndex;
@@ -149,7 +137,7 @@
             this.PossibilityContainer = toDeepClone.PossibilityContainer;
             this.Winner = toDeepClone.Winner;
 
-            this.spotToSideOwnership = new Dictionary<Coordinate, int?>(toDeepClone.SpotToSideOwnership);
+            this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(toDeepClone.SpotToSideOwnership);
             this.PlayerSidesStillInGame = new HashSet<PlayerSide>(toDeepClone.PlayerSidesStillInGame);
 
             this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.acceptedSolutions.Count);
@@ -163,7 +151,7 @@
         {
             List<Coordinate> emptySpots = new(this.SpotToSideOwnership.Count);
 
-            foreach (KeyValuePair<Coordinate, int?> position in this.SpotToSideOwnership)
+            foreach (KeyValuePair<Coordinate, PlayerSide> position in this.SpotToSideOwnership)
             {
                 if (position.Value == null)
                 {
@@ -178,7 +166,7 @@
         {
             foreach (Coordinate position in this.SpotToSideOwnership.Keys)
             {
-                int? ownership = this.SpotToSideOwnership[position];
+                PlayerSide ownership = this.SpotToSideOwnership[position];
 
                 if (ownership == null)
                 {
@@ -199,13 +187,13 @@
             // we want to only check new scoring connections in this process
             if (this.CurrentGameState == GameStateEnum.Cascade && this.CurrentCascadeLevel > connections.Count)
             {
-                turnOrdersRemoved.Add(this.playerOrder[fromCommand.Side].TurnOrderIndex);
+                turnOrdersRemoved.Add(fromCommand.Side.TurnOrderIndex);
             }
 
             return new MoveCommandConsequences(fromCommand, connections, this.CurrentCascadeLevel, turnOrdersRemoved);
         }
 
-        public IReadOnlyList<CellsConnection> GetAllNewSolutions(int sideIndex, Coordinate hypotheticalPosition)
+        public IReadOnlyList<CellsConnection> GetAllNewSolutions(PlayerSide side, Coordinate hypotheticalPosition)
         {
             List<CellsConnection> newSolutions = new(DirectionalitiesWithBackwards.Count);
 
@@ -213,7 +201,7 @@
 
             foreach (CellsConnection possibleConnection in possibleConnections)
             {
-                if (this.OverlayConnectionOwnedAfterPlacement(hypotheticalPosition, possibleConnection, sideIndex))
+                if (this.OverlayConnectionOwnedAfterPlacement(hypotheticalPosition, possibleConnection, side))
                 {
                     newSolutions.Add(possibleConnection);
                 }
@@ -222,7 +210,7 @@
             return this.PruneSolutionsForNotAlreadySolved(newSolutions);
         }
 
-        public bool SpotIsInBounds(Coordinate position) => this.GameConfiguration.SpotIsInBounds(position);
+        public bool SpotIsInBounds(Coordinate position) => this.BasedOnConfiguration.SpotIsInBounds(position);
 
         /// <summary>
         /// Attempts to apply a move command.
@@ -277,7 +265,7 @@
                 if (this.PlayerSidesStillInGame.Count == 1)
                 {
                     this.CurrentPlayerIndex = this.PlayerSidesStillInGame.First().TurnOrderIndex;
-                    this.Winner = this.CurrentPlayerIndex;
+                    this.Winner = this.CurrentPlayerSide;
                     this.CurrentGameState = GameStateEnum.End;
 
                     this.OnGameConclusion?.Invoke(this.Winner);
@@ -302,17 +290,17 @@
                 {
                     this.Winner = null;
 
-                    for (int ii = 0; ii <= this.PlayerCount; ii++)
+                    for (int ii = 0; ii <= this.BasedOnConfiguration.PlayerCount; ii++)
                     {
                         // Count backwards through players to get most recent plays
-                        int turnIndex = (this.CurrentPlayerIndex - ii + this.PlayerCount) % this.PlayerCount;
+                        int turnIndex = (this.CurrentPlayerIndex - ii + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                         if (!this.IsTurnOrderStillInGame(turnIndex))
                         {
                             continue;
                         }
 
-                        this.Winner = turnIndex;
+                        this.Winner = this.playerOrder[turnIndex];
                     }
 
                     this.OnGameConclusion?.Invoke(this.Winner);
@@ -436,11 +424,11 @@
             return false;
         }
 
-        public void ForceMarkOwnership(Coordinate position, int? ownership) => this.spotToSideOwnership[position] = ownership;
+        public void ForceMarkOwnership(Coordinate position, PlayerSide ownership) => this.spotToSideOwnership[position] = ownership;
 
         public void RemoveConnection(Coordinate position, CellsConnection connection) => this.acceptedSolutions[position].Remove(connection);
 
-        public bool OverlayConnectionOwned(CellsConnection connection, int side)
+        public bool OverlayConnectionOwned(CellsConnection connection, PlayerSide side)
         {
             bool allMatch = true;
 
@@ -455,7 +443,7 @@
             return allMatch;
         }
 
-        public bool OverlayConnectionOwnedAfterPlacement(Coordinate overrideCoordinate, CellsConnection connection, int side)
+        public bool OverlayConnectionOwnedAfterPlacement(Coordinate overrideCoordinate, CellsConnection connection, PlayerSide playerSide)
         {
             bool allMatch = true;
 
@@ -466,7 +454,7 @@
                     continue;
                 }
 
-                if (this.SpotToSideOwnership[curCell] != side)
+                if (this.SpotToSideOwnership[curCell] != playerSide)
                 {
                     return false;
                 }
@@ -477,12 +465,12 @@
 
         public bool StallTurnEmbargoLifted()
         {
-            if (this.StallTurn <= 0)
+            if (this.BasedOnConfiguration.StallTurn <= 0)
             {
                 return true;
             }
 
-            return this.CurrentRound >= this.StallTurn;
+            return this.CurrentRound >= this.BasedOnConfiguration.StallTurn;
         }
 
         public bool MoveCommandLegalToPlay(MoveCommand toApply)
@@ -492,7 +480,12 @@
                 return false;
             }
 
-            if (this.SpotToSideOwnership[toApply.Position].HasValue)
+            if (!this.SpotToSideOwnership.TryGetValue(toApply.Position, out PlayerSide ownership))
+            {
+                return false;
+            }
+
+            if (ownership != null)
             {
                 return false;
             }
@@ -510,7 +503,7 @@
             return true;
         }
 
-        public bool AnyLegalMovesRemainForPlayer(int playerSide, out IReadOnlyList<Coordinate> possiblePlays)
+        public bool AnyLegalMovesRemainForPlayer(PlayerSide playerSide, out IReadOnlyList<Coordinate> possiblePlays)
         {
             // No where left to play?
             if (!this.AnyEmptySpots())
@@ -625,10 +618,10 @@
             // This will modulo around the player count and let us find the next valid player
             int advancer = reversePlayer ? -1 : 1;
 
-            for (int ii = 1; ii < this.PlayerCount; ii++)
+            for (int ii = 1; ii < this.BasedOnConfiguration.PlayerCount; ii++)
             {
-                int previousPlayer = (this.CurrentPlayerIndex + (advancer * (ii - 1)) + this.PlayerCount) % this.PlayerCount;
-                int nextProspectivePlayer = (this.CurrentPlayerIndex + (advancer * ii) + this.PlayerCount) % this.PlayerCount;
+                int previousPlayer = (this.CurrentPlayerIndex + (advancer * (ii - 1)) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
+                int nextProspectivePlayer = (this.CurrentPlayerIndex + (advancer * ii) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                 // If the previous player is the starting player, and we're reversing, go back a round
                 if (reversePlayer && previousPlayer == 0)
@@ -660,12 +653,12 @@
             // If there is a specific person who should go first, then everyone should be "in order"
             // and that player should be at the top of the list, index 0
 
-            this.CurrentPlayerIndex = this.GameConfiguration.ForceOrderlyTurn.Value;
-            List<PlayerSide> playerOrder = new(this.PlayerCount);
+            this.CurrentPlayerIndex = this.BasedOnConfiguration.ForceOrderlyTurn.Value;
+            List<PlayerSide> playerOrder = new(this.BasedOnConfiguration.PlayerCount);
 
-            for (int ii = 0, count = this.PlayerCount; ii < count; ii++)
+            for (int ii = 0, count = this.BasedOnConfiguration.PlayerCount; ii < count; ii++)
             {
-                int realIndex = (ii + this.CurrentPlayerIndex + this.PlayerCount) % this.PlayerCount;
+                int realIndex = (ii + this.CurrentPlayerIndex + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                 PlayerSide newSide = new(ii, realIndex);
                 this.playerOrder.Add(newSide);
@@ -677,8 +670,8 @@
         {
             // Randomly select the player to move first
             // First, fill the list with all of the possible sides
-            List<int> remainingSides = new(this.PlayerCount);
-            for (int ii = 0; ii < this.PlayerCount; ii++)
+            List<int> remainingSides = new(this.BasedOnConfiguration.PlayerCount);
+            for (int ii = 0; ii < this.BasedOnConfiguration.PlayerCount; ii++)
             {
                 remainingSides.Add(ii);
             }
@@ -710,6 +703,20 @@
             }
 
             return false;
+        }
+
+        public PlayerSide GetPlayerSideForTurnIndex(int turnIndex) => this.playerOrder[turnIndex];
+        public PlayerSide GetPlayerSideForProfileIndex(int profileIndex)
+        {
+            foreach (PlayerSide side in this.playerOrder)
+            {
+                if (side.PlayerProfileIndex == profileIndex)
+                {
+                    return side;
+                }
+            }
+
+            return null;
         }
     }
 }

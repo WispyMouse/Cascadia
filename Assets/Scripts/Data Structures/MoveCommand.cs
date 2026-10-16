@@ -2,10 +2,10 @@
 {
     public struct MoveCommand
     {
-        public int Side;
+        public PlayerSide Side;
         public Coordinate Position;
 
-        public MoveCommand(int side, Coordinate position)
+        public MoveCommand(PlayerSide side, Coordinate position)
         {
             this.Side = side;
             this.Position = position;

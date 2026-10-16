@@ -88,7 +88,7 @@
 
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn.PlayerProfileIndex];
-            MoveCommand command = new(takingTurn.PlayerProfileIndex, toChoose.Position);
+            MoveCommand command = new(takingTurn, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
@@ -177,7 +177,7 @@
             this.connectionToRenderer.Add(connection, newRenderer);
         }
 
-        public void DeclarePlayerVictorious(int? winner)
+        public void DeclarePlayerVictorious(PlayerSide winner)
         {
             PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex];
 
@@ -203,7 +203,7 @@
         public void Rewind()
         {
             // If this undid a win, we should remove the "recent wint" entry because this game has been undone
-            if (this.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.End && this.CurrentBoardState.Winner.HasValue)
+            if (this.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.End && this.CurrentBoardState.Winner != null)
             {
                 this.ScoreBoard.RemoveRecentWin();
             }

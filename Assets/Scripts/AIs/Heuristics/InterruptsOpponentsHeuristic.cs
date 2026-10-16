@@ -11,18 +11,18 @@
         /// </summary>
         public int MinimumConnections = 1;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             int connectionsOpponentsCanMake = 0;
 
             foreach (PlayerSide remainingSide in currentGameState.GetSidesStillInGame())
             {
-                if (remainingSide.PlayerProfileIndex == forSide)
+                if (remainingSide == forSide)
                 {
                     continue;
                 }
 
-                connectionsOpponentsCanMake += currentGameState.GetAllNewSolutions(remainingSide.PlayerProfileIndex, position).Count;
+                connectionsOpponentsCanMake += currentGameState.GetAllNewSolutions(remainingSide, position).Count;
             }
 
             if (connectionsOpponentsCanMake >= this.MinimumConnections)

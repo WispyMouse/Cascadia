@@ -20,7 +20,7 @@
 
         private int currentConnectionsCount { get; set; } = 0;
 
-        public override void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)
+        public override void BakeInformation(PlayerSide forSide, IReadOnlyBoardState currentGameState)
         {
             this.currentConnectionsCount = 0;
 
@@ -39,7 +39,7 @@
 #endif
         }
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             // We've baked the information and now know if we have any existing connections
             // First question; are we already satisfied?
@@ -63,8 +63,8 @@
                 foreach (Coordinate connectionComponent in possibleConnection.Cells)
                 {
                     // If this spot is taken by another team, we can't possibly score here
-                    int? ownership = currentGameState.SpotToSideOwnership[connectionComponent];
-                    if (ownership.HasValue && ownership != forSide)
+                    PlayerSide ownership = currentGameState.SpotToSideOwnership[connectionComponent];
+                    if (ownership != null && ownership != forSide)
                     {
                         isValid = false;
                         break;
@@ -82,7 +82,7 @@
                 }
 
                 // If this connection is valid, and only one away from full, then it counts
-                if (isValid && hits == currentGameState.InARowToSolve - 1)
+                if (isValid && hits == currentGameState.BasedOnConfiguration.InARowToSolve - 1)
                 {
                     connectionsAllowed++;
                 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents a player in the game.
     /// </summary>
-    public readonly struct PlayerSide
+    public class PlayerSide
     {
         /// <summary>
         /// The order in which this player acts.

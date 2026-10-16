@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using Cascadia.DataStructures;
+    using UnityEngine.TestTools;
 
     public class GridTests
     {
@@ -95,10 +96,10 @@
 
             for (int ii = 0; ii < lastIndex; ii++)
             {
-                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(0, plan.Placements[ii]), false));
+                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(testState.CurrentPlayerSide, plan.Placements[ii]), false));
             }
 
-            MoveCommandConsequences lastCommand = testState.GenerateConsequencesFromMoveCommand(new MoveCommand(0, plan.Placements[lastIndex]));
+            MoveCommandConsequences lastCommand = testState.GenerateConsequencesFromMoveCommand(new MoveCommand(testState.CurrentPlayerSide, plan.Placements[lastIndex]));
             Assert.AreEqual(plan.ExpectedSolutions, lastCommand.ConnectionsMade.Count, $"Especting a specific amount of solutions total");
 
             Assert.IsTrue(testState.TryApplyMoveCommand(lastCommand.FromCommand, false));

@@ -17,7 +17,7 @@
         /// </summary>
         public int Radius = 1;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             int occupiedNeighbors = 0;
 
@@ -28,8 +28,8 @@
                     continue;
                 }
 
-                int? ownership = currentGameState.SpotToSideOwnership[resultingPosition];
-                if (ownership.HasValue && ownership != forSide)
+                PlayerSide ownership = currentGameState.SpotToSideOwnership[resultingPosition];
+                if (ownership != null && ownership != forSide)
                 {
                     occupiedNeighbors++;
                 }

@@ -27,7 +27,7 @@
                     continue;
                 }
 
-                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new(side.PlayerProfileIndex, cell.Position)).ConnectionsMade.Count);
+                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new(side, cell.Position)).ConnectionsMade.Count);
             }
             this.isOn = true;
         }

@@ -13,7 +13,7 @@
 
         private int currentConnectionsCount { get; set; } = 0;
 
-        public override void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)
+        public override void BakeInformation(PlayerSide forSide, IReadOnlyBoardState currentGameState)
         {
             this.currentConnectionsCount = 0;
 
@@ -32,7 +32,7 @@
 #endif
         }
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             // We've baked the information and now know if we have any existing connections
             // First question; are we already satisfied?

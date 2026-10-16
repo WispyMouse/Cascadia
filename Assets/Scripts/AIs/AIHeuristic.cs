@@ -8,8 +8,8 @@
     {
         public float Weight = 1f;
 
-        public abstract float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position);
-        public virtual void BakeInformation(int forSide, IReadOnlyBoardState currentGameState)
+        public abstract float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position);
+        public virtual void BakeInformation(PlayerSide forSide, IReadOnlyBoardState currentGameState)
         {
 
         }

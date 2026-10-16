@@ -88,10 +88,10 @@
 
             Coordinate move =
                 PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore
-                .DetermineMove(side.PlayerProfileIndex, this.GameConductor.CurrentBoardState);
+                .DetermineMove(side, this.GameConductor.CurrentBoardState);
 
 #if UNITY_EDITOR
-            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side.PlayerProfileIndex, move));
+            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
             Debug.Log($"({PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
 #endif
 

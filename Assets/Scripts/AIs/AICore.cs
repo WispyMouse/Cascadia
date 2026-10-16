@@ -18,7 +18,7 @@
         [SerializeField]
         private List<AIHeuristic> aIHeuristics = new();
 
-        public virtual Coordinate DetermineMove(int forSide, BoardState currentGameState)
+        public virtual Coordinate DetermineMove(PlayerSide forSide, BoardState currentGameState)
         {
             if (!currentGameState.AnyLegalMovesRemainForPlayer(forSide, out IReadOnlyList<Coordinate> possibleMoves))
             {

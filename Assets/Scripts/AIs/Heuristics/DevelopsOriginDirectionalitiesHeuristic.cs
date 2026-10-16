@@ -20,7 +20,7 @@
         [Range(0, 8)]
         public int CutoffConnections = 3;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             // We're going to project a direction out in each of the directionalities, from this position
             // If the casted directionality is a possible development target, add to the weight
@@ -34,7 +34,7 @@
                     bool valid = true;
                     int ownedInQuery = 0;
 
-                    for (int ii = 1; ii < currentGameState.InARowToSolve; ii++)
+                    for (int ii = 1; ii < currentGameState.BasedOnConfiguration.InARowToSolve; ii++)
                     {
                         Coordinate resultingPosition = position + (direction * ii);
 
@@ -44,7 +44,7 @@
                             break;
                         }
 
-                        int? ownership = currentGameState.SpotToSideOwnership[resultingPosition];
+                        PlayerSide ownership = currentGameState.SpotToSideOwnership[resultingPosition];
 
                         // If it's not empty, or not owned by us, it doesn't work
                         if (!(ownership == null || ownership == forSide))

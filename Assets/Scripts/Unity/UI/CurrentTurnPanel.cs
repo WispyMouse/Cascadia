@@ -38,7 +38,7 @@
 
         public void UpdateToNewTurn(PlayerSide newTurn)
         {
-            for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerCount; ii++)
+            for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount; ii++)
             {
                 this.entries[ii].SetCurrentTurn(ii == newTurn.TurnOrderIndex);
             }
@@ -57,7 +57,7 @@
 
         public void SetHints(int visibleHint)
         {
-            for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerCount; ii++)
+            for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount; ii++)
             {
                 this.SetHint(ii, ii == visibleHint);
             }

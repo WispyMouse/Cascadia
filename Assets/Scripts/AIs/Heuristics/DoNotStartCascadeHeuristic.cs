@@ -9,7 +9,7 @@
         [Range(0, 4)]
         public int MaximimumCascadeLevel = 1;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             // We're already in Cascade, so this rule doesn't apply anymore
             if (currentGameState.CurrentGameState == BoardState.GameStateEnum.Cascade)

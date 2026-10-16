@@ -16,11 +16,11 @@
 
             for (int ii = 0; ii < plan.Coordinates.Count; ii++)
             {
-                Assert.IsTrue(holder.TryApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide.PlayerProfileIndex, plan.Coordinates[ii])));
+                Assert.IsTrue(holder.TryApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide, plan.Coordinates[ii])));
             }
 
             Assert.AreEqual(BoardState.GameStateEnum.End, holder.CurrentGameState, $"Expecting board state to result in the end of a game.");
-            Assert.AreEqual(plan.Winner, holder.Winner, $"Expecting a predicted winner / null lack of winner.");
+            Assert.AreEqual(plan.Winner, holder.Winner?.PlayerProfileIndex, $"Expecting a predicted winner / null lack of winner.");
         }
     }
 }

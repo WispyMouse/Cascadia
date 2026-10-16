@@ -74,12 +74,12 @@
         public void KnockoutStatusAsExpected(UndoTests_UndosAtEnd_DataSource_Object plan)
         {
             BoardState testState = new(plan.GameConfiguration);
-            List<int> expectedOwnership = new();
+            List<PlayerSide> expectedOwnership = new();
 
             for (int ii = 0, count = plan.Placements.Count; ii < count; ii++)
             {
-                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(testState.CurrentPlayerIndex, plan.Placements[ii]), true));
-                expectedOwnership.Add(testState.SpotToSideOwnership[plan.Placements[ii]].Value);
+                Assert.IsTrue(testState.TryApplyMoveCommand(new MoveCommand(testState.CurrentPlayerSide, plan.Placements[ii]), true));
+                expectedOwnership.Add(testState.SpotToSideOwnership[plan.Placements[ii]]);
             }
 
             for (int ii = 0; ii < plan.UndosAtEnd; ii++)

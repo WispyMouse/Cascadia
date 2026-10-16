@@ -9,7 +9,7 @@
     {
         public int Radius = 1;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             int unplayableSpaces = 0;
 
@@ -39,8 +39,8 @@
 
             foreach (Coordinate curCoordinate in coordinatesToCheck)
             {
-                int? ownership = currentGameState.SpotToSideOwnership[curCoordinate];
-                if (ownership.HasValue)
+                PlayerSide ownership = currentGameState.SpotToSideOwnership[curCoordinate];
+                if (ownership != null)
                 {
                     unplayableSpaces++;
                 }

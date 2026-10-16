@@ -44,11 +44,11 @@
             this.CascadeAnimator.EnableAnimation(1f / this.GameConductor.CurrentBoardState.CurrentCascadeLevel);
         }
 
-        public void OnGameConclusion(int? winner)
+        public void OnGameConclusion(PlayerSide winner)
         {
-            if (winner.HasValue)
+            if (winner != null)
             {
-                this.CascadeAnimator.TextString = $"{PersistentGameConfiguration.Singleton.Players[winner.Value].PlayerName} WINS!";
+                this.CascadeAnimator.TextString = $"{PersistentGameConfiguration.Singleton.Players[winner.PlayerProfileIndex].PlayerName} WINS!";
                 this.CascadeAnimator.EnableAnimation(this.WinnerSpeed);
             }
             else

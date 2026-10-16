@@ -8,7 +8,7 @@
     {
         public int ConnectionsRequired = 1;
 
-        public override float ScorePosition(int forSide, IReadOnlyBoardState currentGameState, Coordinate position)
+        public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)
         {
             int connectionsMade = 0;
 
@@ -17,7 +17,7 @@
                 foreach (Coordinate connectionComponent in possibleConnection.Cells)
                 {
                     // We only want tiles owned by this team
-                    int? ownership = currentGameState.SpotToSideOwnership[connectionComponent];
+                    PlayerSide ownership = currentGameState.SpotToSideOwnership[connectionComponent];
                     if (ownership != forSide)
                     {
                         break;

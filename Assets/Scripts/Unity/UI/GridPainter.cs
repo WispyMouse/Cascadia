@@ -24,7 +24,7 @@
 
         public Dictionary<Coordinate, Cell> Paint()
         {
-            Dictionary<Coordinate, Cell> cells = new(this.GameConductor.CurrentBoardState.GameConfiguration.MaximumDimensions);
+            Dictionary<Coordinate, Cell> cells = new(this.GameConductor.CurrentBoardState.BasedOnConfiguration.MaximumDimensions);
 
             for (int ii = this.instantiatedCells.Count - 1; ii >= 0; ii--)
             {
@@ -32,12 +32,12 @@
             }
             this.instantiatedCells.Clear();
 
-            float xOffset = this.GameConductor.CurrentBoardState.Width / 2f;
-            float yOffset = this.GameConductor.CurrentBoardState.Height / 2f;
+            float xOffset = this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width / 2f;
+            float yOffset = this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height / 2f;
 
-            for (int xx = 0; xx < this.GameConductor.CurrentBoardState.Width; xx++)
+            for (int xx = 0; xx < this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width; xx++)
             {
-                for (int yy = 0; yy < this.GameConductor.CurrentBoardState.Height; yy++)
+                for (int yy = 0; yy < this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height; yy++)
                 {
                     Coordinate position = new(xx, yy);
                     Cell newCell = Instantiate(this.CellPF, this.transform);
@@ -49,7 +49,7 @@
             }
 
             this.GridCamera.orthographicSize = this.OrthographicSizeBase
-                + (Mathf.Max(this.GameConductor.CurrentBoardState.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.Height)
+                + (Mathf.Max(this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height)
                 * this.OrthographicSizeScalar);
 
             return cells;

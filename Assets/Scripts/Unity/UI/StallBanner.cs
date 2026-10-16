@@ -40,7 +40,7 @@
 
             this.StallBannerGO.SetActive(true);
 
-            int remainingTurns = this.GameConductor.CurrentBoardState.StallTurn - this.GameConductor.CurrentBoardState.CurrentRound;
+            int remainingTurns = this.GameConductor.CurrentBoardState.BasedOnConfiguration.StallTurn - this.GameConductor.CurrentBoardState.CurrentRound;
 
             if (remainingTurns == 1)
             {
@@ -52,7 +52,7 @@
             }
         }
 
-        public void Clear(int? _) => this.StallBannerGO.SetActive(false);
+        public void Clear(PlayerSide _) => this.StallBannerGO.SetActive(false);
 
         public void CallAttention() => this.curTimeForAttentionState = this.TimeForAttentionState;
 

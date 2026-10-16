@@ -12,7 +12,7 @@
         public HashSet<int> SidesThatAreAI = new();
 
         public GameConductor GameConductor;
-        public int PlayerCount => this.GameConductor.CurrentBoardState == null ? 0 : this.GameConductor.CurrentBoardState.PlayerCount;
+        public int PlayerCount => this.GameConductor.CurrentBoardState == null ? 0 : this.GameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount;
 
         public bool PlayerIsHuman(int index) => !PersistentGameConfiguration.Singleton.Players[index].IsAI;
     }

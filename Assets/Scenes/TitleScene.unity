@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 73550630}
   - component: {fileID: 73550629}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Title Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -578,8 +578,9 @@ GameObject:
   - component: {fileID: 88292796}
   - component: {fileID: 88292795}
   - component: {fileID: 88292799}
+  - component: {fileID: 88292800}
   m_Layer: 5
-  m_Name: Play Button
+  m_Name: '[FINDABLE] Start Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -743,6 +744,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &88292800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88292793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.FindableButton
 --- !u!1 &118964678
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,7 +999,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1077,7 +1090,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7336532312175510608, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
   m_PrefabInstance: {fileID: 546963851861754408}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1776220810}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 94f5b1d553d6f2c4ea6216caebc2860f, type: 3}
@@ -1562,8 +1575,9 @@ GameObject:
   - component: {fileID: 183811482}
   - component: {fileID: 183811481}
   - component: {fileID: 183811485}
+  - component: {fileID: 183811486}
   m_Layer: 5
-  m_Name: Title Canvas
+  m_Name: '[FINDABLE] Title Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1662,6 +1676,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 183811480}
   m_CullTransparentMesh: 1
+--- !u!114 &183811486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183811480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &208902617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,7 +1918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2029,7 +2055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2068,7 +2094,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 55.9
+  m_fontSize: 61.45
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2572,8 +2598,9 @@ GameObject:
   - component: {fileID: 365753014}
   - component: {fileID: 365753013}
   - component: {fileID: 365753012}
+  - component: {fileID: 365753016}
   m_Layer: 5
-  m_Name: Configure Players Canvas
+  m_Name: '[FINDABLE] Configure Players Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2665,6 +2692,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &365753016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365753010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &450550640
 GameObject:
   m_ObjectHideFlags: 0
@@ -2678,8 +2717,9 @@ GameObject:
   - component: {fileID: 450550644}
   - component: {fileID: 450550643}
   - component: {fileID: 450550642}
+  - component: {fileID: 450550646}
   m_Layer: 5
-  m_Name: Next
+  m_Name: '[FINDABLE] Rules From One to Two'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2835,6 +2875,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450550640}
   m_CullTransparentMesh: 1
+--- !u!114 &450550646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450550640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &499325819
 GameObject:
   m_ObjectHideFlags: 0
@@ -3023,7 +3075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3063,7 +3115,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.65
+  m_fontSize: 57.35
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3346,7 +3398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3383,7 +3435,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.2
+  m_fontSize: 56.55
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3906,7 +3958,7 @@ GameObject:
   - component: {fileID: 722442192}
   - component: {fileID: 722442191}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Select Board Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4085,7 +4137,7 @@ GameObject:
   - component: {fileID: 932282423}
   - component: {fileID: 932282422}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Select Play Mode Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4294,8 +4346,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1050247179}
+  - component: {fileID: 1050247180}
   m_Layer: 5
-  m_Name: Rules Page Two
+  m_Name: '[FINDABLE] Rules Page Two'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4325,6 +4378,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1050247180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050247178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1070888907
 GameObject:
   m_ObjectHideFlags: 0
@@ -4637,6 +4702,14 @@ PrefabInstance:
       propertyPath: m_fontSizeMax
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 2152871795941293260, guid: dd11ffa0b1cae2e43ba2a622671775a4, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2482903284705298975, guid: dd11ffa0b1cae2e43ba2a622671775a4, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5302323393838573592, guid: dd11ffa0b1cae2e43ba2a622671775a4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4778,7 +4851,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -5109,6 +5182,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 1464710470574118982, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
+      propertyPath: m_Name
+      value: Stall SLider Background
+      objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.22222222
@@ -5354,8 +5431,9 @@ GameObject:
   - component: {fileID: 1402337490}
   - component: {fileID: 1402337489}
   - component: {fileID: 1402337488}
+  - component: {fileID: 1402337492}
   m_Layer: 5
-  m_Name: Previous
+  m_Name: '[FINDABLE] Rules From Two to One'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5511,6 +5589,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1402337486}
   m_CullTransparentMesh: 1
+--- !u!114 &1402337492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402337486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1434803050
 GameObject:
   m_ObjectHideFlags: 0
@@ -5719,8 +5809,9 @@ GameObject:
   - component: {fileID: 1483317399}
   - component: {fileID: 1483317398}
   - component: {fileID: 1483317397}
+  - component: {fileID: 1483317401}
   m_Layer: 5
-  m_Name: Rules Canvas
+  m_Name: '[FINDABLE] Rules Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5809,6 +5900,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1483317401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1483317396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1484847082
 GameObject:
   m_ObjectHideFlags: 0
@@ -6090,8 +6193,9 @@ GameObject:
   - component: {fileID: 1601203165}
   - component: {fileID: 1601203164}
   - component: {fileID: 1601203168}
+  - component: {fileID: 1601203169}
   m_Layer: 5
-  m_Name: Select Board Canvas
+  m_Name: '[FINDABLE] Select Board Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6201,6 +6305,18 @@ MonoBehaviour:
   HeightValueLabel: {fileID: 1779050096}
   StallSlider: {fileID: 1299633267}
   StallValueLabel: {fileID: 1299633266}
+--- !u!114 &1601203169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601203163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!114 &1664619818
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6225,8 +6341,9 @@ GameObject:
   - component: {fileID: 1684924897}
   - component: {fileID: 1684924896}
   - component: {fileID: 1684924895}
+  - component: {fileID: 1684924899}
   m_Layer: 5
-  m_Name: Select Play Mode Canvas
+  m_Name: '[FINDABLE] Select Play Mode Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6318,6 +6435,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1684924899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684924894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1704656459
 GameObject:
   m_ObjectHideFlags: 0
@@ -6369,7 +6498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6550,7 +6679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -6591,7 +6720,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.75
+  m_fontSize: 54.25
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6644,6 +6773,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769506704}
   m_CullTransparentMesh: 1
+--- !u!1 &1776220810 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+  m_PrefabInstance: {fileID: 546963851861754408}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1776220811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776220810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1001 &1779050094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6652,6 +6798,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1094903871}
     m_Modifications:
+    - target: {fileID: 1464710470574118982, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
+      propertyPath: m_Name
+      value: Height Slider Background
+      objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.22222222
@@ -6809,8 +6959,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1780341935}
+  - component: {fileID: 1780341936}
   m_Layer: 5
-  m_Name: Rules Page One
+  m_Name: '[FINDABLE] Rules Page One'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6840,6 +6991,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -40, y: -40}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1780341936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1780341934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1862353690
 GameObject:
   m_ObjectHideFlags: 0
@@ -6855,7 +7018,7 @@ GameObject:
   - component: {fileID: 1862353692}
   - component: {fileID: 1862353696}
   m_Layer: 5
-  m_Name: Rules Button
+  m_Name: '[FINDABLE] Rules Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7193,8 +7356,9 @@ GameObject:
   - component: {fileID: 1898329557}
   - component: {fileID: 1898329556}
   - component: {fileID: 1898329559}
+  - component: {fileID: 1898329560}
   m_Layer: 5
-  m_Name: Return
+  m_Name: '[FINDABLE] Rules Return'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7362,6 +7526,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &1898329560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898329554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1924154441
 GameObject:
   m_ObjectHideFlags: 0
@@ -7374,7 +7550,7 @@ GameObject:
   - component: {fileID: 1924154444}
   - component: {fileID: 1924154443}
   m_Layer: 5
-  m_Name: Background
+  m_Name: Configure Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7488,7 +7664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7625,7 +7801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7658,7 +7834,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 95.9
+  m_fontSize: 96
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7762,7 +7938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7899,7 +8075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -8123,7 +8299,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_Name
-      value: Edit Player Canvas
+      value: '[FINDABLE] Edit Player Canvas'
       objectReference: {fileID: 0}
     - target: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_IsActive
@@ -8533,6 +8709,10 @@ PrefabInstance:
       propertyPath: AlreadyTakenPanel
       value: 
       objectReference: {fileID: 546963851861754409}
+    - target: {fileID: 7523016519257010653, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_Name
+      value: Edit Player Background
+      objectReference: {fileID: 0}
     - target: {fileID: 7550452327291165423, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_Transition
       value: 2
@@ -8605,6 +8785,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1776220811}
     - targetCorrespondingSourceObject: {fileID: 4983045199546481345, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       insertIndex: -1
       addedObject: {fileID: 546963851861754418}
@@ -8746,6 +8929,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1094903871}
     m_Modifications:
+    - target: {fileID: 1464710470574118982, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
+      propertyPath: m_Name
+      value: Width Slider Background
+      objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.22222222

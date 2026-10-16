@@ -324,8 +324,9 @@ GameObject:
   - component: {fileID: 66202465}
   - component: {fileID: 66202464}
   - component: {fileID: 66202468}
+  - component: {fileID: 66202469}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: '[FINDABLE] Game Setup Back Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -348,8 +349,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 288, y: -620}
-  m_SizeDelta: {x: 576, y: 160}
+  m_AnchoredPosition: {x: 313.84073, y: -620}
+  m_SizeDelta: {x: 627.68146, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &66202464
 MonoBehaviour:
@@ -439,6 +440,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 183811480}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &66202466
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -489,6 +502,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &66202469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66202462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &73550627
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,7 +605,7 @@ GameObject:
   - component: {fileID: 88292799}
   - component: {fileID: 88292800}
   m_Layer: 5
-  m_Name: '[FINDABLE] Start Button'
+  m_Name: '[FINDABLE] Game Setup Start Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -670,6 +695,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 183811480}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1684924894}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -795,8 +832,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 288, y: -440}
-  m_SizeDelta: {x: 576, y: 160}
+  m_AnchoredPosition: {x: 313.84073, y: -440}
+  m_SizeDelta: {x: 627.68146, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &118964680
 MonoBehaviour:
@@ -1147,7 +1184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1180,7 +1217,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70.4
+  m_fontSize: 72
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1476,7 +1513,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1726,8 +1763,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 288, y: -260}
-  m_SizeDelta: {x: 576, y: 160}
+  m_AnchoredPosition: {x: 313.84073, y: -260}
+  m_SizeDelta: {x: 627.68146, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &208902619
 MonoBehaviour:
@@ -2273,7 +2310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -2938,7 +2975,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3182,8 +3219,9 @@ GameObject:
   - component: {fileID: 526617731}
   - component: {fileID: 526617730}
   - component: {fileID: 526617734}
+  - component: {fileID: 526617735}
   m_Layer: 5
-  m_Name: Select Board
+  m_Name: '[FINDABLE] Select Board'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3206,8 +3244,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 288, y: -80}
-  m_SizeDelta: {x: 576, y: 160}
+  m_AnchoredPosition: {x: 313.84073, y: -80}
+  m_SizeDelta: {x: 627.68146, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &526617730
 MonoBehaviour:
@@ -3285,6 +3323,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1684924894}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 526617734}
         m_TargetAssemblyTypeName: TicTacCOSTCO.Unity.UI.BlipPlayer, TicTacCOSTCO.Unity.UI
         m_MethodName: PlayBlip
@@ -3347,6 +3397,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &526617735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 526617728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &575069259
 GameObject:
   m_ObjectHideFlags: 0
@@ -3539,7 +3601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4251,7 +4313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4506,8 +4568,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 864, y: -50}
-  m_SizeDelta: {x: 1728, y: 100}
+  m_AnchoredPosition: {x: 941.5221, y: -50}
+  m_SizeDelta: {x: 1883.0442, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1094903872
 MonoBehaviour:
@@ -5188,7 +5250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.22222222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5196,11 +5258,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3436960229226253485, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.22222222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5979415150949368848, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.22222222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5979415150949368848, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchorMax.y
@@ -5240,7 +5302,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1728
+      value: 1883.0442
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.y
@@ -5276,7 +5338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 864
+      value: 941.5221
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5926,8 +5988,9 @@ GameObject:
   - component: {fileID: 1484847085}
   - component: {fileID: 1484847084}
   - component: {fileID: 1484847088}
+  - component: {fileID: 1484847089}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: '[FINDABLE] Select Board Back Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6053,6 +6116,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1684924894}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1484847086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6103,6 +6178,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &1484847089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1484847082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &1583946944
 GameObject:
   m_ObjectHideFlags: 0
@@ -6343,7 +6430,7 @@ GameObject:
   - component: {fileID: 1684924895}
   - component: {fileID: 1684924899}
   m_Layer: 5
-  m_Name: '[FINDABLE] Select Play Mode Canvas'
+  m_Name: '[FINDABLE] Game Setup Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6848,7 +6935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 864
+      value: 941.5221
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.y
@@ -6884,7 +6971,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1296
+      value: 1412.2832
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -7120,6 +7207,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 183811480}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1862353696}
         m_TargetAssemblyTypeName: TicTacCOSTCO.Unity.UI.BlipPlayer, TicTacCOSTCO.Unity.UI
         m_MethodName: PlayBlip
@@ -7257,7 +7356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -7475,6 +7574,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 183811480}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1898329557
 MonoBehaviour:
@@ -7944,7 +8055,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start
+  m_text: Game Setup
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8181,6 +8292,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -75
       objectReference: {fileID: 0}
+    - target: {fileID: 521433906694872385, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 608098148734823974, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_Transition
       value: 2
@@ -8303,6 +8418,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2767306294579116838, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821911766443077063, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3089865182828537970, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
@@ -8440,6 +8563,10 @@ PrefabInstance:
     - target: {fileID: 4415640194268608506, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_fontSizeMax
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 4415640194268608506, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4415640194268608506, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_enableAutoSizing
@@ -8590,6 +8717,10 @@ PrefabInstance:
       value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 5076998340063473551, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5076998340063473551, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_enableAutoSizing
       value: 1
       objectReference: {fileID: 0}
@@ -8616,6 +8747,10 @@ PrefabInstance:
     - target: {fileID: 5475599700892820427, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_fontSizeMax
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 5475599700892820427, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5475599700892820427, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_enableAutoSizing
@@ -8776,6 +8911,10 @@ PrefabInstance:
     - target: {fileID: 9172442335293016613, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_fontSizeMax
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 9172442335293016613, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9172442335293016613, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_enableAutoSizing
@@ -8987,7 +9126,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 864
+      value: 941.5221
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_SizeDelta.y
@@ -9023,7 +9162,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 432
+      value: 470.76105
       objectReference: {fileID: 0}
     - target: {fileID: 8200393985307506770, guid: 1b28bc34ad8baa34c89d690a0d93c506, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -9171,6 +9310,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -566.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1506542340615301964, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1536651969345552067, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634782726159019263, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2407255901780647871, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_Spacing.x
       value: 20
@@ -9194,6 +9345,10 @@ PrefabInstance:
     - target: {fileID: 2410678814586685681, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 2410678814586685681, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2765695507491500212, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -9279,6 +9434,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3958048914811344320, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3985536501109037590, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: PlayerConfiguratorSelector
       value: 
@@ -9287,9 +9446,17 @@ PrefabInstance:
       propertyPath: playerConfiguratorSelector
       value: 
       objectReference: {fileID: 2089472125376563909}
+    - target: {fileID: 4422947915064955752, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4889854520294922009, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 4889854520294922009, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4956644814257336156, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -9378,6 +9545,10 @@ PrefabInstance:
     - target: {fileID: 5210919798908080561, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5210919798908080561, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5494261943140777510, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_AnchorMax.x
@@ -9539,6 +9710,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6072510220260133416, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6189998742864561662, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: PlayerConfiguratorSelector
       value: 
@@ -9559,13 +9734,25 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 72
       objectReference: {fileID: 0}
+    - target: {fileID: 6945351689407429658, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7050877823560640917, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
       objectReference: {fileID: 0}
+    - target: {fileID: 7050877823560640917, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7178309518245244454, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_fontSize
       value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 7178309518245244454, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7245078542386681443, guid: 745d4e65a75c92c4c9697897845067bd, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size

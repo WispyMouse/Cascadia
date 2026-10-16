@@ -11,15 +11,8 @@
         [UnityTest]
         public IEnumerator CanLoadTitle()
         {
-            yield return PlayModeTestUtility.LoadStartScene();
-            yield return PlayModeTestUtility.LoadTitleScene();
-
-            PlayModeTestUtility.AssertObjectIsActive(Findable.TITLECANVASNAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.SELECTPLAYMODECANVASNAME, isActive: false);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.SELECTBOARDCANVASNAME, isActive: false);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.CONFIGUREPLAYERSCANVASNAME, isActive: false);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.EDITPLAYERCANVASNMAE, isActive: false);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESCANVASNAME, isActive: false);
+            yield return PlayModeTestUtility.LoadInToTitleScene();
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.TITLE);
         }
 
         /// <summary>
@@ -31,41 +24,59 @@
         [UnityTest]
         public IEnumerator RulesNavigation()
         {
-            yield return PlayModeTestUtility.LoadStartScene();
-            yield return PlayModeTestUtility.LoadTitleScene();
+            yield return PlayModeTestUtility.LoadInToTitleScene();
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESBUTTONNAME);
 
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGEONENAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGETWONAME, isActive: false);
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.RULESPAGEONE);
 
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESFROMONETOTWOBUTTONNAME);
 
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGETWONAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGEONENAME, isActive: false);
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.RULESPAGETWO);
 
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESFROMTWOTOONEBUTTONNAME);
 
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGEONENAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGETWONAME, isActive: false);
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.RULESPAGEONE);
 
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESFROMONETOTWOBUTTONNAME);
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESRETURNBUTTONNAME);
 
-            PlayModeTestUtility.AssertObjectIsActive(Findable.TITLECANVASNAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESCANVASNAME, isActive: false);
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.TITLE);
 
             yield return PlayModeTestUtility.ClickOnButton(Findable.RULESBUTTONNAME);
 
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGEONENAME);
-            PlayModeTestUtility.AssertObjectIsActive(Findable.RULESPAGETWONAME, isActive: false);
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.RULESPAGEONE);
         }
 
         [UnityTest]
         public IEnumerator PressStartOnTitle()
         {
-            yield return PlayModeTestUtility.LoadStartScene();
-            yield return PlayModeTestUtility.LoadTitleScene();
-            yield return PlayModeTestUtility.ClickOnButton(Findable.STARTBUTTONNAME);
+            yield return PlayModeTestUtility.LoadInToTitleScene();
+
+            yield return PlayModeTestUtility.ClickOnButton(Findable.GAMESETUPSTARTBUTTONNAME);
+
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.GAMESETUP);
+
+            yield return PlayModeTestUtility.ClickOnButton(Findable.GAMESETUPBACKBUTTONNAME);
+
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.TITLE);
+        }
+
+        [UnityTest]
+        public IEnumerator SelectBoardScreenOpens()
+        {
+            yield return PlayModeTestUtility.LoadInToTitleScene();
+
+            yield return PlayModeTestUtility.ClickOnButton(Findable.GAMESETUPSTARTBUTTONNAME);
+
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.GAMESETUP);
+
+            yield return PlayModeTestUtility.ClickOnButton(Findable.SELECTBOARDBUTTONNAME);
+
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.SELECTBOARD);
+
+            yield return PlayModeTestUtility.ClickOnButton(Findable.SELECTBOARDBACKBUTTONNAME);
+
+            PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVAS.GAMESETUP);
         }
     }
 }

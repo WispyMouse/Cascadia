@@ -30,8 +30,10 @@
             yield return new WaitForFixedUpdate();
         }
 
-        public static IEnumerator LoadTitleScene()
+        public static IEnumerator LoadInToTitleScene()
         {
+            yield return LoadStartScene();
+
             AsyncOperation loadOp = SceneManager.LoadSceneAsync(PlayModeTestUtility.TITLESCENE);
             while (!loadOp.isDone)
             {
@@ -57,14 +59,14 @@
             Mouse currentMouse = InputSystem.AddDevice<Mouse>();
             GameObject associatedGameObject = GameObject.Find(buttonFindableName);
 
-            if (!associatedGameObject.activeInHierarchy)
-            {
-                Assert.Fail($"Specified button {buttonFindableName} should not be inactive.");
-            }
-
             if (associatedGameObject == null)
             {
                 Assert.Fail($"Could not find a button with findable name '{buttonFindableName}'.");
+            }
+
+            if (!associatedGameObject.activeInHierarchy)
+            {
+                Assert.Fail($"Specified button {buttonFindableName} should not be inactive.");
             }
 
             if (!associatedGameObject.TryGetComponent<RectTransform>(out RectTransform transformWithName))
@@ -177,6 +179,18 @@
             }
 
             return null; // No UI element found at this position
+        }
+
+        /// <summary>
+        /// Iterates through all expected title menus, and asserts that only the expected one is open currently.
+        /// </summary>
+        /// <param name="exceptFor">The sole exception that should be open.</param>
+        public static void AssertTitleMenuOpenness(string exceptFor)
+        {
+            foreach (string titleCanvas in Findable.TITLE.CANVAS.TITLEMENUWINDOWS)
+            {
+                AssertObjectIsActive(titleCanvas, titleCanvas == exceptFor);
+            }
         }
     }
 }

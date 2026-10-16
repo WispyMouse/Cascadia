@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.7
+  m_fontSize: 41.3
   m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2381,6 +2381,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922198629}
   m_CullTransparentMesh: 1
+--- !u!1 &957284802
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 957284803}
+  - component: {fileID: 957284804}
+  m_Layer: 5
+  m_Name: Winner Animation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &957284803
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957284802}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1436363980}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &957284804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957284802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53535b22b28c0094dbe8ba3cabdbd957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.WinnerAnimation
+  winnerAnimationItemPF: {fileID: 9190111923300717433, guid: 839f25ca1428e3e49bce9bc45ee24c3d, type: 3}
+  distanceOut: 1100
+  amount: 10
 --- !u!1 &964392233
 GameObject:
   m_ObjectHideFlags: 0
@@ -4017,6 +4068,7 @@ MonoBehaviour:
   ScoreBoard: {fileID: 1655775203}
   WinnerPanel: {fileID: 902168029}
   WinnerText: {fileID: 1151377086}
+  WinnerAnimation: {fileID: 957284804}
   WinnerIcon: {fileID: 18702980}
   NoMoreMovesPanel: {fileID: 1107159041}
   CascadeBanner: {fileID: 907875804}
@@ -4311,6 +4363,7 @@ GameObject:
   - component: {fileID: 1436363980}
   - component: {fileID: 1436363982}
   - component: {fileID: 1436363981}
+  - component: {fileID: 1436363983}
   m_Layer: 5
   m_Name: Middle Background
   m_TagString: Untagged
@@ -4329,7 +4382,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 84.85282}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 957284803}
   m_Father: {fileID: 792712511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2, y: 0}
@@ -4375,6 +4429,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436363979}
   m_CullTransparentMesh: 1
+--- !u!114 &1436363983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436363979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 1
 --- !u!1 &1447424495
 GameObject:
   m_ObjectHideFlags: 0
@@ -7146,7 +7213,7 @@ PrefabInstance:
       objectReference: {fileID: 1075755429}
     - target: {fileID: 8501188839260201773, guid: 988e68654bf759f4c85bb8993de5f31b, type: 3}
       propertyPath: m_fontSize
-      value: 44.9
+      value: 56.9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

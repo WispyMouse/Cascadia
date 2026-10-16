@@ -20,6 +20,7 @@
         public ScoreBoard ScoreBoard;
         public TMP_Text WinnerPanel;
         public TMP_Text WinnerText;
+        public WinnerAnimation WinnerAnimation;
         public Image WinnerIcon;
         public GameObject NoMoreMovesPanel;
         public CascadeBanner CascadeBanner;
@@ -46,6 +47,7 @@
             this.solutionLineRenderers.Clear();
             this.connectionToRenderer.Clear();
 
+            this.WinnerAnimation.gameObject.SetActive(false);
             this.WinnerPanel.transform.parent.gameObject.SetActive(false);
             this.RewindButtonHolder.SetActive(false);
             this.NoMoreMovesPanel.SetActive(false);
@@ -187,11 +189,16 @@
             string winnerName = player.PlayerName;
             if (!string.IsNullOrEmpty(winnerName))
             {
+                this.WinnerAnimation.ToDisplay = player;
+                this.WinnerAnimation.gameObject.SetActive(true);
+                this.WinnerPanel.gameObject.SetActive(true);
                 this.WinnerText.gameObject.SetActive(true);
                 this.WinnerText.text = winnerName;
             }
             else
             {
+                this.WinnerAnimation.ToDisplay = null;
+                this.WinnerPanel.gameObject.SetActive(false);
                 this.WinnerText.gameObject.SetActive(false);
             }
 
@@ -239,6 +246,7 @@
             // We have to have more moves, right?
             // Can't have a winner anymore either
             this.NoMoreMovesPanel.SetActive(false);
+            this.WinnerAnimation.gameObject.SetActive(false);
             this.WinnerPanel.transform.parent.gameObject.SetActive(false);
 
             foreach (Cell curCell in this.PositionsToCells.Values)

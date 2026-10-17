@@ -39,7 +39,7 @@
             }
 
             // If the current player is human, do nothing
-            if (this.TurnOrderHolder.PlayerIsHuman(turn.PlayerProfileIndex))
+            if (this.TurnOrderHolder.PlayerIsHuman(turn))
             {
                 return;
             }
@@ -87,12 +87,12 @@
             this.thinkingCoroutine = null;
 
             Coordinate move =
-                PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore
+                PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore
                 .DetermineMove(side, this.GameConductor.CurrentBoardState);
 
 #if UNITY_EDITOR
             MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
-            Debug.Log($"({PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex].AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
+            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
 #endif
 
             this.GameConductor.ChooseCell(move);

@@ -27,7 +27,7 @@
                 this.entries.Add(newTurn);
 
                 PlayerSide side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
-                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.Players[side.PlayerProfileIndex]);
+                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.GetPlayerProfile(side));
 
                 newTurn.OnShowHints += this.SetHints;
                 newTurn.OnHideHints += this.HideHints;

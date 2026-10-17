@@ -72,7 +72,7 @@
                 return;
             }
 
-            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex))
+            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
             {
                 this.HandleLeftClick();
             }
@@ -90,7 +90,7 @@
             RandomBlipPlayer.Singleton.PlayRandomSound();
 
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
-            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[takingTurn.PlayerProfileIndex];
+            PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
             MoveCommand command = new(takingTurn, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
@@ -182,7 +182,7 @@
 
         public void DeclarePlayerVictorious(PlayerSide winner)
         {
-            PlayerProfile player = PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex];
+            PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(winner);
 
             // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
             this.WinnerIcon.sprite = player.SpriteRepresentation;
@@ -232,7 +232,7 @@
                 this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();
 
                 // When we reach a player, stop
-                if (!PersistentGameConfiguration.Singleton.Players[this.CurrentBoardState.CurrentPlayerSide.PlayerProfileIndex].IsAI)
+                if (!PersistentGameConfiguration.Singleton.GetPlayerProfile(this.CurrentBoardState.CurrentPlayerSide).IsAI)
                 {
                     break;
                 }

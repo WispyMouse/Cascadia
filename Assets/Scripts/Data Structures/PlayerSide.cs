@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Represents a player in the game.
+    /// This is a stripped down version that helps correleate to longer lasting player profiles.
     /// </summary>
     public class PlayerSide
     {

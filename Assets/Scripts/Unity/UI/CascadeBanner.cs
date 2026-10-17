@@ -48,7 +48,7 @@
         {
             if (winner != null)
             {
-                this.CascadeAnimator.TextString = $"{PersistentGameConfiguration.Singleton.Players[winner.PlayerProfileIndex].PlayerName} WINS!";
+                this.CascadeAnimator.TextString = $"{PersistentGameConfiguration.Singleton.GetPlayerProfile(winner).PlayerName} WINS!";
                 this.CascadeAnimator.EnableAnimation(this.WinnerSpeed);
             }
             else

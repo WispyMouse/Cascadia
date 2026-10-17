@@ -1,5 +1,6 @@
 ﻿namespace Cascadia.Unity.UI
 {
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -19,12 +20,12 @@
 
         public TMP_Text AICoreLabel;
 
-        public void OpenFromPlayer(int player)
+        public void OpenFromPlayer(PlayerProfile profile)
         {
             this.AlreadyTakenPanel.SetActive(false);
             this.gameObject.SetActive(true);
 
-            this.ShowingProfile = PersistentGameConfiguration.Singleton.Players[player];
+            this.ShowingProfile = profile;
 
             if (this.ShowingProfile.PlayerName == PersistentGameConfiguration.HUMAN)
             {
@@ -67,7 +68,7 @@
                 this.ShowingProfile.PlayerName = PersistentGameConfiguration.HUMAN;
             }
 
-            this.OpenFromPlayer(this.ShowingProfile.Index);
+            this.OpenFromPlayer(this.ShowingProfile);
         }
 
         public void NameChanged(string newName) => this.ShowingProfile.PlayerName = newName;

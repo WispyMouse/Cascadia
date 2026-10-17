@@ -234,5 +234,10 @@
                 this.AddPlayer();
             }
         }
+
+        public PlayerProfile GetPlayerProfile(PlayerSide forSide)
+        {
+            return this.Players[forSide.PlayerProfileIndex];
+        }
     }
 }

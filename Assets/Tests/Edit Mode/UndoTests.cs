@@ -79,7 +79,7 @@
             for (int ii = 0, count = plan.Placements.Count; ii < count; ii++)
             {
                 testState.ApplyMoveCommand(new MoveCommand(testState.CurrentPlayerSide, plan.Placements[ii]), true);
-                expectedOwnership.Add(testState.SpotToSideOwnership[plan.Placements[ii]]);
+                expectedOwnership.Add(testState.GetCoordinateOwnership(plan.Placements[ii]));
             }
 
             for (int ii = 0; ii < plan.UndosAtEnd; ii++)
@@ -94,12 +94,12 @@
 
             for (int ii = 0, count = plan.Placements.Count - plan.UndosAtEnd; ii < count; ii++)
             {
-                Assert.IsTrue(testState.SpotToSideOwnership[plan.Placements[ii]] == expectedOwnership[ii], "Expecting ownership to still be claimed");
+                Assert.IsTrue(testState.GetCoordinateOwnership(plan.Placements[ii]) == expectedOwnership[ii], "Expecting ownership to still be claimed");
             }
 
             for (int ii = plan.Placements.Count - plan.UndosAtEnd + 1, count = plan.Placements.Count; ii < count; ii++)
             {
-                Assert.IsTrue(testState.SpotToSideOwnership[plan.Placements[ii]] == null, "Expecting ownership to now be empty");
+                Assert.IsTrue(testState.GetCoordinateOwnership(plan.Placements[ii]) == null, "Expecting ownership to now be empty");
             }
         }
     }

@@ -22,7 +22,7 @@
 
         public bool IsTurnOrderStillInGame(int turnOrder);
         public IEnumerable<PlayerSide> GetSidesStillInGame();
-        public IReadOnlyDictionary<Coordinate, PlayerSide> SpotToSideOwnership { get; }
+        public PlayerSide GetCoordinateOwnership(Coordinate coordinate);
         public GameStateEnum CurrentGameState { get; }
 
         public BoardConnectionShapesSolver PossibilityContainer { get; }

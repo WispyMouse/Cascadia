@@ -28,7 +28,7 @@
                     continue;
                 }
 
-                PlayerSide ownership = currentGameState.SpotToSideOwnership[resultingPosition];
+                PlayerSide ownership = currentGameState.GetCoordinateOwnership(resultingPosition);
                 if (ownership != null && ownership != forSide)
                 {
                     occupiedNeighbors++;

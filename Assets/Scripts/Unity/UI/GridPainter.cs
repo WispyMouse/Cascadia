@@ -4,6 +4,9 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
+    /// <summary>
+    /// Draws a grid on command.
+    /// </summary>
     public class GridPainter : MonoBehaviour
     {
         public Cell CellPF;

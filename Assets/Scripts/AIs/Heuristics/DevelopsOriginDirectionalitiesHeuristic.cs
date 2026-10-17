@@ -44,7 +44,7 @@
                             break;
                         }
 
-                        PlayerSide ownership = currentGameState.SpotToSideOwnership[resultingPosition];
+                        PlayerSide ownership = currentGameState.GetCoordinateOwnership(resultingPosition);
 
                         // If it's not empty, or not owned by us, it doesn't work
                         if (!(ownership == null || ownership == forSide))

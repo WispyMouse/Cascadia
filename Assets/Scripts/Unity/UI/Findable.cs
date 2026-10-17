@@ -1,12 +1,13 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
-    using UnityEngine.EventSystems;
 
     /// <summary>
     /// The UIToolkit can find these buttons during tests.
     /// The assumption is that the button will have a predictable name, and that this will report on that.
     /// That helps the toolkit find buttons based on strings.
+    /// By attaching Findable to objects, we can search for them by type in a way that narrows it down a little.
+    /// This has no functions, otherwise.
     /// </summary>
     public class Findable : MonoBehaviour
     {

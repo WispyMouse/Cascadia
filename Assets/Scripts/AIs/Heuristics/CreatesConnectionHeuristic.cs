@@ -17,7 +17,7 @@
                 foreach (Coordinate connectionComponent in possibleConnection.Cells)
                 {
                     // We only want tiles owned by this team
-                    PlayerSide ownership = currentGameState.SpotToSideOwnership[connectionComponent];
+                    PlayerSide ownership = currentGameState.GetCoordinateOwnership(connectionComponent);
                     if (ownership != forSide)
                     {
                         break;

@@ -39,7 +39,7 @@
 
             foreach (Coordinate curCoordinate in coordinatesToCheck)
             {
-                PlayerSide ownership = currentGameState.SpotToSideOwnership[curCoordinate];
+                PlayerSide ownership = currentGameState.GetCoordinateOwnership(curCoordinate);
                 if (ownership != null)
                 {
                     unplayableSpaces++;

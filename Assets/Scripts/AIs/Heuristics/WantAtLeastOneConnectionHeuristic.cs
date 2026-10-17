@@ -63,7 +63,7 @@
                 foreach (Coordinate connectionComponent in possibleConnection.Cells)
                 {
                     // If this spot is taken by another team, we can't possibly score here
-                    PlayerSide ownership = currentGameState.SpotToSideOwnership[connectionComponent];
+                    PlayerSide ownership = currentGameState.GetCoordinateOwnership(connectionComponent);
                     if (ownership != null && ownership != forSide)
                     {
                         isValid = false;

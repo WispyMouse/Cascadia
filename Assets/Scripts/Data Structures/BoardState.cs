@@ -8,6 +8,11 @@
     {
         public const int MINIMUMPLAYERS = 2;
 
+        /// <summary>
+        /// The directions that can source from a tile, and be considered as being "rooted" in that tile.
+        /// When solving a piece's involvement, you could just iterate over each coordinate and look at
+        /// connections going in these directions.
+        /// </summary>
         public static IReadOnlyList<DirectionalityVector> Directionalities = new DirectionalityVector[]
         {
             new (1, 0),
@@ -16,6 +21,10 @@
             new (-1, -1),
         };
 
+        /// <summary>
+        /// <see cref="Directionalities"/>, but also pointing backwards.
+        /// Helps in a practical way to find more connections.
+        /// </summary>
         public static IReadOnlyList<DirectionalityVector> DirectionalitiesWithBackwards = new DirectionalityVector[]
         {
             new (1, 0),
@@ -38,13 +47,12 @@
         public IReadOnlyList<PlayerSide> PlayerOrder => this.playerOrder;
         private readonly List<PlayerSide> playerOrder = new();
 
-        public IReadOnlyDictionary<Coordinate, PlayerSide> SpotToSideOwnership => this.spotToSideOwnership;
+        private readonly Dictionary<Coordinate, PlayerSide> spotToSideOwnership;
+
         int IReadOnlyBoardState.CurrentCascadeLevel => this.CurrentCascadeLevel;
         int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
-
-        private readonly Dictionary<Coordinate, PlayerSide> spotToSideOwnership;
 
         public int CurrentCascadeLevel { get; set; }
         public int CurrentPlayerIndex { get; set; }
@@ -133,7 +141,7 @@
             this.PossibilityContainer = toDeepClone.PossibilityContainer;
             this.Winner = toDeepClone.Winner;
 
-            this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(toDeepClone.SpotToSideOwnership);
+            this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(toDeepClone.spotToSideOwnership);
             this.PlayerSidesStillInGame = new HashSet<PlayerSide>(toDeepClone.PlayerSidesStillInGame);
 
             this.acceptedSolutions = new Dictionary<Coordinate, List<CellsConnection>>(this.acceptedSolutions.Count);
@@ -145,9 +153,9 @@
 
         public IReadOnlyList<Coordinate> GetEmptySpots()
         {
-            List<Coordinate> emptySpots = new(this.SpotToSideOwnership.Count);
+            List<Coordinate> emptySpots = new(this.spotToSideOwnership.Count);
 
-            foreach (KeyValuePair<Coordinate, PlayerSide> position in this.SpotToSideOwnership)
+            foreach (KeyValuePair<Coordinate, PlayerSide> position in this.spotToSideOwnership)
             {
                 if (position.Value == null)
                 {
@@ -160,9 +168,9 @@
 
         public bool AnyEmptySpots()
         {
-            foreach (Coordinate position in this.SpotToSideOwnership.Keys)
+            foreach (Coordinate position in this.spotToSideOwnership.Keys)
             {
-                PlayerSide ownership = this.SpotToSideOwnership[position];
+                PlayerSide ownership = this.spotToSideOwnership[position];
 
                 if (ownership == null)
                 {
@@ -217,7 +225,7 @@
         {
             if (!this.MoveCommandLegalToPlay(toApply))
             {
-                throw new System.ArgumentException($"Attempted to play illegal move. Check legality using {nameof(this.MoveCommandLegalToPlay)}.");
+                throw new ArgumentException($"Attempted to play illegal move. Check legality using {nameof(this.MoveCommandLegalToPlay)}.");
             }
 
             MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);
@@ -438,7 +446,7 @@
 
             foreach (Coordinate curCell in connection.Cells)
             {
-                if (this.SpotToSideOwnership[curCell] != side)
+                if (this.GetCoordinateOwnership(curCell) != side)
                 {
                     return false;
                 }
@@ -458,7 +466,7 @@
                     continue;
                 }
 
-                if (this.SpotToSideOwnership[curCell] != playerSide)
+                if (this.GetCoordinateOwnership(curCell) != playerSide)
                 {
                     return false;
                 }
@@ -484,7 +492,7 @@
                 return false;
             }
 
-            if (!this.SpotToSideOwnership.TryGetValue(toApply.Position, out PlayerSide ownership))
+            if (!this.spotToSideOwnership.TryGetValue(toApply.Position, out PlayerSide ownership))
             {
                 return false;
             }
@@ -723,6 +731,11 @@
             }
 
             return null;
+        }
+
+        public PlayerSide GetCoordinateOwnership(Coordinate position)
+        {
+            return this.spotToSideOwnership[position];
         }
     }
 }

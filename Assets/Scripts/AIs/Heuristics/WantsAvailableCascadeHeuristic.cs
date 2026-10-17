@@ -57,7 +57,7 @@
                         continue;
                     }
 
-                    if (currentGameState.SpotToSideOwnership[connectionComponent] != forSide)
+                    if (currentGameState.GetCoordinateOwnership(connectionComponent) != forSide)
                     {
                         valid = false;
                         break;

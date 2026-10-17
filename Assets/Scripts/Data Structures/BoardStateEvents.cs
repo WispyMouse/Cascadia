@@ -1,7 +1,5 @@
 ﻿namespace Cascadia.DataStructures
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Represents all of the "events" that can happen in a BoardState.
     /// </summary>

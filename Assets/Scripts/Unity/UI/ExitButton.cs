@@ -1,7 +1,10 @@
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Closes the game.
+    /// </summary>
     public class ExitButton : MonoBehaviour
     {
         public void OnPress()

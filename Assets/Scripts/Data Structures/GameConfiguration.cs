@@ -1,6 +1,8 @@
 ﻿namespace Cascadia.DataStructures
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// Concept representing what a game could be started as.
@@ -13,6 +15,8 @@
         public int PlayerCount;
         public int InARowToSolve;
         public int StallTurn;
+
+        public IReadOnlyCollection<Coordinate> AllCoordinates;
 
         public readonly int MaximumDimensions => this.Width * this.Height;
 
@@ -28,6 +32,38 @@
         {
             this.Width = width;
             this.Height = height;
+
+            HashSet<Coordinate> coordinates = new(this.Width * this.Height);
+
+            for (int xx = 0; xx < this.Width; xx++)
+            {
+                for (int yy = 0; yy < this.Height; yy++)
+                {
+                    coordinates.Add(new Coordinate(xx, yy));
+                }
+            }
+
+            this.AllCoordinates = coordinates;
+
+            this.PlayerCount = playerCount;
+            this.InARowToSolve = inARowToSolve;
+            this.StallTurn = stallTurn;
+            this.ForceOrderlyTurn = forceOrderlyTurn;
+        }
+
+        public GameConfiguration(IReadOnlyCollection<Coordinate> coordinates, int playerCount, int inARowToSolve, int stallTurn, int? forceOrderlyTurn)
+        {
+            int width = 0, height = 0;
+            foreach (Coordinate coordinate in coordinates)
+            {
+                width = Math.Max(width, coordinate.X);
+                height = Math.Max(height, coordinate.Y);
+            }
+            this.Width = width;
+            this.Height = height;
+
+            this.AllCoordinates = coordinates;
+
             this.PlayerCount = playerCount;
             this.InARowToSolve = inARowToSolve;
             this.StallTurn = stallTurn;
@@ -56,7 +92,7 @@
                 return false;
             }
 
-            return true;
+            return this.AllCoordinates.Contains(position);
         }
 
         public readonly IEnumerable<Coordinate> GetAllCoordinatesInMapDimensions()

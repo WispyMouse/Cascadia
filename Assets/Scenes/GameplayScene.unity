@@ -2430,8 +2430,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.WinnerAnimation
   winnerAnimationItemPF: {fileID: 9190111923300717433, guid: 839f25ca1428e3e49bce9bc45ee24c3d, type: 3}
-  distanceOut: 1100
-  amount: 10
+  distanceOut: 1450
+  amount: 8
 --- !u!1 &964392233
 GameObject:
   m_ObjectHideFlags: 0

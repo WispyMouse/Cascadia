@@ -127,7 +127,7 @@
                 }
             }
 
-            this.CurrentTurnPanel.SetCascade(takingTurn.PlayerProfileIndex, consequences.ConnectionsMade.Count);
+            this.CurrentTurnPanel.SetCascade(takingTurn, consequences.ConnectionsMade.Count);
 
             foreach (PlayerSide playerSideRemoved in consequences.PlayerSidesRemoved)
             {
@@ -242,7 +242,14 @@
                     Destroy(renderer.gameObject);
                 }
 
+                foreach (PlayerSide side in undoneCommand.PlayerSidesRemoved)
+                {
+                    this.CurrentTurnPanel.RestorePlayer(side);
+                }
+
                 this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();
+
+                this.CurrentTurnPanel.SetCascade(undoneCommand.FromCommand.Side, undoneCommand.PreviousCascadeLevel);
 
                 // When we reach a player, stop
                 if (!PersistentGameConfiguration.Singleton.GetPlayerProfile(this.CurrentBoardState.CurrentPlayerSide).IsAI)
@@ -251,8 +258,7 @@
                 }
             }
 
-            // We have to have more moves, right?
-            // Can't have a winner anymore either
+            // Can't have a winner anymore; the game is no longer over, if it was
             this.NoMoreMovesPanel.SetActive(false);
             this.WinnerAnimation.gameObject.SetActive(false);
             this.WinnerPanel.transform.parent.gameObject.SetActive(false);
@@ -262,6 +268,8 @@
                 curCell.SetHighlightStatus(false);
             }
 
+            // If there is a previous move, then highlight spaces
+            // as though this was the most recently made move
             if (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
                 MoveCommandConsequences latestCommand = this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];

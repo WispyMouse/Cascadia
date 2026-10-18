@@ -15,6 +15,11 @@
         public void OnEnable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
         public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
 
+        public void UpdateDescriptionFromCurrentConfiguration()
+        {
+            this.UpdateDescription(PersistentGameConfiguration.Singleton.GameConfiguration);
+        }
+
         public void UpdateDescription(GameConfiguration newConfiguration)
         {
             StringBuilder description = new();

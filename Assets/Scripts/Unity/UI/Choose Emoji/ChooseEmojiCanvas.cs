@@ -6,7 +6,6 @@
     using UnityEngine;
     using UnityEngine.AddressableAssets;
     using UnityEngine.ResourceManagement.AsyncOperations;
-    using static Codice.Client.BaseCommands.Import.Commit;
 
     public class ChooseEmojiCanvas : MonoBehaviour
     {

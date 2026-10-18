@@ -7,6 +7,7 @@
     public class BoardState : IReadOnlyBoardState
     {
         public const int MINIMUMPLAYERS = 2;
+        public const int MAXIMUMPLAYERS = 6;
 
         /// <summary>
         /// The directions that can source from a tile, and be considered as being "rooted" in that tile.
@@ -50,15 +51,15 @@
         private readonly Dictionary<Coordinate, PlayerSide> spotToSideOwnership;
 
         int IReadOnlyBoardState.CurrentCascadeLevel => this.CurrentCascadeLevel;
-        int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerIndex;
+        int IReadOnlyBoardState.CurrentPlayerIndex => this.CurrentPlayerTurnIndex;
         GameStateEnum IReadOnlyBoardState.CurrentGameState => this.CurrentGameState;
         BoardConnectionShapesSolver IReadOnlyBoardState.PossibilityContainer => this.PossibilityContainer;
 
-        public int CurrentCascadeLevel { get; set; }
-        public int CurrentPlayerIndex { get; set; }
-        public PlayerSide CurrentPlayerSide => this.PlayerOrder[this.CurrentPlayerIndex];
-        public HashSet<PlayerSide> PlayerSidesStillInGame { get; set; } = new HashSet<PlayerSide>();
-        public int CurrentRound { get; set; } = 1;
+        public int CurrentCascadeLevel { get; private set; }
+        public int CurrentPlayerTurnIndex { get; private set; }
+        public PlayerSide CurrentPlayerSide => this.PlayerOrder[this.CurrentPlayerTurnIndex];
+        public HashSet<PlayerSide> PlayerSidesStillInGame { get; private set; } = new HashSet<PlayerSide>();
+        public int CurrentRound { get; private set; } = 1;
 
         private readonly Dictionary<Coordinate, List<CellsConnection>> acceptedSolutions;
 
@@ -136,7 +137,7 @@
             this.BoardStateEvents = new BoardStateEvents();
 
             this.CurrentCascadeLevel = toDeepClone.CurrentCascadeLevel;
-            this.CurrentPlayerIndex = toDeepClone.CurrentPlayerIndex;
+            this.CurrentPlayerTurnIndex = toDeepClone.CurrentPlayerTurnIndex;
             this.CurrentGameState = toDeepClone.CurrentGameState;
             this.PossibilityContainer = toDeepClone.PossibilityContainer;
             this.Winner = toDeepClone.Winner;
@@ -268,7 +269,7 @@
                 // If there's only one remaining player, they must win
                 if (this.PlayerSidesStillInGame.Count == 1)
                 {
-                    this.CurrentPlayerIndex = this.PlayerSidesStillInGame.First().TurnOrderIndex;
+                    this.CurrentPlayerTurnIndex = this.PlayerSidesStillInGame.First().TurnOrderIndex;
                     this.Winner = this.CurrentPlayerSide;
                     this.CurrentGameState = GameStateEnum.End;
 
@@ -307,7 +308,7 @@
                     for (int ii = 0; ii <= this.BasedOnConfiguration.PlayerCount; ii++)
                     {
                         // Count backwards through players to get most recent plays
-                        int turnIndex = (this.CurrentPlayerIndex - ii + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
+                        int turnIndex = (this.CurrentPlayerTurnIndex - ii + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                         if (!this.IsTurnOrderStillInGame(turnIndex))
                         {
@@ -626,7 +627,10 @@
 
         public void AdvancePlayer(bool reversePlayer = false)
         {
-            this.BoardStateEvents.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
+            if (!reversePlayer)
+            {
+                this.BoardStateEvents.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
+            }
 
             // If we're advancing, add one. Reversing, minus one
             // This will modulo around the player count and let us find the next valid player
@@ -634,8 +638,8 @@
 
             for (int ii = 1; ii < this.BasedOnConfiguration.PlayerCount; ii++)
             {
-                int previousPlayer = (this.CurrentPlayerIndex + (advancer * (ii - 1)) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
-                int nextProspectivePlayer = (this.CurrentPlayerIndex + (advancer * ii) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
+                int previousPlayer = (this.CurrentPlayerTurnIndex + (advancer * (ii - 1)) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
+                int nextProspectivePlayer = (this.CurrentPlayerTurnIndex + (advancer * ii) + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                 // If the previous player is the starting player, and we're reversing, go back a round
                 if (reversePlayer && previousPlayer == 0)
@@ -656,7 +660,7 @@
                     continue;
                 }
 
-                this.CurrentPlayerIndex = nextProspectivePlayer;
+                this.CurrentPlayerTurnIndex = nextProspectivePlayer;
                 this.BoardStateEvents.OnPlayerStartTurn?.Invoke(this.CurrentPlayerSide);
                 break;
             }
@@ -667,12 +671,12 @@
             // If there is a specific person who should go first, then everyone should be "in order"
             // and that player should be at the top of the list, index 0
 
-            this.CurrentPlayerIndex = this.BasedOnConfiguration.ForceOrderlyTurn.Value;
+            this.CurrentPlayerTurnIndex = this.BasedOnConfiguration.ForceOrderlyTurn.Value;
             List<PlayerSide> playerOrder = new(this.BasedOnConfiguration.PlayerCount);
 
             for (int ii = 0, count = this.BasedOnConfiguration.PlayerCount; ii < count; ii++)
             {
-                int realIndex = (ii + this.CurrentPlayerIndex + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
+                int realIndex = (ii + this.CurrentPlayerTurnIndex + this.BasedOnConfiguration.PlayerCount) % this.BasedOnConfiguration.PlayerCount;
 
                 PlayerSide newSide = new(ii, realIndex);
                 this.playerOrder.Add(newSide);

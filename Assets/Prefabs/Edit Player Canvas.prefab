@@ -582,7 +582,6 @@ RectTransform:
   - {fileID: 310219057255894347}
   - {fileID: 2883766548456425868}
   - {fileID: 2930987581164431690}
-  - {fileID: 4272722626268340836}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -671,6 +670,7 @@ MonoBehaviour:
   AIPanel: {fileID: 5314242487714849923}
   AlreadyTakenPanel: {fileID: 8286753949190278122}
   AICoreLabel: {fileID: 6978944038712202876}
+  chooseEmojiCanvas: {fileID: 0}
 --- !u!114 &749456971558139286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,8 +836,9 @@ GameObject:
   - component: {fileID: 4768650004271073570}
   - component: {fileID: 8769697324949980807}
   - component: {fileID: 5155439647056359821}
+  - component: {fileID: 6752836363271087716}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: '[FINDABLE] Back Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -856,6 +857,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 864725971092177609}
+  - {fileID: 4272722626268340836}
   m_Father: {fileID: 4033989438692321936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -1013,6 +1015,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &6752836363271087716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3213866798862793755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &3255186318359572641
 GameObject:
   m_ObjectHideFlags: 0
@@ -2663,12 +2677,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 244842780867380571}
-  m_Father: {fileID: 4033989438692321936}
+  m_Father: {fileID: 2930987581164431690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 710, y: -390}
-  m_SizeDelta: {x: -1420, y: -780}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5384367724296920396
 CanvasRenderer:

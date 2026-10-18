@@ -27,7 +27,7 @@
                 this.entries.Add(newTurn);
 
                 PlayerSide side = this.TurnOrderHolder.GameConductor.CurrentBoardState.PlayerOrder[playerIndex];
-                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.GetPlayerProfile(side));
+                newTurn.RepresentProfile(PersistentGameConfiguration.Singleton.GetPlayerProfile(side), side);
 
                 newTurn.OnShowHints += this.SetHints;
                 newTurn.OnHideHints += this.HideHints;
@@ -55,13 +55,13 @@
 
         public void RestorePlayer(PlayerSide side) => this.entries[side.TurnOrderIndex].RestorePlayer(this.TurnOrderHolder.GameConductor.CurrentBoardState.CurrentPlayerSide);
 
-        public void SetCascade(int index, int cascadeLevel) => this.entries[index].SetCascade(cascadeLevel);
+        public void SetCascade(PlayerSide playerSide, int cascadeLevel) => this.entries[playerSide.TurnOrderIndex].SetCascade(cascadeLevel);
 
-        public void SetHints(int visibleHint)
+        public void SetHints(PlayerSide side)
         {
             for (int ii = 0; ii < this.TurnOrderHolder.GameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount; ii++)
             {
-                this.SetHint(ii, ii == visibleHint);
+                this.SetHint(ii, ii == side.TurnOrderIndex);
             }
         }
 

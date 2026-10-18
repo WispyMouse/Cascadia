@@ -3,17 +3,19 @@
     using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.Profiling;
     using UnityEngine.UI;
 
     public class CurrentTurnPanelEntry : MonoBehaviour
     {
-        public delegate void OnShowHintsDelegate(int side);
+        public delegate void OnShowHintsDelegate(PlayerSide side);
         public delegate void OnHideHintsDelegate();
 
         public OnShowHintsDelegate OnShowHints;
         public OnHideHintsDelegate OnHideHints;
 
         public PlayerProfile RepresentedProfile { get; private set; }
+        public PlayerSide RepresentedSide { get; private set; }
 
         public Image PlayerIcon;
 
@@ -38,12 +40,12 @@
         /// </summary>
         public float CascadeLerpPerLevel = .2f;
 
-        public void RepresentProfile(PlayerProfile toRepresent)
+        public void RepresentProfile(PlayerProfile toRepresent, PlayerSide side)
         {
             this.Clear();
 
             this.RepresentedProfile = toRepresent;
-            this.PlayerIcon.sprite = toRepresent.Sprite.Sprite;
+            this.RepresentedSide = side;
 
             if (toRepresent.PlayerName == PersistentGameConfiguration.HUMAN)
             {
@@ -54,10 +56,30 @@
                 this.NameText.text = toRepresent.PlayerName;
                 this.NameText.gameObject.SetActive(true);
             }
+
+            // If we're still loading the icon, don't show it
+            if (!this.RepresentedProfile.Sprite.NeedsResolution)
+            {
+                this.PlayerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
+                this.PlayerIcon.gameObject.SetActive(true);
+            }
+            else
+            {
+                this.PlayerIcon.gameObject.SetActive(false);
+                this.PlayerIcon.sprite = null;
+
+                // Resolution not complete; wait for it and update it when it's finished
+                this.RepresentedProfile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
+            }
         }
 
         public void Clear()
         {
+            if (this.RepresentedProfile != null)
+            {
+                this.RepresentedProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
+            }
+
             this.RepresentedProfile = null;
             this.CascadeLevelTextHolder.SetActive(false);
             this.IsCurrentTurnIndicator.SetActive(false);
@@ -122,8 +144,16 @@
                 this.CascadeLevelVisibilityCurve.Evaluate(this.curCascadeLevelVisibility / this.curCascadeTimeLevel));
         }
 
-        public void ShowHints() => this.OnShowHints?.Invoke(this.RepresentedProfile.Index);
+        public void ShowHints() => this.OnShowHints?.Invoke(this.RepresentedSide);
 
         public void HideHints() => this.OnHideHints?.Invoke();
+
+        private void OnIconDoneLoading()
+        {
+            this.RepresentedProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
+
+            this.PlayerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
+            this.PlayerIcon.gameObject.SetActive(true);
+        }
     }
 }

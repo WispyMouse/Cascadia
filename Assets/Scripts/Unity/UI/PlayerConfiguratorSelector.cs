@@ -28,5 +28,20 @@
                 }
             }
         }
+
+        public int CurrentlyConfigurablePlayerButtonsCount
+        {
+            get
+            {
+                int playerButtonsVisible = 0;
+
+                for (int ii = 0; ii < this.PlayerButtons.Count; ii++)
+                {
+                    playerButtonsVisible += this.PlayerButtons[ii].IsShowingConfiguration ? 1 : 0;
+                }
+
+                return playerButtonsVisible;
+            }
+        }
     }
 }

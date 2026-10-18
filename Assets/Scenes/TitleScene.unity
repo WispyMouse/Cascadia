@@ -1739,8 +1739,9 @@ GameObject:
   - component: {fileID: 208902620}
   - component: {fileID: 208902619}
   - component: {fileID: 208902623}
+  - component: {fileID: 208902624}
   m_Layer: 5
-  m_Name: Configure Players
+  m_Name: '[FINDABLE] Configure Players Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1830,6 +1831,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1684924894}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 365753010}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -1904,6 +1917,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &208902624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208902617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!1 &214124852
 GameObject:
   m_ObjectHideFlags: 0
@@ -3503,7 +3528,7 @@ GameObject:
   - component: {fileID: 526617734}
   - component: {fileID: 526617735}
   m_Layer: 5
-  m_Name: '[FINDABLE] Select Board'
+  m_Name: '[FINDABLE] Select Board Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4055,6 +4080,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 575139967}
   m_CullTransparentMesh: 1
+--- !u!1 &616521360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 616521362}
+  - component: {fileID: 616521361}
+  m_Layer: 0
+  m_Name: Title Canvas Initializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &616521361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616521360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5548b87d33da54bbb3ad0ef50cbc75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.TitleCanvasInitializer
+  KeepOpen: '[FINDABLE] Title Canvas'
+--- !u!4 &616521362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 616521360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &654958751
 GameObject:
   m_ObjectHideFlags: 0
@@ -4394,7 +4464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2152871795941293260, guid: dd11ffa0b1cae2e43ba2a622671775a4, type: 3}
       propertyPath: m_fontSize
-      value: 18
+      value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 2152871795941293260, guid: dd11ffa0b1cae2e43ba2a622671775a4, type: 3}
       propertyPath: m_fontSizeMax
@@ -4673,8 +4743,9 @@ GameObject:
   - component: {fileID: 722588798}
   - component: {fileID: 722588797}
   - component: {fileID: 722588801}
+  - component: {fileID: 722588802}
   m_Layer: 5
-  m_Name: Choose Emoji Canvas
+  m_Name: '[FINDABLE] Choose Emoji Canvas'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4779,6 +4850,18 @@ MonoBehaviour:
   optionParent: {fileID: 1330988871}
   chooseEmojiCategoryPF: {fileID: 1721874325610008167, guid: d134f256846373c4a83c57e88c4726ac, type: 3}
   chooseEmojiIconPF: {fileID: 5816721538240427520, guid: 1c9cf9411f30ff245b7d6ed0587abfb1, type: 3}
+--- !u!114 &722588802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722588796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Findable
 --- !u!224 &799413292 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1340631671140616139, guid: 1c9cf9411f30ff245b7d6ed0587abfb1, type: 3}
@@ -6839,7 +6922,7 @@ GameObject:
   - component: {fileID: 1434803052}
   - component: {fileID: 1434803056}
   m_Layer: 5
-  m_Name: Back Button
+  m_Name: '[FINDABLE] Configure Players Back Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6954,8 +7037,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 325867775}
-        m_TargetAssemblyTypeName: TicTacCOSTCO.Unity.UI.GameDescriber, TicTacCOSTCO.Unity.UI
-        m_MethodName: UpdateDescription
+        m_TargetAssemblyTypeName: Cascadia.Unity.UI.GameDescriber, Cascadia.Unity.UI
+        m_MethodName: UpdateDescriptionFromCurrentConfiguration
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6964,6 +7047,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1684924894}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &1434803054
 MonoBehaviour:
@@ -10169,6 +10264,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3213866798862793755, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_Name
+      value: '[FINDABLE] Edit Player Back Button'
+      objectReference: {fileID: 0}
     - target: {fileID: 4033989438692321936, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -11832,3 +11931,4 @@ SceneRoots:
   - {fileID: 546963851861754408}
   - {fileID: 1835940601061800685}
   - {fileID: 722588800}
+  - {fileID: 616521362}

@@ -56,7 +56,6 @@
 
         public static IEnumerator ClickOnButton(string buttonFindableName)
         {
-            Mouse currentMouse = InputSystem.AddDevice<Mouse>();
             GameObject associatedGameObject = GameObject.Find(buttonFindableName);
 
             if (associatedGameObject == null)
@@ -74,14 +73,23 @@
                 Assert.Fail($"Found button with name '{buttonFindableName}', but it didn't have a RectTransform.");
             }
 
+            yield return ClickOn(transformWithName);
+        }
+
+        public static IEnumerator ClickOn(RectTransform transform)
+        {
+            yield return null;
+
+            Mouse currentMouse = InputSystem.AddDevice<Mouse>();
+
             // Move mouse over object
             using (StateEvent.From(currentMouse, out InputEventPtr ptr))
             {
-                Vector2 center = GetScreenCoordinates(transformWithName).center;
+                Vector2 center = GetScreenCoordinates(transform).center;
 
                 // Make sure the top element is this
                 GameObject clickedObject = GetUIElementAtScreenPosition(center);
-                Assert.AreEqual(associatedGameObject, clickedObject, $"Expecting that the top ui element at position is {buttonFindableName}. Was instead {clickedObject?.name}");
+                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name}. Was instead {clickedObject?.name}");
 
                 currentMouse.position.WriteValueIntoEvent<Vector2>(center, ptr);
                 InputSystem.QueueEvent(ptr);
@@ -127,6 +135,8 @@
             // Wait for the release event to have completed firing
             yield return null;
 
+            // Wait for next visual frame
+            yield return Awaitable.NextFrameAsync();
 
             InputSystem.RemoveDevice(currentMouse);
         }
@@ -187,7 +197,7 @@
         /// <param name="exceptFor">The sole exception that should be open.</param>
         public static void AssertTitleMenuOpenness(string exceptFor)
         {
-            foreach (string titleCanvas in Findable.TITLE.CANVAS.TITLEMENUWINDOWS)
+            foreach (string titleCanvas in Findable.TITLE.CANVASNAMES.TITLEMENUWINDOWS)
             {
                 AssertObjectIsActive(titleCanvas, titleCanvas == exceptFor);
             }

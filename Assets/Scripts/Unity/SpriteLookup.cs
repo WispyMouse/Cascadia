@@ -1,6 +1,7 @@
 ﻿namespace Cascadia.Unity
 {
     using System.Collections.Generic;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
     using Cascadia.Unity.UI;
     using UnityEngine;
@@ -68,6 +69,39 @@
         public string ChooseRandomCategory()
         {
             return this.emojiCategoryLabels[Random.Range(0, this.emojiCategoryLabels.Count)];
+        }
+
+        /// <summary>
+        /// Asynchronously loads a random icon, and then updates the provided profile
+        /// </summary>
+        /// <param name="forProfile"></param>
+        /// <returns></returns>
+        public static async void AssignRandomSpriteFromAddressablesAsync(PlayerProfile forProfile)
+        {
+            PlayerProfileSprite sprite;
+            bool unique;
+
+            do
+            {
+                unique = true;
+
+                sprite = await SpriteLookup.Singleton.GetRandomSpriteFromAnyCategory();
+
+                // Ensure no one else has this same icon
+                for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
+                {
+                    if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite, sprite.Sprite))
+                    {
+                        unique = false;
+                        break;
+                    }
+                }
+            }
+            while (!unique);
+
+            Debug.Log($"Loading saturated icon {sprite.Sprite.name}");
+
+            forProfile.UpdateSprite(sprite);
         }
     }
 }

@@ -97,9 +97,16 @@
 
             int countWithIndex = 0;
 
+            // Check to see if there are any other players using the same icon; if they are, then we can't leave this screen yet!
             for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
             {
-                if (PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite == this.ShowingProfile.Sprite.Sprite)
+                // Count everything else
+                if (ii == this.ShowingProfile.Index)
+                {
+                    continue;
+                }
+
+                if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite, this.ShowingProfile.Sprite.Sprite))
                 {
                     countWithIndex++;
                 }

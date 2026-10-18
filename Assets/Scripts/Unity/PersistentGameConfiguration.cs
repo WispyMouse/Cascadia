@@ -41,7 +41,7 @@
         private int debugHeight = 5;
 
         /// When starting the game from in editor, set <see cref="GameConfiguration.PlayerCount"/> to this.
-        [Range(BoardState.MINIMUMPLAYERS, 6)]
+        [Range(BoardState.MINIMUMPLAYERS, BoardState.MAXIMUMPLAYERS)]
         [SerializeField]
         private int debugPlayerCount = 2;
 
@@ -100,17 +100,17 @@
             this.transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
 
-            this.gameConfiguration = new GameConfiguration(this.debugWidth, this.debugHeight, this.debugPlayerCount, 3, this.debugStallTurn, forceOrderlyTurn: null);
-        }
+            this.gameConfiguration = new GameConfiguration(this.debugWidth, this.debugHeight, 0, 3, this.debugStallTurn, forceOrderlyTurn: null);
 
-        private async Awaitable Start()
-        {
-            await Addressables.InitializeAsync().Task;
+            int playerCount = BoardState.MINIMUMPLAYERS;
 
-            // Wait until start to add players, so that we can be assured SpriteLookup is set
-            for (int ii = 0; ii < this.debugPlayerCount; ii++)
+#if UNITY_EDITOR
+            playerCount = this.debugPlayerCount;
+#endif
+
+            for (int ii = 0; ii < playerCount; ii++)
             {
-                PlayerProfile newProfile = await this.AddPlayer();
+                PlayerProfile newProfile = this.AddPlayer();
 
 #if UNITY_EDITOR
                 // Quick AI core test; assign AI cores to players based on editor-only debug variables
@@ -122,6 +122,11 @@
                 }
 #endif
             }
+        }
+
+        private async Awaitable Start()
+        {
+            await Addressables.InitializeAsync().Task;
 
             // After starting, send up the event that the game configuration has changed
             // This will help UI items decide to update, which should assign in OnEnable
@@ -170,6 +175,7 @@
                 {
                     startRemoving = true;
                     this.players.RemoveAt(ii);
+                    this.gameConfiguration.PlayerCount = this.players.Count;
 
                     // Move the iterator back one, since this has removed something
                     ii--;
@@ -186,40 +192,58 @@
         /// will already have the appropriate <see cref="PlayerProfile.Index"/>.
         /// </summary>
         /// <returns></returns>
-        public async Awaitable<PlayerProfile> AddPlayer()
+        public PlayerProfile AddPlayer()
         {
-            PlayerProfileSprite sprite = await SpriteLookup.Singleton.GetRandomSpriteFromAnyCategory();
+            // Start looking up an icon for them; asynchronous action
             PlayerProfile newProfile = new()
             {
                 Index = this.players.Count,
-                Sprite = sprite
+                Sprite = PlayerProfileSprite.GetNeedsResolution()
             };
+
+            SpriteLookup.AssignRandomSpriteFromAddressablesAsync(newProfile);
 
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.IsAI = false;
             newProfile.PlayerName = HUMAN;
 
             this.players.Add(newProfile);
+            this.gameConfiguration.PlayerCount = this.players.Count;
 
             return newProfile;
         }
 
-        public void ForceSetConfig(GameConfiguration configuration) => this.gameConfiguration = configuration;
+        public void ForceSetConfig(GameConfiguration configuration)
+        {
+            this.gameConfiguration = configuration;
 
-        public async Awaitable HumanitizeForTests()
+            this.EnsurePlayerCount(configuration.PlayerCount);
+        }
+
+        public void HumanitizeForTests()
         {
             this.debugAICores.Clear();
-            this.players.Clear();
-
-            for (int ii = 0; ii < this.GameConfiguration.PlayerCount; ii++)
-            {
-                await this.AddPlayer();
-            }
+            this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
         }
 
         public PlayerProfile GetPlayerProfile(PlayerSide forSide)
         {
             return this.Players[forSide.PlayerProfileIndex];
+        }
+
+        public void EnsurePlayerCount(int size)
+        {
+            // Remove players over limit
+            for (int ii = this.players.Count - 1; ii >= size; ii--)
+            {
+                this.RemovePlayer(this.players[ii]);
+            }
+
+            // Add players until we hit the limit
+            for (int ii = this.players.Count; ii < size; ii++)
+            {
+                this.AddPlayer();
+            }
         }
     }
 }

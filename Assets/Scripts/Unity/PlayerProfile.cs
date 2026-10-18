@@ -6,6 +6,9 @@
 
     public class PlayerProfile
     {
+        public delegate void PlayerProfileSpriteUpdated();
+        public PlayerProfileSpriteUpdated OnPlayerProfileSpriteUpdated;
+
         public int Index;
         public string PlayerName;
         public bool IsAI;
@@ -17,5 +20,11 @@
         public int AICoreIndex;
 
         public AICore AICore => PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex];
+
+        public void UpdateSprite(PlayerProfileSprite sprite)
+        {
+            this.Sprite = sprite;
+            this.OnPlayerProfileSpriteUpdated?.Invoke();
+        }
     }
 }

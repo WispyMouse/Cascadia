@@ -32,8 +32,8 @@ public class PlayModeSmokeTests
         yield return PlayModeTestUtility.LoadStartScene();
 
         PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-        config.ForceSetConfig(plan.GameConfiguration);
         config.HumanitizeForTests();
+        config.ForceSetConfig(plan.GameConfiguration);
 
         yield return PlayModeTestUtility.LoadGameplayScene();
 
@@ -54,8 +54,8 @@ public class PlayModeSmokeTests
         yield return PlayModeTestUtility.LoadStartScene();
 
         PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-        config.ForceSetConfig(plan.GameConfiguration);
         config.HumanitizeForTests();
+        config.ForceSetConfig(plan.GameConfiguration);
 
         yield return PlayModeTestUtility.LoadGameplayScene();
 
@@ -67,7 +67,7 @@ public class PlayModeSmokeTests
         }
 
         Assert.AreEqual(plan.ExpectedGameStateEnum, gameConductor.CurrentBoardState.CurrentGameState, $"Expecting game state to be in specific status");
-        Assert.AreEqual(plan.ExpectedPlayerIndex, gameConductor.CurrentBoardState.CurrentPlayerIndex, $"Expecting current player index to be specific");
+        Assert.AreEqual(plan.ExpectedPlayerIndex, gameConductor.CurrentBoardState.CurrentPlayerTurnIndex, $"Expecting current player index to be specific");
         Assert.AreEqual(plan.ExpectedCascade, gameConductor.CurrentBoardState.CurrentCascadeLevel, $"Expecting cascade to be specific");
         Assert.AreEqual(plan.ExpectedRemainingPlayers, gameConductor.CurrentBoardState.PlayerSidesStillInGame.Count, $"Expecting remaining player count to be specific");
     }

@@ -4,6 +4,9 @@
     using Cascadia.DataStructures;
     using Cascadia.AIs;
     using UnityEngine;
+    using System.Threading.Tasks;
+    using Cascadia.Unity.UI;
+    using UnityEngine.AddressableAssets;
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
@@ -68,14 +71,6 @@
         private List<Color> knockoutColorsForTurns = new();
 
         /// <summary>
-        /// All possible emojis players can be assigned.
-        /// TODO: This should certainly load from addressables!
-        /// </summary>
-        public IReadOnlyList<Sprite> PlayerIconOptions => this.playerIconOptions;
-        [SerializeField]
-        private List<Sprite> playerIconOptions = new();
-
-        /// <summary>
         /// List of all <see cref="AICore"/>s that can be assigned.
         /// Ordered in the editor. The indexes need to correspond to
         /// other configured index values, so be careful about rearranging.
@@ -88,6 +83,8 @@
         /// </summary>
         [SerializeField]
         private List<AICore> aiCores = new();
+
+        public bool ConfigurationLoaded { get; private set; } = false;
 
         private void Awake()
         {
@@ -104,10 +101,16 @@
             DontDestroyOnLoad(this.gameObject);
 
             this.gameConfiguration = new GameConfiguration(this.debugWidth, this.debugHeight, this.debugPlayerCount, 3, this.debugStallTurn, forceOrderlyTurn: null);
+        }
 
+        private async Awaitable Start()
+        {
+            await Addressables.InitializeAsync().Task;
+
+            // Wait until start to add players, so that we can be assured SpriteLookup is set
             for (int ii = 0; ii < this.debugPlayerCount; ii++)
             {
-                PlayerProfile newProfile = this.AddPlayer();
+                PlayerProfile newProfile = await this.AddPlayer();
 
 #if UNITY_EDITOR
                 // Quick AI core test; assign AI cores to players based on editor-only debug variables
@@ -119,13 +122,12 @@
                 }
 #endif
             }
-        }
 
-        private void Start()
-        {
             // After starting, send up the event that the game configuration has changed
             // This will help UI items decide to update, which should assign in OnEnable
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
+
+            this.ConfigurationLoaded = true;
         }
 
         public void UpdateWidth(int newValue)
@@ -184,35 +186,15 @@
         /// will already have the appropriate <see cref="PlayerProfile.Index"/>.
         /// </summary>
         /// <returns></returns>
-        public PlayerProfile AddPlayer()
+        public async Awaitable<PlayerProfile> AddPlayer()
         {
-            PlayerProfile newProfile = new();
-
-            // Find the first index not used by anyone for the icon
-            // It'll see if anyone is using the first, and if not, use that;
-            // otherwise check the second, etc.
-            int iconIndex = 0;
-            for (int ii = 0, count = this.playerIconOptions.Count; ii < count; ii++)
+            PlayerProfileSprite sprite = await SpriteLookup.Singleton.GetRandomSpriteFromAnyCategory();
+            PlayerProfile newProfile = new()
             {
-                // Check each player to see if they're using this index
-                bool unused = true;
-                for (int jj = 0, jjcount = this.Players.Count; jj < jjcount; jj++)
-                {
-                    if (this.Players[jj].RepresenterSpriteIndex == ii)
-                    {
-                        unused = false;
-                        break;
-                    }
-                }
-                if (unused)
-                {
-                    iconIndex = ii;
-                    break;
-                }
-            }
+                Index = this.players.Count,
+                Sprite = sprite
+            };
 
-            newProfile.Index = this.players.Count;
-            newProfile.RepresenterSpriteIndex = Random.Range(0, this.playerIconOptions.Count);
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.IsAI = false;
             newProfile.PlayerName = HUMAN;
@@ -224,14 +206,14 @@
 
         public void ForceSetConfig(GameConfiguration configuration) => this.gameConfiguration = configuration;
 
-        public void HumanitizeForTests()
+        public async Awaitable HumanitizeForTests()
         {
             this.debugAICores.Clear();
             this.players.Clear();
 
             for (int ii = 0; ii < this.GameConfiguration.PlayerCount; ii++)
             {
-                this.AddPlayer();
+                await this.AddPlayer();
             }
         }
 

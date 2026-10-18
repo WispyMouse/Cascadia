@@ -36,7 +36,15 @@
 
         public GameObject RewindButtonHolder;
 
-        public void Start() => this.ResetGame();
+        public async Awaitable Start()
+        {
+            while (!PersistentGameConfiguration.Singleton.ConfigurationLoaded)
+            {
+                await Awaitable.NextFrameAsync();
+            }
+
+            this.ResetGame();
+        }
 
         public void ResetGame()
         {
@@ -67,6 +75,11 @@
 
         public void Update()
         {
+            if (!PersistentGameConfiguration.Singleton.ConfigurationLoaded || this.CurrentBoardState == null)
+            {
+                return;
+            }
+
             if (this.CurrentBoardState != null && this.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.End)
             {
                 return;
@@ -185,7 +198,7 @@
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(winner);
 
             // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
-            this.WinnerIcon.sprite = player.SpriteRepresentation;
+            this.WinnerIcon.sprite = player.Sprite.Sprite;
 
             string winnerName = player.PlayerName;
             if (!string.IsNullOrEmpty(winnerName))

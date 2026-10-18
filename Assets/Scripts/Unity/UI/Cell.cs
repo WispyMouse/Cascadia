@@ -28,7 +28,7 @@ public class Cell : MonoBehaviour
     public void SetSide(PlayerProfile player)
     {
         this.SideIndex = player.Index;
-        this.IconSpriteRenderer.sprite = player.SpriteRepresentation;
+        this.IconSpriteRenderer.sprite = player.Sprite.Sprite;
         this.AlreadyPlaced = true;
     }
 

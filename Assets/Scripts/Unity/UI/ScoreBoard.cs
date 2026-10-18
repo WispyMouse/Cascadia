@@ -28,7 +28,7 @@
                 Destroy(this.WinnerIconHolder.GetChild(0).gameObject);
             }
 
-            Sprite winnerSprite = winner.SpriteRepresentation;
+            Sprite winnerSprite = winner.Sprite.Sprite;
             Image newImage = Instantiate(this.WinnerIconImage, this.WinnerIconHolder);
             newImage.sprite = winnerSprite;
         }

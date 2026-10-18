@@ -29,7 +29,7 @@
             {
                 WinnerAnimationItem newItem = Instantiate(this.winnerAnimationItemPF, this.transform);
                 newItem.GetComponent<RectTransform>().anchoredPosition = Random.insideUnitCircle * this.distanceOut;
-                newItem.Image.sprite = this.ToDisplay.SpriteRepresentation;
+                newItem.Image.sprite = this.ToDisplay.Sprite.Sprite;
                 this.winnerAnimations.Add(newItem);
             }
         }

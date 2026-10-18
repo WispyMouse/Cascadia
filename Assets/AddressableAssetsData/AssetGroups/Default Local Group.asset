@@ -14,7 +14,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Default Local Group
   m_GUID: 844aa31f2c19ee444a10f57a1b699d5f
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 0e33af03e8b01544d91a2f60145a62f7
+    m_Address: Assets/Graphics/openmoji/Travel.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Travel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1274114e791a48d47bf3ed7954d0c4fe
+    m_Address: Assets/Graphics/openmoji/Flags.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Flags
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 310b0c8bf4495104498d7b0deebe11ee
+    m_Address: Assets/Graphics/openmoji/People Body.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - People Body
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4493ad8c01ba4ef4899361831d309734
+    m_Address: Assets/Graphics/openmoji/Objects.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Objects
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a0e87d11c72cf5941ba3da04db3a88d8
+    m_Address: Assets/Graphics/openmoji/Food.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Food
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3d66f4f599c0f14fad9bebb7bc6da28
+    m_Address: Assets/Graphics/openmoji/Activities.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Activities
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d72cf4e6cebff0a41bf326b1903d2257
+    m_Address: Assets/Graphics/openmoji/Symbols.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Symbols
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd5699456c1616548a6dd1b66ae0d718
+    m_Address: Assets/Graphics/openmoji/Animals.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Animals
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f09f126ea7716374fbe04fc873504da7
+    m_Address: Assets/Graphics/openmoji/Smiley.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Smiley
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8bbe285daac62a347b48bc34e60230ec, type: 2}
   m_SchemaSet:

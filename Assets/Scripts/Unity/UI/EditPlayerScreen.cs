@@ -20,6 +20,24 @@
 
         public TMP_Text AICoreLabel;
 
+        [SerializeReference]
+        private ChooseEmojiCanvas chooseEmojiCanvas;
+
+        public void OpenFromPlayerProfileIndex(int profileIndex)
+        {
+            PlayerProfile profile = PersistentGameConfiguration.Singleton.Players[profileIndex];
+            this.OpenFromPlayer(profile);
+        }
+
+        private void OnEnable()
+        {
+            // When re-enabling, update the player. This is useful if we've changed their icon in the inner menu.
+            if (this.ShowingProfile != null)
+            {
+                this.OpenFromPlayer(this.ShowingProfile);
+            }
+        }
+
         public void OpenFromPlayer(PlayerProfile profile)
         {
             this.AlreadyTakenPanel.SetActive(false);
@@ -37,7 +55,7 @@
                 this.NameInputField.SetTextWithoutNotify(this.ShowingProfile.PlayerName);
             }
 
-            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.SpriteRepresentation;
+            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
 
             if (this.ShowingProfile.IsAI)
             {
@@ -73,29 +91,15 @@
 
         public void NameChanged(string newName) => this.ShowingProfile.PlayerName = newName;
 
-        public void NextIcon()
-        {
-            int nextIndex = (this.ShowingProfile.RepresenterSpriteIndex + 1) % PersistentGameConfiguration.Singleton.PlayerIconOptions.Count;
-            this.ShowingProfile.RepresenterSpriteIndex = nextIndex;
-            this.UpdateIcon();
-        }
-
-        public void PreviousIcon()
-        {
-            int previousIndex = (this.ShowingProfile.RepresenterSpriteIndex + PersistentGameConfiguration.Singleton.PlayerIconOptions.Count - 1) % PersistentGameConfiguration.Singleton.PlayerIconOptions.Count;
-            this.ShowingProfile.RepresenterSpriteIndex = previousIndex;
-            this.UpdateIcon();
-        }
-
         private void UpdateIcon()
         {
-            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.SpriteRepresentation;
+            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
 
             int countWithIndex = 0;
 
             for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
             {
-                if (PersistentGameConfiguration.Singleton.Players[ii].RepresenterSpriteIndex == this.ShowingProfile.RepresenterSpriteIndex)
+                if (PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite == this.ShowingProfile.Sprite.Sprite)
                 {
                     countWithIndex++;
                 }
@@ -129,6 +133,11 @@
             {
                 this.AICoreLabel.gameObject.SetActive(false);
             }
+        }
+
+        public async void OpenIconSelection()
+        {
+            await this.chooseEmojiCanvas.ShowForProfile(this.ShowingProfile);
         }
     }
 }

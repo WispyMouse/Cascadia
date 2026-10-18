@@ -43,7 +43,7 @@
             this.Clear();
 
             this.RepresentedProfile = toRepresent;
-            this.PlayerIcon.sprite = toRepresent.SpriteRepresentation;
+            this.PlayerIcon.sprite = toRepresent.Sprite.Sprite;
 
             if (toRepresent.PlayerName == PersistentGameConfiguration.HUMAN)
             {

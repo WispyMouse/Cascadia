@@ -103,10 +103,9 @@
             this.BoardStateEvents = new BoardStateEvents();
 
             this.spotToSideOwnership = new Dictionary<Coordinate, PlayerSide>(this.BasedOnConfiguration.MaximumDimensions);
-
-            foreach (Coordinate coordinate in this.basedOnConfiguration.GetAllCoordinatesInMapDimensions())
+            foreach (Coordinate curPosition in this.basedOnConfiguration.AllCoordinates)
             {
-                this.spotToSideOwnership.Add(coordinate, null);
+                this.spotToSideOwnership.Add(curPosition, null);
             }
 
             this.Winner = null;
@@ -224,9 +223,14 @@
         /// </summary>
         public void ApplyMoveCommand(MoveCommand toApply, bool advancePlayer = true)
         {
+            if (this.CurrentPlayerTurnIndex != toApply.Side.TurnOrderIndex)
+            {
+                throw new ArgumentException($"Attempted to make a move for a player who is currently not moving. Use {nameof(ForceMarkOwnership)} if you want to force mark without using player action.");
+            }
+
             if (!this.MoveCommandLegalToPlay(toApply))
             {
-                throw new ArgumentException($"Attempted to play illegal move. Check legality using {nameof(this.MoveCommandLegalToPlay)}.");
+                throw new ArgumentException($"Side {toApply.Side} attempted to play illegal move at {toApply.Position}. Check legality using {nameof(this.MoveCommandLegalToPlay)}.");
             }
 
             MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);

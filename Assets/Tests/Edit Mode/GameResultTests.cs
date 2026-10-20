@@ -3,6 +3,7 @@
     using NUnit.Framework;
     using Cascadia.DataStructures;
     using Cascadia.TestData;
+    using static Cascadia.TestData.TestUtilities;
 
     public class GameResultTests
     {
@@ -16,7 +17,10 @@
 
             for (int ii = 0; ii < plan.Coordinates.Count; ii++)
             {
-                holder.ApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide, plan.Coordinates[ii]));
+                CoordinateBySide coordinateBySide = plan.Coordinates[ii];
+                Assert.AreEqual(coordinateBySide.Side, holder.CurrentPlayerTurnIndex, $"Expecting side {coordinateBySide.Side} to be placing this turn");
+
+                holder.ApplyMoveCommand(new MoveCommand(holder.CurrentPlayerSide, coordinateBySide.Placement));
             }
 
             Assert.AreEqual(BoardState.GameStateEnum.End, holder.CurrentGameState, $"Expecting board state to result in the end of a game.");

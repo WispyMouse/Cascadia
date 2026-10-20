@@ -8,6 +8,8 @@
     {
         public CurrentTurnPanelEntry CurrentTurnPanelEntryPF;
         public Transform CurrentTurnPanelEntryParent;
+
+        public IReadOnlyList<CurrentTurnPanelEntry> Entries => this.entries;
         private List<CurrentTurnPanelEntry> entries { get; set; } = new List<CurrentTurnPanelEntry>();
 
         public TurnOrderHolder TurnOrderHolder;

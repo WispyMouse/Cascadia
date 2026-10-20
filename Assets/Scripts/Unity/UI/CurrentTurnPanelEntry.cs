@@ -17,6 +17,8 @@
         public PlayerProfile RepresentedProfile { get; private set; }
         public PlayerSide RepresentedSide { get; private set; }
 
+        public bool IsPlayerSideKnockedOut { get; private set; } = false;
+
         public Image PlayerIcon;
 
         public GameObject IsCurrentTurnIndicator;
@@ -105,6 +107,7 @@
 
         public void MarkKnockout()
         {
+            this.IsPlayerSideKnockedOut = true;
             this.KnockoutPanel.SetActive(true);
             this.IsNotTurnIndicator.SetActive(false);
             this.IsCurrentTurnIndicator.SetActive(false);
@@ -114,6 +117,7 @@
         // HACK: Assumes that it would be this player's turn.
         public void RestorePlayer(PlayerSide sideToRestore)
         {
+            this.IsPlayerSideKnockedOut = false;
             this.KnockoutPanel.SetActive(false);
             this.IsNotTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex != this.RepresentedProfile.Index);
             this.IsCurrentTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex == this.RepresentedProfile.Index);

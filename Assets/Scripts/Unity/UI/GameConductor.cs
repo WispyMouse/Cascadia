@@ -95,23 +95,23 @@
 
         public void ChooseCell(Cell toChoose)
         {
-            foreach (Cell curCell in this.PositionsToCells.Values)
-            {
-                curCell.SetHighlightStatus(false);
-            }
-
-            RandomBlipPlayer.Singleton.PlayRandomSound();
-
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
             MoveCommand command = new(takingTurn, toChoose.Position);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
-                Debug.Log("Can't play that command! We should tell the user why somehow.");
+                Debug.LogError("Can't play that command! We should tell the user why somehow.");
                 this.StallBanner.CallAttention();
                 return;
             }
+
+            foreach (Cell curCell in this.PositionsToCells.Values)
+            {
+                curCell.SetHighlightStatus(false);
+            }
+
+            RandomBlipPlayer.Singleton.PlayRandomSound();
 
             MoveCommandConsequences consequences = this.CurrentBoardState.GenerateConsequencesFromMoveCommand(command);
 

@@ -10,8 +10,28 @@
     /// </summary>
     public struct GameConfiguration
     {
-        public int Width;
-        public int Height;
+        public int Width
+        {
+            readonly get => this.width;
+            set
+            {
+                this.width = value;
+                this.SaturateCoordinates();
+            }
+        }
+        private int width { get; set; }
+
+        public int Height
+        {
+            readonly get => this.height;
+            set
+            {
+                this.height = value;
+                this.SaturateCoordinates();
+            }
+        }
+        private int height { get; set; }
+
         public int PlayerCount;
         public int InARowToSolve;
         public int StallTurn;
@@ -30,25 +50,16 @@
 
         public GameConfiguration(int width, int height, int playerCount, int inARowToSolve, int stallTurn, int? forceOrderlyTurn)
         {
-            this.Width = width;
-            this.Height = height;
-
-            HashSet<Coordinate> coordinates = new(this.Width * this.Height);
-
-            for (int xx = 0; xx < this.Width; xx++)
-            {
-                for (int yy = 0; yy < this.Height; yy++)
-                {
-                    coordinates.Add(new Coordinate(xx, yy));
-                }
-            }
-
-            this.AllCoordinates = coordinates;
+            this.width = width;
+            this.height = height;
 
             this.PlayerCount = playerCount;
             this.InARowToSolve = inARowToSolve;
             this.StallTurn = stallTurn;
             this.ForceOrderlyTurn = forceOrderlyTurn;
+
+            this.AllCoordinates = Array.Empty<Coordinate>();
+            this.SaturateCoordinates();
         }
 
         public GameConfiguration(IReadOnlyCollection<Coordinate> coordinates, int playerCount, int inARowToSolve, int stallTurn, int? forceOrderlyTurn)
@@ -59,8 +70,8 @@
                 width = Math.Max(width, coordinate.X);
                 height = Math.Max(height, coordinate.Y);
             }
-            this.Width = width;
-            this.Height = height;
+            this.width = width;
+            this.height = height;
 
             this.AllCoordinates = coordinates;
 
@@ -108,6 +119,21 @@
             }
 
             return coordinates;
+        }
+
+        private void SaturateCoordinates()
+        {
+            HashSet<Coordinate> coordinates = new(this.Width * this.Height);
+
+            for (int xx = 0; xx < this.Width; xx++)
+            {
+                for (int yy = 0; yy < this.Height; yy++)
+                {
+                    coordinates.Add(new Coordinate(xx, yy));
+                }
+            }
+
+            this.AllCoordinates = coordinates;
         }
     }
 }

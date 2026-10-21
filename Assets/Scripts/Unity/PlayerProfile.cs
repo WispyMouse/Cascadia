@@ -26,5 +26,10 @@
             this.Sprite = sprite;
             this.OnPlayerProfileSpriteUpdated?.Invoke();
         }
+
+        public bool MatchesSprite(Sprite sprite)
+        {
+            return ReferenceEquals(this.Sprite.Sprite, sprite) || string.Equals(this.Sprite.SpriteName, sprite.name);
+        }
     }
 }

@@ -27,16 +27,18 @@
         private List<ChooseEmojiIcon> icons { get; set; } = new();
 
         private string selectedCategory { get; set; }
+        private ChooseEmojiIcon currentlySelected { get; set; }
 
         private void Awake()
         {
+            this.AdoptEditorBakedIcons();
             this.EstablishCategories();
         }
 
         public async Awaitable ShowForProfile(PlayerProfile showingForProfile)
         {
-            this.ShowingForProfile = showingForProfile;
             this.gameObject.SetActive(true);
+            this.ShowingForProfile = showingForProfile;
             await this.ShowCategory(showingForProfile.Sprite.Category);
         }
 
@@ -71,19 +73,50 @@
 
             Debug.Log($"Loaded {sprites.Count} sprites for category {category}");
 
-            foreach (Sprite sprite in sprites)
+            int spritesCount = sprites.Count;
+            int iconsCount = this.icons.Count;
+
+            // If we need more icons than we currently have already available, make some more
+            // (this logic only runs if there are more incoming sprites than already-created icons)
+            for (int ii = iconsCount; ii < spritesCount; ii++)
             {
-                ChooseEmojiIcon iconButton = Instantiate(this.chooseEmojiIconPF, this.optionParent);
-                iconButton.SetSprite(sprite);
-                iconButton.OnEmojiClicked.AddListener(this.SelectEmoji);
-                this.icons.Add(iconButton);
+                ChooseEmojiIcon newIcon = Instantiate(this.chooseEmojiIconPF, this.optionParent);
+                this.icons.Add(newIcon);
+            }
+
+            // Hide the rest
+            // (this logic only runs if there are more already-created icons than incoming sprites)
+            for (int ii = spritesCount; ii < iconsCount; ii++)
+            {
+                this.icons[ii].gameObject.SetActive(false);
+            }
+
+            for (int ii = 0; ii < spritesCount; ii++)
+            {
+                Sprite thisSprite = sprites[ii];
+                ChooseEmojiIcon icon = this.icons[ii];
+                icon.SetSprite(thisSprite);
+                icon.gameObject.SetActive(true);
+
+                // If this is the icon the player already has selected, highlight it
+                icon.SetSelectionStatus(this.ShowingForProfile.MatchesSprite(thisSprite));
             }
 
             this.selectedCategory = category;
 
-            foreach (ChooseEmojiIcon icon in this.icons)
+            if (this.ShowingForProfile.Sprite.Category == this.selectedCategory)
             {
-                icon.SetSelectionStatus(ReferenceEquals(icon.RepresentedEmoji, this.ShowingForProfile.Sprite));
+                foreach (ChooseEmojiIcon icon in this.icons)
+                {
+                    icon.SetSelectionStatus(this.ShowingForProfile.MatchesSprite(icon.RepresentedEmoji));
+                }
+            }
+            else
+            {
+                foreach (ChooseEmojiIcon icon in this.icons)
+                {
+                    icon.SetSelectionStatus(false);
+                }
             }
 
             this.showCategorySemaphore.Release();
@@ -93,10 +126,36 @@
         {
             this.ShowingForProfile.Sprite.Category = this.selectedCategory;
             this.ShowingForProfile.Sprite.Sprite = selected.RepresentedEmoji;
+            this.ShowingForProfile.Sprite.SpriteName = selected.RepresentedEmoji.name;
 
             foreach (ChooseEmojiIcon icon in this.icons)
             {
                 icon.SetSelectionStatus(ReferenceEquals(icon, selected));
+            }
+
+            if (!ReferenceEquals(this.currentlySelected, null))
+            {
+                this.currentlySelected.SetSelectionStatus(false);
+            }
+
+            this.currentlySelected = selected;
+            selected.SetSelectionStatus(true);
+        }
+
+        /// <summary>
+        /// Creating all of the prefabs for the buttons takes a while.
+        /// During editor time, we may have already created some.
+        /// Identify the ones currently existing, and "adopt" them into <see cref="icons"/>.
+        /// </summary>
+        private void AdoptEditorBakedIcons()
+        {
+            for (int ii = 0, count = this.optionParent.childCount; ii < count; ii++)
+            {
+                if (this.optionParent.GetChild(ii).TryGetComponent(out ChooseEmojiIcon icon))
+                {
+                    this.icons.Add(icon);
+                    icon.gameObject.SetActive(false);
+                }
             }
         }
     }

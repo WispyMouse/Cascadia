@@ -61,15 +61,12 @@
         {
             await this.showCategorySemaphore.WaitAsync();
 
-            for (int ii = this.optionParent.childCount - 1; ii >= 0; ii--)
-            {
-                Destroy(this.optionParent.GetChild(ii).gameObject);
-            }
-
-            this.icons.Clear();
-
             IReadOnlyList<Sprite> sprites = await SpriteLookup.Singleton.GetSpritesFromCategory(category);
-            this.icons.Capacity = sprites.Count;
+
+            if (this.icons.Capacity < sprites.Count)
+            {
+                this.icons.Capacity = sprites.Count;
+            }
 
             Debug.Log($"Loaded {sprites.Count} sprites for category {category}");
 
@@ -82,6 +79,11 @@
             {
                 ChooseEmojiIcon newIcon = Instantiate(this.chooseEmojiIconPF, this.optionParent);
                 this.icons.Add(newIcon);
+
+                // TODO HACK: Icons need to have this listener added when they're new or previously baked
+                // We should have a single place where this listener is added, so that we don't end up
+                // with two different hacks of emoji buttons on accident
+                newIcon.OnEmojiClicked.AddListener(this.SelectEmoji);
             }
 
             // Hide the rest
@@ -155,6 +157,7 @@
                 {
                     this.icons.Add(icon);
                     icon.gameObject.SetActive(false);
+                    icon.OnEmojiClicked.AddListener(this.SelectEmoji);
                 }
             }
         }

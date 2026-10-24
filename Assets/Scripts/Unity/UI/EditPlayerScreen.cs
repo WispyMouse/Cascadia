@@ -74,9 +74,9 @@
 
         public void ToggleHumanAI()
         {
-            this.ShowingProfile.IsAI = !this.ShowingProfile.IsAI;
+            bool toggleAI = !this.ShowingProfile.IsAI;
 
-            if (this.ShowingProfile.IsAI)
+            if (toggleAI)
             {
                 this.ShowingProfile.AICoreIndex = 0;
                 this.ShowingProfile.PlayerName = this.ShowingProfile.AICore.name;

@@ -8,7 +8,8 @@
         "Cascadia.Unity.UI",
         "Cascadia.Unity",
         "Cascadia.TestData",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Cascadia.AIs"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

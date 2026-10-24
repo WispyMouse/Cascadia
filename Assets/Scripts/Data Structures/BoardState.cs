@@ -66,6 +66,8 @@
         public readonly BoardConnectionShapesSolver PossibilityContainer;
         public readonly BoardStateEvents BoardStateEvents;
 
+        public MoveCommandConsequences? LastPlay;
+
         public enum GameStateEnum
         {
             /// <summary>
@@ -234,6 +236,7 @@
             }
 
             MoveCommandConsequences consequences = this.GenerateConsequencesFromMoveCommand(toApply);
+            this.LastPlay = consequences;
 
             if (this.CurrentGameState == GameStateEnum.NotStarted)
             {
@@ -259,6 +262,8 @@
                     existingConnections.Add(connection);
                 }
             }
+
+            this.BoardStateEvents.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
 
             // Removed knocked out players, and consider end game state
             if (consequences.PlayerSidesRemoved.Any())
@@ -626,16 +631,21 @@
 
             this.BoardStateEvents.OnMoveUndone?.Invoke(toRemove);
 
+            // Note the most recently played move, which might now be nothing
+            if (this.moveCommandsApplied.Any())
+            {
+                this.LastPlay = this.moveCommandsApplied[^1];
+            }
+            else
+            {
+                this.LastPlay = null;
+            }
+
             return toRemove;
         }
 
         public void AdvancePlayer(bool reversePlayer = false)
         {
-            if (!reversePlayer)
-            {
-                this.BoardStateEvents.OnPlayerMadeMove?.Invoke(this.CurrentPlayerSide);
-            }
-
             // If we're advancing, add one. Reversing, minus one
             // This will modulo around the player count and let us find the next valid player
             int advancer = reversePlayer ? -1 : 1;

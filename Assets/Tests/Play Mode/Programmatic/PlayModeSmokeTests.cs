@@ -68,12 +68,26 @@ public class PlayModeSmokeTests
         yield return PlayModeTestUtility.LoadGameplayScene();
 
         GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
+        CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);
 
         for (int ii = 0; ii < plan.Coordinates.Count; ii++)
         {
+            // Track how many plays have been made so we're moving *exactly* as expected,
+            // otherwise the AI might make multiple turns
+            int expectedActionCount = gameConductor.CurrentBoardState.MoveCommandsApplied.Count + 1;
+
             CoordinateBySide coordinateBySide = plan.Coordinates[ii];
             Assert.AreEqual(coordinateBySide.Side, gameConductor.CurrentBoardState.CurrentPlayerTurnIndex, $"Expecting side {coordinateBySide.Side} to be placing this turn");
             gameConductor.ChooseCell(coordinateBySide.Placement);
+
+            // Ensure the UI thinks it is this player's turn
+            foreach (CurrentTurnPanelEntry currentTurn in turnEntries)
+            {
+                bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
+                Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicator.activeInHierarchy, $"Expecting the current turn indicator to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+            }
+
+            Assert.AreEqual(expectedActionCount, gameConductor.CurrentBoardState.MoveCommandsApplied.Count, $"Expecting that a specific number of actions has been applied. Either it isn't applying or too many moves are being applied in one step. Is the AI taking extra actions?");
         }
 
         Assert.AreEqual(BoardState.GameStateEnum.End, gameConductor.CurrentBoardState.CurrentGameState, $"Expecting board state to result in the end of a game.");

@@ -20,6 +20,14 @@
             this.TurnOrderHolder.OnTurnStarted += this.OnTurnStarted;
         }
 
+        private void OnDisable()
+        {
+            if (this.thinkingCoroutine != null)
+            {
+                this.StopCoroutine(this.thinkingCoroutine);
+            }
+        }
+
         private void OnTurnStarted(PlayerSide turn)
         {
             if (this.thinkingCoroutine != null)
@@ -68,6 +76,8 @@
         private IEnumerator AIThinksAndTakesTurn()
         {
             PlayerSide side = this.GameConductor.CurrentBoardState.CurrentPlayerSide;
+            PlayerProfile profile = PersistentGameConfiguration.Singleton.GetPlayerProfile(side);
+
             float randomWait = this.TimeForAIToThinkAdditionalSeconds.Evaluate(Random.Range(0, 1f));
 
             if (this.GameConductor.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.Cascade)
@@ -75,9 +85,11 @@
                 randomWait += this.AdditionalTimeDuringCascade.Evaluate(Random.Range(0, 1f));
             }
 
-            // Debug.Log($"Starting to think for {side}, waiting {randomWait} seconds...");
+            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Starting to think for {profile.PlayerName} profile index {profile.Index} turn order {side.TurnOrderIndex}, waiting {randomWait} seconds...");
 
-            yield return new WaitForSeconds(this.TimeForAIToThinkBase + randomWait);
+            // TODO: Find a good programmatic way to always utilize animation speed
+            // instead of needing to remember to include it everywhere
+            yield return new WaitForSeconds((this.TimeForAIToThinkBase + randomWait) * PersistentGameConfiguration.Singleton.AnimationSpeedModifier);
 
             if (this.GameConductor.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.End)
             {

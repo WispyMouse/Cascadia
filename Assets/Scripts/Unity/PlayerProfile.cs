@@ -11,15 +11,15 @@
 
         public int Index;
         public string PlayerName;
-        public bool IsAI;
+        public bool IsAI => this.AICoreIndex.HasValue;
 
         public PlayerProfileSprite Sprite;
 
         public Color KnockoutColor;
 
-        public int AICoreIndex;
+        public int? AICoreIndex;
 
-        public AICore AICore => PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex];
+        public AICore AICore => this.IsAI ? PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex.Value] : null;
 
         public void UpdateSprite(PlayerProfileSprite sprite)
         {

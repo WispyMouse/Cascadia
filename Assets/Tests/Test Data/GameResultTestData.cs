@@ -1,18 +1,21 @@
 ﻿namespace Cascadia.TestData
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
     using Cascadia.DataStructures;
     using static Cascadia.TestData.TestUtilities;
 
     public static class GameResultTestData
     {
-        public class CoordinatesToPlay_DataSource_Object
+        public readonly struct CoordinatesToPlay_DataSource_Object
         {
-            public GameConfiguration GameConfiguration;
-            public List<CoordinateBySide> Coordinates;
-            public int? Winner;
+            public readonly GameConfiguration GameConfiguration;
+            public readonly IReadOnlyList<CoordinateBySide> Coordinates;
+            public readonly int? Winner;
 
-            public CoordinatesToPlay_DataSource_Object(GameConfiguration configuration, List<CoordinateBySide> coordinates, int? winner)
+            public CoordinatesToPlay_DataSource_Object(GameConfiguration configuration, IReadOnlyList<CoordinateBySide> coordinates, int? winner)
             {
                 this.GameConfiguration = configuration;
                 this.Coordinates = coordinates;
@@ -117,5 +120,38 @@
                     new(new(6, 0), 0), new(new(6, 1), 1)  // Unable to make connections, player index 2 wins 
             }, 3),
         };
+
+        /// <summary>
+        /// Assuming a range of 0-
+        /// Taken from SergeyS and AustinWBryan's Stack Overflow answer
+        /// https://stackoverflow.com/a/19891145
+        /// </summary>
+        /// <param name="seq"></param>
+        /// <returns></returns>
+        public static int[][] FastPowerSet(int range)
+        {
+            int[] seq = Enumerable.Range(0, range).ToArray();
+
+            int[][] powerSet = new int[1 << seq.Length][];
+            powerSet[0] = new int[0]; // starting only with empty set
+
+            for (int i = 0; i < seq.Length; i++)
+            {
+                int cur = seq[i];
+                int count = 1 << i; // doubling list each time
+                for (int j = 0; j < count; j++)
+                {
+                    int[] source = powerSet[j];
+                    int[] destination = powerSet[count + j] = new int[source.Length + 1];
+
+                    for (int q = 0; q < source.Length; q++)
+                    {
+                        destination[q] = source[q];
+                    }
+                    destination[source.Length] = cur;
+                }
+            }
+            return powerSet;
+        }
     }
 }

@@ -27,6 +27,11 @@
         /// </summary>
         public int StallTurn => this.GameConfiguration.StallTurn;
 
+        /// <summary>
+        /// All animation times are multiplied by this to determine their duration.
+        /// </summary>
+        public float AnimationSpeedModifier = 1f;
+
         #region Debug Values
         [Header("Debug Values")]
 
@@ -117,7 +122,6 @@
                 if (this.debugAICores.Count > ii && this.debugAICores[ii] >= 0)
                 {
                     newProfile.AICoreIndex = this.debugAICores[ii];
-                    newProfile.IsAI = true;
                     newProfile.PlayerName = this.AICores[this.debugAICores[ii]].name;
                 }
 #endif
@@ -204,7 +208,7 @@
             SpriteLookup.AssignRandomSpriteFromAddressablesAsync(newProfile);
 
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
-            newProfile.IsAI = false;
+            newProfile.AICoreIndex = null;
             newProfile.PlayerName = HUMAN;
 
             this.players.Add(newProfile);
@@ -218,32 +222,38 @@
             this.gameConfiguration = configuration;
 
             this.EnsurePlayerCount(configuration.PlayerCount);
+            this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
         }
 
         public void HumanitizeForTests()
         {
             this.debugAICores.Clear();
+            this.aiCores.Clear();
             this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
         }
 
         public PlayerProfile GetPlayerProfile(PlayerSide forSide)
         {
-            return this.Players[forSide.PlayerProfileIndex];
+            return this.players[forSide.PlayerProfileIndex];
         }
 
         public void EnsurePlayerCount(int size)
         {
-            // Remove players over limit
-            for (int ii = this.players.Count - 1; ii >= size; ii--)
-            {
-                this.RemovePlayer(this.players[ii]);
-            }
+            this.players.Clear();
 
             // Add players until we hit the limit
-            for (int ii = this.players.Count; ii < size; ii++)
+            for (int ii = 0; ii < size; ii++)
             {
                 this.AddPlayer();
             }
+        }
+
+        public int AddAICore(AICore toAdd)
+        {
+            int nextIndex = this.aiCores.Count;
+            Debug.Log($"Adding AICore {toAdd.name} to index {nextIndex}");
+            this.aiCores.Add(toAdd);
+            return nextIndex;
         }
     }
 }

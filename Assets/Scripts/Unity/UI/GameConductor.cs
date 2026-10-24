@@ -95,6 +95,8 @@
 
         public void ChooseCell(Cell toChoose)
         {
+            Debug.Log($"Attempting to choose cell {toChoose.Position}");
+
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
             MoveCommand command = new(takingTurn, toChoose.Position);
@@ -251,7 +253,9 @@
 
                 this.CurrentTurnPanel.SetCascade(undoneCommand.FromCommand.Side, undoneCommand.PreviousCascadeLevel);
 
-                // When we reach a player, stop
+                // When we reach a non-ai human player, stop
+                // This way we'll "undo" AI turns until we paint over them.
+                // If we don't, our undo might get re-done by the AI
                 if (!PersistentGameConfiguration.Singleton.GetPlayerProfile(this.CurrentBoardState.CurrentPlayerSide).IsAI)
                 {
                     break;
@@ -270,13 +274,12 @@
 
             // If there is a previous move, then highlight spaces
             // as though this was the most recently made move
-            if (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
+            MoveCommandConsequences? latestCommand = this.CurrentBoardState.LastPlay;
+            if (latestCommand.HasValue)
             {
-                MoveCommandConsequences latestCommand = this.CurrentBoardState.MoveCommandsApplied[this.CurrentBoardState.MoveCommandsApplied.Count - 1];
+                this.PositionsToCells[latestCommand.Value.FromCommand.Position].SetHighlightStatus(true);
 
-                this.PositionsToCells[latestCommand.FromCommand.Position].SetHighlightStatus(true);
-
-                foreach (Coordinate curCoordinate in latestCommand.ConnectionsMade.SelectMany(x => x.Cells))
+                foreach (Coordinate curCoordinate in latestCommand.Value.ConnectionsMade.SelectMany(x => x.Cells))
                 {
                     this.PositionsToCells[curCoordinate].SetHighlightStatus(true);
                 }

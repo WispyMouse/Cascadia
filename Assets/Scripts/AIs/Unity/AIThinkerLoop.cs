@@ -29,7 +29,7 @@
             }
         }
 
-        private void OnTurnStarted(PlayerSide turn)
+        private void OnTurnStarted(PlayerSide turn, int roundNumber)
         {
             if (this.thinkingCoroutine != null)
             {

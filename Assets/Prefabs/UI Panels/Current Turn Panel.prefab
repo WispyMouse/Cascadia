@@ -92,8 +92,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CurrentTurnWheel
   CurrentTurnPanelEntryPF: {fileID: 744229597263104666, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
   CurrentTurnPanelEntryParent: {fileID: 1239178635904160358}
-  TurnOrderHolder: {fileID: 0}
-  HintController: {fileID: 0}
+  turnOrderHolder: {fileID: 0}
+  hintController: {fileID: 0}
+  gameConductor: {fileID: 0}
 --- !u!114 &1250900659606256458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,6 +129,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1239178635904160358}
     m_Modifications:
+    - target: {fileID: 2243542773929290942, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
+      propertyPath: m_fontSize
+      value: 56.9
+      objectReference: {fileID: 0}
     - target: {fileID: 4001934515541464276, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
       propertyPath: m_Name
       value: Current Turn Panel Entry

@@ -42,7 +42,7 @@
             this.isOn = false;
         }
 
-        public void RefreshHints(PlayerSide side)
+        public void RefreshHints(PlayerSide side, int roundNumber)
         {
             if (!this.isOn)
             {

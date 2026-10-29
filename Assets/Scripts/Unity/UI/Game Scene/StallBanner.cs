@@ -28,7 +28,7 @@
             this.Clear(null);
         }
 
-        public void OnTurnUpdate(PlayerSide _)
+        public void OnTurnUpdate(PlayerSide _, int roundNumber)
         {
             this.Colorable.color = this.NeutralColor;
 

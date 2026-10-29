@@ -72,7 +72,7 @@
             this.CurrentTurnPanel.ResetGame();
             this.CascadeBanner.ResetGame();
 
-            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide);
+            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void Update()
@@ -143,7 +143,7 @@
 
             toChoose.SetHighlightStatus(true);
 
-            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide);
+            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         private void HandleLeftClick()

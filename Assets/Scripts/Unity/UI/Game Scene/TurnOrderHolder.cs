@@ -6,13 +6,14 @@
 
     public class TurnOrderHolder : MonoBehaviour
     {
-        public delegate void UITurnStarted(PlayerSide playerProfileIndex);
+        public delegate void UITurnStarted(PlayerSide playerProfileIndex, int roundNumber);
         public UITurnStarted OnTurnStarted;
 
         public HashSet<int> SidesThatAreAI = new();
 
-        public GameConductor GameConductor;
-        public int PlayerCount => this.GameConductor.CurrentBoardState == null ? 0 : this.GameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount;
+        [SerializeReference]
+        private GameConductor gameConductor;
+        public int PlayerCount => this.gameConductor.CurrentBoardState == null ? 0 : this.gameConductor.CurrentBoardState.BasedOnConfiguration.PlayerCount;
 
         public bool PlayerIsHuman(PlayerSide side) => !PersistentGameConfiguration.Singleton.GetPlayerProfile(side).IsAI;
     }

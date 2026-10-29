@@ -8,6 +8,7 @@
     using Cascadia.TestData;
     using Cascadia.Unity;
     using Cascadia.Unity.UI;
+    using Cascadia.Unity.UI.GameScene;
     using NUnit.Framework;
     using UnityEngine;
     using UnityEngine.TestTools;

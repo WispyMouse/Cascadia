@@ -1,4 +1,4 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.Audio
 {
     using UnityEngine;
 

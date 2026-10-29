@@ -1,6 +1,7 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.GameScene
 {
     using Cascadia.DataStructures;
+    using Cascadia.Unity.UI.Reusable;
     using UnityEngine;
 
     public class HintController : MonoBehaviour

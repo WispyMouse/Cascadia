@@ -1,6 +1,7 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.SetupScene
 {
     using System.Linq;
+    using Cascadia.Unity.UI.Reusable;
     using UnityEngine;
 
     public class TitleCanvasInitializer : MonoBehaviour

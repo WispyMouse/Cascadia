@@ -1,5 +1,4 @@
-﻿
-namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.SetupScene
 {
     using TMPro;
     using UnityEngine;

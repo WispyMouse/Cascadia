@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using Cascadia.DataStructures;
+    using Cascadia.Unity.UI.GameScene;
     using UnityEngine;
 
     public class AIThinkerLoop : MonoBehaviour

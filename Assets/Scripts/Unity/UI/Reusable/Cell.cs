@@ -1,0 +1,60 @@
+﻿namespace Cascadia.Unity.UI.Reusable
+{
+    using Cascadia.DataStructures;
+    using Cascadia.Unity;
+    using TMPro;
+    using UnityEngine;
+
+    public class Cell : MonoBehaviour
+    {
+        public SpriteRenderer CellSpriteRenderer;
+        public SpriteRenderer IconSpriteRenderer;
+
+        public Sprite DefaultBorder;
+        public Sprite RecentBorder;
+
+        public GameObject HintHolder;
+        public TMP_Text HintNumber;
+
+        public bool AlreadyPlaced { get; set; } = false;
+
+        public int? SideIndex { get; private set; }
+        public Coordinate Position { get; set; }
+
+        private void Awake()
+        {
+            this.SetHighlightStatus(false);
+            this.HintHolder.SetActive(false);
+        }
+
+        public void SetSide(PlayerProfile player)
+        {
+            this.SideIndex = player.Index;
+            this.IconSpriteRenderer.sprite = player.Sprite.Sprite;
+            this.AlreadyPlaced = true;
+        }
+
+        public void SetHighlightStatus(bool toHighlight) => this.CellSpriteRenderer.sprite = toHighlight ? this.RecentBorder : this.DefaultBorder;
+
+        public void SetHint(int amount)
+        {
+            if (amount == 0)
+            {
+                this.HintHolder.SetActive(false);
+            }
+            else
+            {
+                this.HintHolder.SetActive(true);
+                this.HintNumber.text = amount.ToString();
+            }
+        }
+
+        public void Clear()
+        {
+            this.SideIndex = 0;
+            this.IconSpriteRenderer.sprite = null;
+            this.AlreadyPlaced = false;
+            this.SetHighlightStatus(false);
+        }
+    }
+}

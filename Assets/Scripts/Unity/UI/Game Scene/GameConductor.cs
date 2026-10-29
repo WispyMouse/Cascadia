@@ -1,8 +1,10 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.GameScene
 {
     using System.Collections.Generic;
     using System.Linq;
     using Cascadia.DataStructures;
+    using Cascadia.Unity.UI.Audio;
+    using Cascadia.Unity.UI.Reusable;
     using TMPro;
     using UnityEngine;
     using UnityEngine.EventSystems;

@@ -1,4 +1,4 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.GameScene
 {
     using System.Collections.Generic;
     using Cascadia.DataStructures;

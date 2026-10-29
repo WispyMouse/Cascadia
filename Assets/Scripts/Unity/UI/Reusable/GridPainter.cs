@@ -1,7 +1,8 @@
-﻿namespace Cascadia.Unity.UI
+﻿namespace Cascadia.Unity.UI.Reusable
 {
     using System.Collections.Generic;
     using Cascadia.DataStructures;
+    using Cascadia.Unity.UI.GameScene;
     using UnityEngine;
 
     /// <summary>

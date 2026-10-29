@@ -4,6 +4,8 @@
     using System.Linq;
     using Cascadia.DataStructures;
     using Cascadia.Unity.UI;
+    using Cascadia.Unity.UI.GameScene;
+    using Cascadia.Unity.UI.Reusable;
     using NUnit.Framework;
     using UnityEngine;
     using UnityEngine.TestTools;

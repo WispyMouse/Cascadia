@@ -14,29 +14,45 @@
 
     public class GameConductor : MonoBehaviour
     {
-        public Camera ClickCamera;
+        [SerializeReference]
+        private Camera clickCamera;
 
-        public TurnOrderHolder TurnOrderHolder;
-        public GridPainter GridPainter;
-        public CurrentTurnPanel CurrentTurnPanel;
-        public ScoreBoard ScoreBoard;
-        public TMP_Text WinnerPanel;
-        public TMP_Text WinnerText;
-        public WinnerAnimation WinnerAnimation;
-        public Image WinnerIcon;
-        public GameObject NoMoreMovesPanel;
-        public CascadeBanner CascadeBanner;
-        public StallBanner StallBanner;
+        [SerializeReference]
+        private TurnOrderHolder turnOrderHolder;
+        [SerializeReference]
+        private GridPainter gridPainter;
+        [SerializeReference]
+        private CurrentTurnPanel currentTurnPanel;
+        [SerializeReference]
+        private ScoreBoard scoreBoard;
+        [SerializeReference]
+        private TMP_Text winnerPanel;
+        [SerializeReference]
+        private TMP_Text winnerText;
+        [SerializeReference]
+        private WinnerAnimation winnerAnimation;
+        [SerializeReference]
+        private Image winnerIcon;
+        [SerializeReference]
+        private GameObject noMoreMovesPanel;
+        [SerializeReference]
+        private CascadeBanner cascadeBanner;
+        [SerializeReference]
+        private StallBanner stallBanner;
+        [SerializeReference]
+        private WinnerBannerIconShower winnerBannerIconShower;
+        [SerializeReference]
+        public GameObject rewindButtonHolder;
 
         public Dictionary<Coordinate, Cell> PositionsToCells { get; set; } = new Dictionary<Coordinate, Cell>();
 
-        public LineRenderer LineRendererPF;
+        [SerializeReference]
+        private LineRenderer lineRendererPF;
+
         private List<LineRenderer> solutionLineRenderers { get; set; } = new List<LineRenderer>();
         private Dictionary<CellsConnection, LineRenderer> connectionToRenderer { get; set; } = new Dictionary<CellsConnection, LineRenderer>();
 
         public BoardState CurrentBoardState { get; set; }
-
-        public GameObject RewindButtonHolder;
 
         public async Awaitable Start()
         {
@@ -54,25 +70,31 @@
             {
                 Destroy(this.solutionLineRenderers[ii].gameObject);
             }
+
+            // TODO: This is a LOT of UI code tied in directly with the point of user input!
+            // We should get as many of these to be off of the GameConductor as possible, and instead
+            // THEY subscribe to THIS. As is, every new module is being added *here*
+            // Instead, we should fire an event that indicates the show has started, or something
             this.solutionLineRenderers.Clear();
             this.connectionToRenderer.Clear();
 
-            this.WinnerAnimation.gameObject.SetActive(false);
-            this.WinnerPanel.transform.parent.gameObject.SetActive(false);
-            this.RewindButtonHolder.SetActive(false);
-            this.NoMoreMovesPanel.SetActive(false);
+            this.winnerAnimation.gameObject.SetActive(false);
+            this.winnerPanel.transform.parent.gameObject.SetActive(false);
+            this.rewindButtonHolder.SetActive(false);
+            this.noMoreMovesPanel.SetActive(false);
+            this.winnerBannerIconShower.HideIcons();
 
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
             this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.DeclarePlayerVictorious;
-            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.StallBanner.Clear;
-            this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.CurrentTurnPanel.UpdateToNewTurn;
-            this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.CurrentTurnPanel.RestorePlayer;
+            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.stallBanner.Clear;
+            this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.currentTurnPanel.UpdateToNewTurn;
+            this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.currentTurnPanel.RestorePlayer;
 
-            this.PositionsToCells = this.GridPainter.Paint();
-            this.CurrentTurnPanel.ResetGame();
-            this.CascadeBanner.ResetGame();
+            this.PositionsToCells = this.gridPainter.Paint();
+            this.currentTurnPanel.ResetGame();
+            this.cascadeBanner.ResetGame();
 
-            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
+            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void Update()
@@ -87,7 +109,7 @@
                 return;
             }
 
-            if (this.TurnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
+            if (this.turnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
             {
                 this.HandleLeftClick();
             }
@@ -97,7 +119,7 @@
 
         public void ChooseCell(Cell toChoose)
         {
-            Debug.Log($"Attempting to choose cell {toChoose.Position}");
+            Debug.Log($"Attempting to choose cell {toChoose.Position}", this);
 
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
@@ -105,8 +127,8 @@
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
-                Debug.LogError("Can't play that command! We should tell the user why somehow.");
-                this.StallBanner.CallAttention();
+                Debug.LogError("Can't play that command! We should tell the user why somehow.", this);
+                this.stallBanner.CallAttention();
                 return;
             }
 
@@ -131,19 +153,19 @@
                 }
             }
 
-            this.CurrentTurnPanel.SetCascade(takingTurn, consequences.ConnectionsMade.Count);
+            this.currentTurnPanel.SetCascade(takingTurn, consequences.ConnectionsMade.Count);
 
             foreach (PlayerSide playerSideRemoved in consequences.PlayerSidesRemoved)
             {
-                this.CurrentTurnPanel.KnockOutPlayer(playerSideRemoved);
+                this.currentTurnPanel.KnockOutPlayer(playerSideRemoved);
             }
 
             this.CurrentBoardState.ApplyMoveCommand(command);
-            this.RewindButtonHolder.SetActive(true);
+            this.rewindButtonHolder.SetActive(true);
 
             toChoose.SetHighlightStatus(true);
 
-            this.TurnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
+            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         private void HandleLeftClick()
@@ -167,7 +189,7 @@
                 return;
             }
 
-            RaycastHit2D raycast = Physics2D.Raycast(this.ClickCamera.ScreenToWorldPoint(raycastPoint), Vector2.zero);
+            RaycastHit2D raycast = Physics2D.Raycast(this.clickCamera.ScreenToWorldPoint(raycastPoint), Vector2.zero);
             if (raycast.collider == null)
             {
                 return;
@@ -188,7 +210,7 @@
 
         public void DrawLineBetween(CellsConnection connection, PlayerProfile faction)
         {
-            LineRenderer newRenderer = Instantiate(this.LineRendererPF);
+            LineRenderer newRenderer = Instantiate(this.lineRendererPF);
             newRenderer.SetPosition(0, this.PositionsToCells[connection.Root].transform.position + (Vector3.back * 5f));
             newRenderer.SetPosition(1, this.PositionsToCells[connection.Tail].transform.position + (Vector3.back * 5f));
             newRenderer.startColor = faction.KnockoutColor;
@@ -199,44 +221,50 @@
 
         public void DeclarePlayerVictorious(PlayerSide winner)
         {
+            if (winner == null)
+            {
+                this.winnerAnimation.ToDisplay = null;
+                this.winnerPanel.gameObject.SetActive(false);
+                this.winnerText.gameObject.SetActive(false);
+                this.winnerBannerIconShower.HideIcons();
+                return;
+            }
+
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(winner);
 
             // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
-            this.WinnerIcon.sprite = player.Sprite.Sprite;
+            this.winnerIcon.sprite = player.Sprite.Sprite;
 
             string winnerName = player.PlayerName;
-            if (!string.IsNullOrEmpty(winnerName))
-            {
-                this.WinnerAnimation.ToDisplay = player;
-                this.WinnerAnimation.gameObject.SetActive(true);
-                this.WinnerPanel.gameObject.SetActive(true);
-                this.WinnerText.gameObject.SetActive(true);
-                this.WinnerText.text = winnerName;
-            }
-            else
-            {
-                this.WinnerAnimation.ToDisplay = null;
-                this.WinnerPanel.gameObject.SetActive(false);
-                this.WinnerText.gameObject.SetActive(false);
-            }
+            this.winnerAnimation.ToDisplay = player;
+            this.winnerAnimation.gameObject.SetActive(true);
+            this.winnerPanel.gameObject.SetActive(true);
+            this.winnerText.gameObject.SetActive(true);
+            this.winnerText.text = winnerName;
 
-            this.ScoreBoard.AddToScoreboard(player);
+            this.winnerBannerIconShower.ShowIcons(player);
+
+            this.scoreBoard.AddToScoreboard(player);
         }
 
         public void MainMenu() => SceneManager.LoadScene(0);
 
-        public void Rewind()
+        public int Rewind()
         {
+            int turnsRewound = 0;
+
             // If this undid a win, we should remove the "recent wint" entry because this game has been undone
             if (this.CurrentBoardState.CurrentGameState == BoardState.GameStateEnum.End && this.CurrentBoardState.Winner != null)
             {
-                this.ScoreBoard.RemoveRecentWin();
+                this.winnerBannerIconShower.HideIcons();
+                this.scoreBoard.RemoveRecentWin();
             }
 
             // Rewind until we reach the last human move, or the beginning of the game.
             while (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
                 MoveCommandConsequences undoneCommand = this.CurrentBoardState.ReversePreviousMoveCommand();
+                turnsRewound++;
 
                 foreach (CellsConnection connectionToRemove in undoneCommand.ConnectionsMade)
                 {
@@ -248,12 +276,12 @@
 
                 foreach (PlayerSide side in undoneCommand.PlayerSidesRemoved)
                 {
-                    this.CurrentTurnPanel.RestorePlayer(side);
+                    this.currentTurnPanel.RestorePlayer(side);
                 }
 
                 this.PositionsToCells[undoneCommand.FromCommand.Position].Clear();
 
-                this.CurrentTurnPanel.SetCascade(undoneCommand.FromCommand.Side, undoneCommand.PreviousCascadeLevel);
+                this.currentTurnPanel.SetCascade(undoneCommand.FromCommand.Side, undoneCommand.PreviousCascadeLevel);
 
                 // When we reach a non-ai human player, stop
                 // This way we'll "undo" AI turns until we paint over them.
@@ -265,9 +293,9 @@
             }
 
             // Can't have a winner anymore; the game is no longer over, if it was
-            this.NoMoreMovesPanel.SetActive(false);
-            this.WinnerAnimation.gameObject.SetActive(false);
-            this.WinnerPanel.transform.parent.gameObject.SetActive(false);
+            this.noMoreMovesPanel.SetActive(false);
+            this.winnerAnimation.gameObject.SetActive(false);
+            this.winnerPanel.transform.parent.gameObject.SetActive(false);
 
             foreach (Cell curCell in this.PositionsToCells.Values)
             {
@@ -288,7 +316,7 @@
             }
 
             // Remind it that it's now someone's turn, who might have been eliminated before
-
+            return turnsRewound;
         }
     }
 }

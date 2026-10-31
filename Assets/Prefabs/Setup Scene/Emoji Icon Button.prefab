@@ -223,10 +223,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.ChooseEmojiIcon
   emojiIcon: {fileID: 6064492538885830471}
+  selectedIndicator: {fileID: 8948903038248079118}
+  button: {fileID: 3994753217600330353}
   OnEmojiClicked:
     m_PersistentCalls:
       m_Calls: []
-  selectedIndicator: {fileID: 8948903038248079118}
 --- !u!1 &8948903038248079118
 GameObject:
   m_ObjectHideFlags: 0

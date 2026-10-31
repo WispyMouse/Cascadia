@@ -82,7 +82,6 @@
 
                 CoordinateBySide coordinateBySide = plan.Coordinates[ii];
                 Assert.AreEqual(coordinateBySide.Side, gameConductor.CurrentBoardState.CurrentPlayerTurnIndex, $"Expecting side {coordinateBySide.Side} to be placing this turn");
-                gameConductor.ChooseCell(coordinateBySide.Placement);
 
                 // Ensure the UI thinks it is this player's turn
                 foreach (CurrentTurnPanelEntry currentTurn in turnEntries)
@@ -91,6 +90,7 @@
                     Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicator.activeInHierarchy, $"Expecting the current turn indicator to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
+                gameConductor.ChooseCell(coordinateBySide.Placement);
                 Assert.AreEqual(expectedActionCount, gameConductor.CurrentBoardState.MoveCommandsApplied.Count, $"Expecting that a specific number of actions has been applied. Either it isn't applying or too many moves are being applied in one step. Is the AI taking extra actions?");
             }
 

@@ -25,7 +25,7 @@
             {
                 Coordinate nextCoordinate = this.CoordinatesToPlay[0];
                 this.CoordinatesToPlay.RemoveAt(0);
-                Debug.Log($"Player side {forSide} playing prescribed move {nextCoordinate}");
+                Debug.Log($"Player side {forSide} playing prescribed move {nextCoordinate}", this);
                 return nextCoordinate;
             }
 

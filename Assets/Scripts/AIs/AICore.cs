@@ -57,7 +57,7 @@
                     float heuristicValue = heuristic.ScorePosition(forSide, currentGameState, coordinate);
 
 #if UNITY_EDITOR
-                    // UnityEngine.Debug.Log(withCoordinate + $" (Value: {heuristicValue})");
+                    // UnityEngine.Debug.Log(withCoordinate + $" (Value: {heuristicValue})", this);
 #endif
 
                     float newTotal = moveToHeuristicTotal[coordinate] + heuristicValue;
@@ -82,7 +82,7 @@
             Coordinate choice = this.ChooseRandomly(coordinatesToConsider);
 
 #if UNITY_EDITOR
-            // UnityEngine.Debug.Log(logText + $" Selected {choice} which was {(moveToHeuristicTotal[choice] / highestHeuristic).ToString("P2")} of highest at {moveToHeuristicTotal[choice]}");
+            // UnityEngine.Debug.Log(logText + $" Selected {choice} which was {(moveToHeuristicTotal[choice] / highestHeuristic).ToString("P2")} of highest at {moveToHeuristicTotal[choice]}", this);
 #endif
 
             return choice;

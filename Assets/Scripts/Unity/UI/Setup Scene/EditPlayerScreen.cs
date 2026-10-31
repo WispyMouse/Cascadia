@@ -7,21 +7,26 @@
 
     public class EditPlayerScreen : MonoBehaviour
     {
-        public PlayerProfile ShowingProfile { get; private set; }
-
-        public Image PlayerSpriteDisplay;
-
-        public GameObject HumanPanel;
-        public TMP_InputField NameInputField;
-
-        public GameObject AIPanel;
-
-        public GameObject AlreadyTakenPanel;
-
-        public TMP_Text AICoreLabel;
-
+        [Header("Internal Components")]
+        [SerializeReference]
+        private Image playerSpriteDisplay;
+        [SerializeReference]
+        private GameObject humanPanel;
+        [SerializeReference]
+        private TMP_InputField nameInputField;
+        [SerializeReference]
+        private GameObject aIPanel;
+        [SerializeReference]
+        private GameObject alreadyTakenPanel;
+        [SerializeReference]
+        private TMP_Text aICoreLabel;
         [SerializeReference]
         private ChooseEmojiCanvas chooseEmojiCanvas;
+
+        [Header("Exposed Components")]
+        public Sprite CurrentlyDisplayedPlayerSprite => this.playerSpriteDisplay.sprite;
+
+        public PlayerProfile ShowingProfile { get; private set; }
 
         public void OpenFromPlayerProfileIndex(int profileIndex)
         {
@@ -40,7 +45,7 @@
 
         public void OpenFromPlayer(PlayerProfile profile)
         {
-            this.AlreadyTakenPanel.SetActive(false);
+            this.alreadyTakenPanel.SetActive(false);
             this.gameObject.SetActive(true);
 
             this.ShowingProfile = profile;
@@ -48,24 +53,24 @@
             if (this.ShowingProfile.PlayerName == PersistentGameConfiguration.HUMAN)
             {
                 // Show the placeholder text
-                this.NameInputField.SetTextWithoutNotify(string.Empty);
+                this.nameInputField.SetTextWithoutNotify(string.Empty);
             }
             else
             {
-                this.NameInputField.SetTextWithoutNotify(this.ShowingProfile.PlayerName);
+                this.nameInputField.SetTextWithoutNotify(this.ShowingProfile.PlayerName);
             }
 
-            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
+            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
 
             if (this.ShowingProfile.IsAI)
             {
-                this.AIPanel.SetActive(true);
-                this.HumanPanel.SetActive(false);
+                this.aIPanel.SetActive(true);
+                this.humanPanel.SetActive(false);
             }
             else
             {
-                this.AIPanel.SetActive(false);
-                this.HumanPanel.SetActive(true);
+                this.aIPanel.SetActive(false);
+                this.humanPanel.SetActive(true);
             }
 
             this.UpdateIcon();
@@ -83,6 +88,7 @@
             }
             else
             {
+                this.ShowingProfile.AICoreIndex = null;
                 this.ShowingProfile.PlayerName = PersistentGameConfiguration.HUMAN;
             }
 
@@ -93,7 +99,7 @@
 
         private void UpdateIcon()
         {
-            this.PlayerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
+            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
 
             int countWithIndex = 0;
 
@@ -113,7 +119,7 @@
             }
 
             // If there was more than one with this icon, we can't allow you to select it
-            this.AlreadyTakenPanel.SetActive(countWithIndex > 1);
+            this.alreadyTakenPanel.SetActive(countWithIndex > 1);
         }
 
         public void NextAICore()
@@ -132,13 +138,13 @@
         {
             if (this.ShowingProfile.IsAI)
             {
-                this.AICoreLabel.gameObject.SetActive(true);
+                this.aICoreLabel.gameObject.SetActive(true);
                 this.ShowingProfile.PlayerName = this.ShowingProfile.AICore.name;
-                this.AICoreLabel.text = this.ShowingProfile.AICore.name;
+                this.aICoreLabel.text = this.ShowingProfile.AICore.name;
             }
             else
             {
-                this.AICoreLabel.gameObject.SetActive(false);
+                this.aICoreLabel.gameObject.SetActive(false);
             }
         }
 

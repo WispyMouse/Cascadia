@@ -21,7 +21,7 @@
         {
             if (this.ToDisplay == null)
             {
-                Debug.LogError($"Set {nameof(this.ToDisplay)} before making enabled in order to display animation.");
+                Debug.LogError($"Set {nameof(this.ToDisplay)} before making enabled in order to display animation.", this);
                 return;
             }
 

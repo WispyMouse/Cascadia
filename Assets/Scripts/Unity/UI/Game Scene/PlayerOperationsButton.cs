@@ -7,56 +7,77 @@
 
     public class PlayerOperationsButton : MonoBehaviour
     {
-        public GameObject IconRepresenterBase;
-        public Image IconOfPlayer;
-        public TMP_Text TextOfPlayer;
-
-        public GameObject ConfigureButtonBase;
-        public GameObject PlusButtonBase;
-        public GameObject MinusButtonBase;
-
-        public PlayerProfile PlayerProfile { get; private set; }
+        [Header("Scene Managers")]
         [SerializeReference]
         private PlayerConfiguratorSelector playerConfiguratorSelector;
+
+        [Header("Internal Components")]
+        [SerializeReference]
+        private GameObject iconRepresenterBase;
+        [SerializeReference]
+        private Image iconOfPlayer;
+        [SerializeReference]
+        private TMP_Text textOfPlayer;
+
+        [SerializeReference]
+        private GameObject configureButtonBase;
+        [SerializeReference]
+        private Button configureButton;
+        [SerializeReference]
+        private GameObject plusButtonBase;
+        [SerializeReference]
+        private Button plusButton;
+        [SerializeReference]
+        private GameObject minusButtonBase;
+        [SerializeReference]
+        private Button minusButton;
+
+        [Header("Exposed Components")]
+        public Button PlusButton => this.plusButton;
+        public Button MinusButton => this.minusButton;
+        public Button ConfigureButton => this.configureButton;
+
+        public PlayerProfile PlayerProfile { get; private set; }
+        public bool IsShowingConfiguration => this.configureButtonBase.activeInHierarchy;
 
         public void SetFromProfile(PlayerProfile profile)
         {
             this.PlayerProfile = profile;
-            this.ConfigureButtonBase.SetActive(true);
-            this.PlusButtonBase.SetActive(false);
+            this.configureButtonBase.SetActive(true);
+            this.plusButtonBase.SetActive(false);
 
             // Don't show minus for minimum players
-            this.MinusButtonBase.SetActive(PersistentGameConfiguration.Singleton.Players.Count > BoardState.MINIMUMPLAYERS);
+            this.minusButtonBase.SetActive(PersistentGameConfiguration.Singleton.Players.Count > BoardState.MINIMUMPLAYERS);
 
             // If we're still loading the icon, don't show it
             if (!profile.Sprite.NeedsResolution)
             {
-                this.IconOfPlayer.sprite = profile.Sprite.Sprite;
-                this.IconRepresenterBase.SetActive(true);
+                this.iconOfPlayer.sprite = profile.Sprite.Sprite;
+                this.iconRepresenterBase.SetActive(true);
             }
             else
             {
-                this.IconOfPlayer.gameObject.SetActive(false);
-                this.IconRepresenterBase.SetActive(true);
-                this.IconOfPlayer.sprite = null;
+                this.iconOfPlayer.gameObject.SetActive(false);
+                this.iconRepresenterBase.SetActive(true);
+                this.iconOfPlayer.sprite = null;
 
                 // Resolution not complete; wait for it and update it when it's finished
                 profile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
             }
 
-            this.TextOfPlayer.gameObject.SetActive(true);
-            this.TextOfPlayer.text = profile.PlayerName;
+            this.textOfPlayer.gameObject.SetActive(true);
+            this.textOfPlayer.text = profile.PlayerName;
         }
 
         public void OnMinus()
         {
             PersistentGameConfiguration.Singleton.RemovePlayer(this.PlayerProfile);
             this.PlayerProfile = null;
-            this.ConfigureButtonBase.SetActive(false);
-            this.PlusButtonBase.SetActive(true);
-            this.MinusButtonBase.SetActive(false);
-            this.IconRepresenterBase.SetActive(false);
-            this.TextOfPlayer.gameObject.SetActive(false);
+            this.configureButtonBase.SetActive(false);
+            this.plusButtonBase.SetActive(true);
+            this.minusButtonBase.SetActive(false);
+            this.iconRepresenterBase.SetActive(false);
+            this.textOfPlayer.gameObject.SetActive(false);
 
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
         }
@@ -85,22 +106,25 @@
             }
 
             this.PlayerProfile = null;
-            this.ConfigureButtonBase.SetActive(false);
-            this.PlusButtonBase.SetActive(showPlus);
-            this.MinusButtonBase.SetActive(false);
-            this.IconRepresenterBase.SetActive(false);
-            this.TextOfPlayer.gameObject.SetActive(false);
+            this.configureButtonBase.SetActive(false);
+            this.plusButtonBase.SetActive(showPlus);
+            this.minusButtonBase.SetActive(false);
+            this.iconRepresenterBase.SetActive(false);
+            this.textOfPlayer.gameObject.SetActive(false);
         }
 
         private void OnIconDoneLoading()
         {
             this.PlayerProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
 
-            this.IconOfPlayer.sprite = this.PlayerProfile.Sprite.Sprite;
-            this.IconOfPlayer.gameObject.SetActive(true);
-            this.IconRepresenterBase.SetActive(true);
+            this.iconOfPlayer.sprite = this.PlayerProfile.Sprite.Sprite;
+            this.iconOfPlayer.gameObject.SetActive(true);
+            this.iconRepresenterBase.SetActive(true);
         }
 
-        public bool IsShowingConfiguration => this.ConfigureButtonBase.activeInHierarchy;
+        public void ShowMinusButton(bool show = true)
+        {
+            this.minusButtonBase.SetActive(show);
+        }
     }
 }

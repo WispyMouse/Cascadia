@@ -3,6 +3,10 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using Cascadia.DataStructures;
+    using Cascadia.Unity;
     using Cascadia.Unity.UI;
     using Cascadia.Unity.UI.Reusable;
     using NUnit.Framework;
@@ -13,6 +17,7 @@
     using UnityEngine.InputSystem.Controls;
     using UnityEngine.InputSystem.LowLevel;
     using UnityEngine.SceneManagement;
+    using UnityEngine.UI;
 
     public class PlayModeTestUtility
     {
@@ -34,6 +39,14 @@
         public static IEnumerator LoadInToTitleScene()
         {
             yield return LoadStartScene();
+
+            // HACK: We want all of the player's icons to be loaded before continuing
+            // Ideally, we shouldn't be wasting processing power by loading tons of real icons!
+            // For now, patiently wait to reduce errors; it matches human reaction times anyways
+            while (PersistentGameConfiguration.Singleton.Players.Any(x => x.Sprite.NeedsResolution))
+            {
+                yield return null;
+            }
 
             AsyncOperation loadOp = SceneManager.LoadSceneAsync(PlayModeTestUtility.TITLESCENE);
             while (!loadOp.isDone)
@@ -64,17 +77,48 @@
                 Assert.Fail($"Could not find a button with findable name '{buttonFindableName}'.");
             }
 
-            if (!associatedGameObject.activeInHierarchy)
+            if (!associatedGameObject.TryGetComponent<Button>(out Button buttonComponent))
             {
-                Assert.Fail($"Specified button {buttonFindableName} should not be inactive.");
+                Assert.Fail($"{buttonFindableName} was found but it was not attached to a Button.");
             }
 
-            if (!associatedGameObject.TryGetComponent<RectTransform>(out RectTransform transformWithName))
+            yield return ClickOnButton(buttonComponent);
+        }
+
+        public static IEnumerator ClickOnButton(Button button)
+        {
+            if (button == null)
             {
-                Assert.Fail($"Found button with name '{buttonFindableName}', but it didn't have a RectTransform.");
+                Assert.Fail($"Provided button was null.");
             }
+
+            if (!button.gameObject.activeInHierarchy)
+            {
+                Assert.Fail($"Specified button '{button.name}' should not be inactive. [{SpoolOutTransformHierarchy(button.transform)}]");
+            }
+
+            if (!button.gameObject.TryGetComponent<RectTransform>(out RectTransform transformWithName))
+            {
+                Assert.Fail($"Found button with name '{button.name}', but it didn't have a RectTransform.");
+            }
+
+            // Since we know this click is for a Button, we can attach
+            // event listeners to make double sure that this button
+            // considered itself to have been clicked
+            bool onClickRun = false;
+
+            void OnClickRunMethod()
+            {
+                onClickRun = true;
+            }
+
+            button.onClick.AddListener(OnClickRunMethod);
 
             yield return ClickOn(transformWithName);
+
+            button.onClick.RemoveListener(OnClickRunMethod);
+
+            Assert.IsTrue(onClickRun, $"Expected that the onclick method would run.");
         }
 
         public static IEnumerator ClickOn(RectTransform transform)
@@ -88,9 +132,14 @@
             {
                 Vector2 center = GetScreenCoordinates(transform).center;
 
+                if (center.x < 0 || center.y < 0 || center.x > Screen.width || center.y > Screen.height)
+                {
+                    Assert.Fail($"Asked to click outside of the screen to click on {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}] @ {center} (max size is {Screen.width}x{Screen.height}");
+                }
+
                 // Make sure the top element is this
                 GameObject clickedObject = GetUIElementAtScreenPosition(center);
-                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name}. Was instead {clickedObject?.name}");
+                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}]. Was instead {clickedObject?.name}");
 
                 currentMouse.position.WriteValueIntoEvent<Vector2>(center, ptr);
                 InputSystem.QueueEvent(ptr);
@@ -168,22 +217,18 @@
 
         public static GameObject GetUIElementAtScreenPosition(Vector2 screenPosition)
         {
-            // 1. Set up the Pointer Event Data with the screen position
             PointerEventData pointerData = new(EventSystem.current)
             {
                 position = screenPosition
             };
 
-            // 2. Create a list to store all raycast hits
             List<RaycastResult> results = new();
 
-            // 3. Raycast against the UI using the current EventSystem
             if (EventSystem.current != null)
             {
                 EventSystem.current.RaycastAll(pointerData, results);
             }
 
-            // 4. Return the topmost UI GameObject if any were hit
             if (results.Count > 0)
             {
                 return results[0].gameObject;
@@ -202,6 +247,21 @@
             {
                 AssertObjectIsActive(titleCanvas, titleCanvas == exceptFor);
             }
+        }
+
+        public static string SpoolOutTransformHierarchy(Transform toSpool)
+        {
+            StringBuilder sb = new();
+
+            Transform next = toSpool;
+            while (next != null)
+            {
+                sb.Append($"=> {next.name}");
+
+                next = next.parent;
+            }
+
+            return sb.ToString();
         }
     }
 }

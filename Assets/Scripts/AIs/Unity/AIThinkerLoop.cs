@@ -67,7 +67,7 @@
 
             if (this.thinkingCoroutine != null)
             {
-                Debug.Log($"Instructed to stop coroutine for thinking. This suggests we were told to make another AI turn action too early.");
+                Debug.Log($"Instructed to stop coroutine for thinking. This suggests we were told to make another AI turn action too early.", this);
                 this.StopCoroutine(this.thinkingCoroutine);
             }
 
@@ -86,7 +86,7 @@
                 randomWait += this.AdditionalTimeDuringCascade.Evaluate(Random.Range(0, 1f));
             }
 
-            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Starting to think for {profile.PlayerName} profile index {profile.Index} turn order {side.TurnOrderIndex}, waiting {randomWait} seconds...");
+            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Starting to think for {profile.PlayerName} profile index {profile.Index} turn order {side.TurnOrderIndex}, waiting {randomWait} seconds...", this);
 
             // TODO: Find a good programmatic way to always utilize animation speed
             // instead of needing to remember to include it everywhere
@@ -105,7 +105,7 @@
 
 #if UNITY_EDITOR
             MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
-            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections");
+            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections", this);
 #endif
 
             this.GameConductor.ChooseCell(move);

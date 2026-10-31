@@ -28,7 +28,7 @@
             }
 
 #if UNITY_EDITOR
-            Debug.Log($"(Side {forSide}) ({this.name}) Baked {this.currentConnectionsCount} connections");
+            Debug.Log($"(Side {forSide}) ({this.name}) Baked {this.currentConnectionsCount} connections", this);
 #endif
         }
 

@@ -35,7 +35,7 @@
 
         public async Awaitable<IReadOnlyList<Sprite>> GetSpritesFromCategory(string category)
         {
-            Debug.Log($"Random category chosen: {category}");
+            Debug.Log($"Random category chosen: {category}", this);
 
             AsyncOperationHandle<IList<SpriteAtlas>> allAtlasWithCategory = Addressables.LoadAssetAsync<IList<SpriteAtlas>>(category);
             await allAtlasWithCategory.Task;

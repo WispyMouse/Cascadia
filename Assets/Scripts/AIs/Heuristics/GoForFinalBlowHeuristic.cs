@@ -45,7 +45,7 @@
             int creatableConnections = currentGameState.GenerateConsequencesFromMoveCommand(new MoveCommand(forSide, position)).ConnectionsMade.Count;
             if (creatableConnections > this.mostOpponentConnections)
             {
-                Debug.Log($"({this.name}) ({forSide}) Going for critical win against {this.mostOpponentConnections} connections max");
+                Debug.Log($"({this.name}) ({forSide}) Going for critical win against {this.mostOpponentConnections} connections max", this);
                 return this.Weight;
             }
 

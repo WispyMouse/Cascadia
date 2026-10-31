@@ -21,7 +21,7 @@
 
                 if (panel == null)
                 {
-                    Debug.LogError($"Missing panel {panelName}");
+                    Debug.LogError($"Missing panel {panelName}", this);
                     continue;
                 }
 

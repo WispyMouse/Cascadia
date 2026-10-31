@@ -251,7 +251,7 @@
         public int AddAICore(AICore toAdd)
         {
             int nextIndex = this.aiCores.Count;
-            Debug.Log($"Adding AICore {toAdd.name} to index {nextIndex}");
+            Debug.Log($"Adding AICore {toAdd.name} to index {nextIndex}", this);
             this.aiCores.Add(toAdd);
             return nextIndex;
         }

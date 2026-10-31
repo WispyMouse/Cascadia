@@ -18,6 +18,11 @@
                 this.Placement = coordinate;
                 this.Side = side;
             }
+
+            public override readonly string ToString()
+            {
+                return $"Side {this.Side} plays {this.Placement}";
+            }
         }
 
         /// <summary>

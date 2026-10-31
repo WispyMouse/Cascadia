@@ -57,8 +57,9 @@
 
                 public const string CONFIGUREPLAYERSBUTTONNAME = "[FINDABLE] Configure Players Button";
                 public const string CONFIGUREPLAYERSBACKBUTTON = "[FINDABLE] Configure Players Back Button";
-                public const string CHOOSEEMOJIBACKBUTTON = "[FINDABLE] Choose Emoji Back Button";
+                public const string CHOOSEEMOJIBACKBUTTON = "[FINDABLE] Emoji Selection Back Button";
                 public const string EDITPLAYERBACKBUTTON = "[FINDABLE] Edit Player Back Button";
+                public const string SELECTEMOJIEDITBUTTON = "[FINDABLE] Select Emoji Edit Button";
             }
         }
     }

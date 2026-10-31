@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 3903717109111054767}
   - component: {fileID: 6918434471602629898}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: Human/AI Toggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -664,12 +664,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94f5b1d553d6f2c4ea6216caebc2860f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.EditPlayerScreen
-  PlayerSpriteDisplay: {fileID: 8058932863466643469}
-  HumanPanel: {fileID: 7348284425015389302}
-  NameInputField: {fileID: 5993973984591919603}
-  AIPanel: {fileID: 5314242487714849923}
-  AlreadyTakenPanel: {fileID: 8286753949190278122}
-  AICoreLabel: {fileID: 6978944038712202876}
+  playerSpriteDisplay: {fileID: 8058932863466643469}
+  humanPanel: {fileID: 7348284425015389302}
+  nameInputField: {fileID: 5993973984591919603}
+  aIPanel: {fileID: 5314242487714849923}
+  alreadyTakenPanel: {fileID: 8286753949190278122}
+  aICoreLabel: {fileID: 6978944038712202876}
   chooseEmojiCanvas: {fileID: 0}
 --- !u!114 &749456971558139286
 MonoBehaviour:
@@ -838,7 +838,7 @@ GameObject:
   - component: {fileID: 5155439647056359821}
   - component: {fileID: 6752836363271087716}
   m_Layer: 5
-  m_Name: '[FINDABLE] Back Button'
+  m_Name: '[FINDABLE] Edit Player Back Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1843,8 +1843,9 @@ GameObject:
   - component: {fileID: 8959487688334740004}
   - component: {fileID: 608098148734823974}
   - component: {fileID: 1942545313819176306}
+  - component: {fileID: 4132463040541659256}
   m_Layer: 5
-  m_Name: Edit Icon Button
+  m_Name: '[FINDABLE] Select Emoji Edit Button'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1952,9 +1953,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 2456275654115017598}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7336532312175510608}
-        m_TargetAssemblyTypeName: TicTacCOSTCO.Unity.UI.EditPlayerScreen, TicTacCOSTCO.Unity.UI
-        m_MethodName: NextIcon
+        m_TargetAssemblyTypeName: Cascadia.Unity.UI.EditPlayerScreen, Cascadia.Unity.UI
+        m_MethodName: OpenIconSelection
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1988,6 +2001,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.BlipPlayer
+--- !u!114 &4132463040541659256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6108051182585222408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee2349a0e9ff44049adb34a32ab53817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Reusable.Findable
 --- !u!1 &6206938010660383080
 GameObject:
   m_ObjectHideFlags: 0

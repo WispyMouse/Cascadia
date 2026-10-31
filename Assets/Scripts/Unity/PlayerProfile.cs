@@ -29,6 +29,12 @@
 
         public bool MatchesSprite(Sprite sprite)
         {
+            if (ReferenceEquals(sprite, null))
+            {
+                Debug.Log($"Asked to compare this sprite to a null sprite. How odd!");
+                return false;
+            }
+
             return ReferenceEquals(this.Sprite.Sprite, sprite) || string.Equals(this.Sprite.SpriteName, sprite.name);
         }
     }

@@ -15,11 +15,10 @@
             int playerCount = PersistentGameConfiguration.Singleton.Players.Count;
             for (int ii = 0, count = this.PlayerButtons.Count; ii < count; ii++)
             {
-                this.PlayerButtons[ii].MinusButtonBase.SetActive(ii > BoardState.MINIMUMPLAYERS);
-
                 if (playerCount > ii)
                 {
                     this.PlayerButtons[ii].SetFromProfile(PersistentGameConfiguration.Singleton.Players[ii]);
+                    this.PlayerButtons[ii].ShowMinusButton(ii >= BoardState.MINIMUMPLAYERS);
                 }
                 else
                 {

@@ -8602,6 +8602,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Singletons
       objectReference: {fileID: 0}
+    - target: {fileID: 2633596928050718629, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
+      propertyPath: AnimationSpeedModifier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5460238996711962615, guid: ccdccf9c15e257b48ad0cbd41f7bc637, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

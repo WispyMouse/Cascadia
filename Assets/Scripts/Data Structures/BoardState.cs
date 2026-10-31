@@ -312,8 +312,6 @@
                 // If there haven't been any, the game is truly a draw
                 if (this.CurrentCascadeLevel > 0)
                 {
-                    this.Winner = null;
-
                     for (int ii = 0; ii <= this.BasedOnConfiguration.PlayerCount; ii++)
                     {
                         // Count backwards through players to get most recent plays
@@ -327,15 +325,15 @@
                         this.Winner = this.playerOrder[turnIndex];
                     }
 
-                    this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
                 }
+
+                this.BoardStateEvents.OnGameConclusion?.Invoke(this.Winner);
+                return;
             }
-            else
+
+            if (advancePlayer)
             {
-                if (advancePlayer)
-                {
-                    this.AdvancePlayer();
-                }
+                this.AdvancePlayer();
             }
         }
 

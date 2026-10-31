@@ -227,6 +227,9 @@
                 this.winnerPanel.gameObject.SetActive(false);
                 this.winnerText.gameObject.SetActive(false);
                 this.winnerBannerIconShower.HideIcons();
+
+                // If there are no more moves possible, the game is over! Tough luck, everyone.
+                this.noMoreMovesPanel.SetActive(true);
                 return;
             }
 
@@ -248,6 +251,15 @@
         }
 
         public void MainMenu() => SceneManager.LoadScene(0);
+
+        /// <summary>
+        /// You can't have [int] return type for OnClick functions, so this
+        /// simply wraps up <see cref="Rewind"/> in a callable.
+        /// </summary>
+        public void RewindButton()
+        {
+            this.Rewind();
+        }
 
         public int Rewind()
         {

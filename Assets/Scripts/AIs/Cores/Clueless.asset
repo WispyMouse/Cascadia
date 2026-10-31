@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6f1443985a5a0448153237a83d279a, type: 3}
   m_Name: Clueless
   m_EditorClassIdentifier: TicTacCOSTCO.AIs::AICore
-  TopCut: 0
-  AIHeuristics: []
+  topCut: 0
+  aIHeuristics: []

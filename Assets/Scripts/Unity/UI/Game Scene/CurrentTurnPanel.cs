@@ -6,30 +6,37 @@
 
     public class CurrentTurnPanel : MonoBehaviour
     {
-        public CurrentTurnPanelEntry CurrentTurnPanelEntryPF;
-        public Transform CurrentTurnPanelEntryParent;
+        [Header("Scene Managers")]
+        [SerializeReference]
+        private TurnOrderHolder turnOrderHolder;
+        [SerializeReference]
+        private HintController hintController;
+        [SerializeReference]
+        private GameConductor gameConductor;
+
+        [Header("Internal Components")]
+        [SerializeReference]
+        private Transform currentTurnPanelEntryParent;
+
+        [Header("Prefabs")]
+        [SerializeReference]
+        private CurrentTurnPanelEntry currentTurnPanelEntryPF;
 
         public IReadOnlyList<CurrentTurnPanelEntry> Entries => this.entries;
         private List<CurrentTurnPanelEntry> entries { get; set; } = new List<CurrentTurnPanelEntry>();
 
-        [SerializeReference]
-        public TurnOrderHolder turnOrderHolder;
-        [SerializeReference]
-        public HintController hintController;
-        [SerializeReference]
-        public GameConductor gameConductor;
 
         public void ResetGame()
         {
-            for (int ii = this.CurrentTurnPanelEntryParent.childCount - 1; ii >= 0; ii--)
+            for (int ii = this.currentTurnPanelEntryParent.childCount - 1; ii >= 0; ii--)
             {
-                Destroy(this.CurrentTurnPanelEntryParent.GetChild(ii).gameObject);
+                Destroy(this.currentTurnPanelEntryParent.GetChild(ii).gameObject);
             }
             this.entries.Clear();
 
             for (int playerIndex = 0, count = this.turnOrderHolder.PlayerCount; playerIndex < this.turnOrderHolder.PlayerCount; playerIndex++)
             {
-                CurrentTurnPanelEntry newTurn = Instantiate(this.CurrentTurnPanelEntryPF, this.CurrentTurnPanelEntryParent);
+                CurrentTurnPanelEntry newTurn = Instantiate(this.currentTurnPanelEntryPF, this.currentTurnPanelEntryParent);
                 this.entries.Add(newTurn);
 
                 PlayerSide side = this.gameConductor.CurrentBoardState.PlayerOrder[playerIndex];

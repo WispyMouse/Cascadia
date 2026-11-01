@@ -19,28 +19,46 @@
 
         public bool IsPlayerSideKnockedOut { get; private set; } = false;
 
-        public Image PlayerIcon;
+        [Header("Internal Components")]
+        [SerializeReference]
+        private Image playerIcon;
+        [SerializeReference]
+        private GameObject isCurrentTurnIndicatorPanel;
+        [SerializeReference]
+        private GameObject isCurrentTurnIndicatorArrow;
+        [SerializeReference]
+        private GameObject knockoutPanel;
+        [SerializeReference]
+        private GameObject isNotTurnIndicator;
+        [SerializeReference]
+        private GameObject cascadeLevelTextHolder;
+        [SerializeReference]
+        private TMP_Text cascadeLevelText;
+        [SerializeReference]
+        private TMP_Text visibilityText;
+        [SerializeField]
+        private TMP_Text nameText;
 
-        public GameObject IsCurrentTurnIndicator;
-        public GameObject KnockoutPanel;
-        public GameObject IsNotTurnIndicator;
+        [Header("Exposed Properties")]
+        public GameObject IsCurrentTurnIndicatorPanel => this.isCurrentTurnIndicatorPanel;
+        public GameObject IsCurrnetTurnIndicatorArrow => this.IsCurrnetTurnIndicatorArrow;
+        public Image PlayerIcon => this.playerIcon;
 
-        public GameObject CascadeLevelTextHolder;
-        public TMP_Text CascadeLevelText;
-
-        public TMP_Text VisibilityText;
-        public AnimationCurve CascadeLevelVisibilityCurve;
-        public float TimeForCascadeLevelAtLevelOne = 1f;
-
-        public TMP_Text NameText;
-        private float curCascadeLevelVisibility { get; set; } = 0;
-        private float curCascadeTimeLevel { get; set; } = 0;
-
+        [Header("Private Fields")]
         /// <summary>
         /// When determining how fast to make the blinking, subtract out the multiple this by the number of connections above one.
         /// This will make it blink faster.
         /// </summary>
-        public float CascadeLerpPerLevel = .2f;
+        [SerializeField]
+        private float cascadeLerpPerLevel = .2f;
+        [SerializeField]
+        private AnimationCurve cascadeLevelVisibilityCurve;
+        [SerializeField]
+        private float timeForCascadeLevelAtLevelOne = 1f;
+
+        private float curCascadeLevelVisibility { get; set; } = 0;
+        private float curCascadeTimeLevel { get; set; } = 0;
+
 
         public void RepresentProfile(PlayerProfile toRepresent, PlayerSide side)
         {
@@ -51,24 +69,24 @@
 
             if (toRepresent.PlayerName == PersistentGameConfiguration.HUMAN)
             {
-                this.NameText.gameObject.SetActive(false);
+                this.nameText.gameObject.SetActive(false);
             }
             else
             {
-                this.NameText.text = toRepresent.PlayerName;
-                this.NameText.gameObject.SetActive(true);
+                this.nameText.text = toRepresent.PlayerName;
+                this.nameText.gameObject.SetActive(true);
             }
 
             // If we're still loading the icon, don't show it
             if (!this.RepresentedProfile.Sprite.NeedsResolution)
             {
-                this.PlayerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
-                this.PlayerIcon.gameObject.SetActive(true);
+                this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
+                this.playerIcon.gameObject.SetActive(true);
             }
             else
             {
-                this.PlayerIcon.gameObject.SetActive(false);
-                this.PlayerIcon.sprite = null;
+                this.playerIcon.gameObject.SetActive(false);
+                this.playerIcon.sprite = null;
 
                 // Resolution not complete; wait for it and update it when it's finished
                 this.RepresentedProfile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
@@ -83,34 +101,36 @@
             }
 
             this.RepresentedProfile = null;
-            this.CascadeLevelTextHolder.SetActive(false);
-            this.IsCurrentTurnIndicator.SetActive(false);
-            this.IsNotTurnIndicator.SetActive(false);
-            this.KnockoutPanel.SetActive(false);
+            this.cascadeLevelTextHolder.SetActive(false);
+            this.isCurrentTurnIndicatorPanel.SetActive(false);
+            this.isCurrentTurnIndicatorArrow.SetActive(false);
+            this.isNotTurnIndicator.SetActive(false);
+            this.knockoutPanel.SetActive(false);
         }
 
         public void SetCascade(int level)
         {
             if (level == 0)
             {
-                this.CascadeLevelTextHolder.SetActive(false);
+                this.cascadeLevelTextHolder.SetActive(false);
                 return;
             }
 
-            this.CascadeLevelTextHolder.SetActive(true);
-            this.CascadeLevelText.text = $"x{level}";
+            this.cascadeLevelTextHolder.SetActive(true);
+            this.cascadeLevelText.text = $"x{level}";
 
             // Blink faster for higher cascade levels
-            this.curCascadeTimeLevel = this.TimeForCascadeLevelAtLevelOne
-                - Mathf.Lerp(0, this.TimeForCascadeLevelAtLevelOne, this.CascadeLerpPerLevel * (level - 1));
+            this.curCascadeTimeLevel = this.timeForCascadeLevelAtLevelOne
+                - Mathf.Lerp(0, this.timeForCascadeLevelAtLevelOne, this.cascadeLerpPerLevel * (level - 1));
         }
 
         public void MarkKnockout()
         {
             this.IsPlayerSideKnockedOut = true;
-            this.KnockoutPanel.SetActive(true);
-            this.IsNotTurnIndicator.SetActive(false);
-            this.IsCurrentTurnIndicator.SetActive(false);
+            this.knockoutPanel.SetActive(true);
+            this.isNotTurnIndicator.SetActive(false);
+            this.isCurrentTurnIndicatorArrow.SetActive(false);
+            this.isCurrentTurnIndicatorPanel.SetActive(false);
         }
 
         // Marks the player as back in the game, visually.
@@ -118,34 +138,38 @@
         public void RestorePlayer(PlayerSide sideToRestore)
         {
             this.IsPlayerSideKnockedOut = false;
-            this.KnockoutPanel.SetActive(false);
-            this.IsNotTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex != this.RepresentedProfile.Index);
-            this.IsCurrentTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex == this.RepresentedProfile.Index);
+            this.knockoutPanel.SetActive(false);
+            this.isNotTurnIndicator.SetActive(sideToRestore.PlayerProfileIndex != this.RepresentedProfile.Index);
+
+            bool isCurrentTurn = sideToRestore.PlayerProfileIndex == this.RepresentedProfile.Index;
+            this.isCurrentTurnIndicatorArrow.SetActive(isCurrentTurn);
+            this.isCurrentTurnIndicatorPanel.SetActive(isCurrentTurn);
         }
 
         public void SetCurrentTurn(bool isTurn)
         {
             // If we're knocked out, don't update the plates
-            if (this.KnockoutPanel.activeSelf)
+            if (this.knockoutPanel.activeSelf)
             {
                 return;
             }
 
-            this.IsCurrentTurnIndicator.SetActive(isTurn);
-            this.IsNotTurnIndicator.SetActive(!isTurn);
+            this.isCurrentTurnIndicatorPanel.SetActive(isTurn);
+            this.isCurrentTurnIndicatorArrow.SetActive(isTurn);
+            this.isNotTurnIndicator.SetActive(!isTurn);
         }
 
         private void Update()
         {
-            if (!this.CascadeLevelTextHolder.activeSelf)
+            if (!this.cascadeLevelTextHolder.activeSelf)
             {
                 return;
             }
 
             this.curCascadeLevelVisibility = (this.curCascadeLevelVisibility + Time.deltaTime) % this.curCascadeTimeLevel;
 
-            this.VisibilityText.color = new Color(this.VisibilityText.color.r, this.VisibilityText.color.g, this.VisibilityText.color.b,
-                this.CascadeLevelVisibilityCurve.Evaluate(this.curCascadeLevelVisibility / this.curCascadeTimeLevel));
+            this.visibilityText.color = new Color(this.visibilityText.color.r, this.visibilityText.color.g, this.visibilityText.color.b,
+                this.cascadeLevelVisibilityCurve.Evaluate(this.curCascadeLevelVisibility / this.curCascadeTimeLevel));
         }
 
         public void ShowHints() => this.OnShowHints?.Invoke(this.RepresentedSide);
@@ -156,8 +180,8 @@
         {
             this.RepresentedProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
 
-            this.PlayerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
-            this.PlayerIcon.gameObject.SetActive(true);
+            this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
+            this.playerIcon.gameObject.SetActive(true);
         }
     }
 }

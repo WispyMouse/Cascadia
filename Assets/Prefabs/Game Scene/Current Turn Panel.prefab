@@ -90,11 +90,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb8eb174caf402b42850c534f44ec665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CurrentTurnWheel
-  CurrentTurnPanelEntryPF: {fileID: 744229597263104666, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
-  CurrentTurnPanelEntryParent: {fileID: 1239178635904160358}
   turnOrderHolder: {fileID: 0}
   hintController: {fileID: 0}
   gameConductor: {fileID: 0}
+  currentTurnPanelEntryParent: {fileID: 1239178635904160358}
+  currentTurnPanelEntryPF: {fileID: 744229597263104666, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
 --- !u!114 &1250900659606256458
 MonoBehaviour:
   m_ObjectHideFlags: 0

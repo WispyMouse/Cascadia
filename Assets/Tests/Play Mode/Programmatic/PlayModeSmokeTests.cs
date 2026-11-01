@@ -87,7 +87,8 @@
                 foreach (CurrentTurnPanelEntry currentTurn in turnEntries)
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicator.activeInHierarchy, $"Expecting the current turn indicator to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 gameConductor.ChooseCell(coordinateBySide.Placement);

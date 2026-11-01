@@ -145,7 +145,8 @@
                 foreach (CurrentTurnPanelEntry currentTurn in turnEntries)
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicator.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 // If it is an AI's turn, then they should already be aware that the must act
@@ -242,7 +243,8 @@
                 foreach (CurrentTurnPanelEntry currentTurn in turnEntries)
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicator.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 // If it is an AI's turn, then they should already be aware that the must act

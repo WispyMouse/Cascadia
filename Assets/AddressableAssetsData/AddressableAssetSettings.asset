@@ -102,17 +102,22 @@ MonoBehaviour:
     m_ProfileVersion: 1
   m_LabelTable:
     m_LabelNames:
-    - default
-    - Emoji Test
     - Activities
+    - Activities People
     - Animals
-    - Travel
-    - Symbols
-    - Flags
-    - Smiley
-    - People Body
-    - Objects
+    - Ears
+    - Extra
     - Food
+    - Gender
+    - Hands
+    - Objects
+    - Nature
+    - Semi Body Expressions
+    - Smilies
+    - Symbols
+    - Travel
+    - Unicode Humans
+    - Utils
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 5edaa69140bd12743842d7de8a4f8608, type: 2}

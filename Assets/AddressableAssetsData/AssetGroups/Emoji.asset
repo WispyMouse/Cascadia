@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Emoji
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Emoji
+  m_GUID: 42a9d6a40cf2fe547a1e584121b8c96e
+  m_SerializeEntries:
+  - m_GUID: 1aa9592915d4e964daf1447d5240b1c7
+    m_Address: Assets/Graphics/Mutant Standard/emoji/expressions/semi_body_expressions.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Semi Body Expressions
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22947fcd1968f9a4f97e53677a9f5e46
+    m_Address: Assets/Graphics/Mutant Standard/emoji/expressions/smilies.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Smilies
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 51cc1bad5fe32444c8922e2783dd6d55
+    m_Address: Assets/Graphics/Mutant Standard/emoji/activities_clothing/activities_people.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Activities People
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69356113e268d47439e6e2383eb0dcc2
+    m_Address: Assets/Graphics/Mutant Standard/emoji/expressions/hands.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Hands
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72a74eb5efd58fd46b3dd29ad2c7da64
+    m_Address: Assets/Graphics/Mutant Standard/emoji/food_drink_herbs/food.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Food
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98931d27c06382d47bb34f791fcc2254
+    m_Address: Assets/Graphics/Mutant Standard/emoji/nature_effects/nature.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Nature
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b11ebda174348540b861f5b57c0a321
+    m_Address: Assets/Graphics/Mutant Standard/emoji/people_animals/unicode_humans.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Unicode Humans
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a8d801e7d1bb24c4598e50c5e06e743b
+    m_Address: Assets/Graphics/Mutant Standard/emoji/activities_clothing/activities.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Activities
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b083c55b5bbdd6340a5fde59de3cb4a3
+    m_Address: Assets/Graphics/Mutant Standard/emoji/expressions/ears.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Ears
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c304017d104e14f48802980ca4902978
+    m_Address: Assets/Graphics/Mutant Standard/emoji/travel_places/travel.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Travel
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d81f9875d8b434a46bd69ecd29f00281
+    m_Address: Assets/Graphics/Mutant Standard/emoji/utils/utils.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Utils
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7143f2ca7530aa4092c0c21a2b23b11
+    m_Address: Assets/Graphics/Mutant Standard/emoji/extra/extra.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Extra
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e88af443399227e44a8c194551c171f6
+    m_Address: Assets/Graphics/Mutant Standard/emoji/people_animals/animals.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Animals
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee6eb08ec8a850e4f8a4edf26e2673a3
+    m_Address: Assets/Graphics/Mutant Standard/emoji/gender_sexuality_relationships/gender.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Gender
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4844c57540eb1f45bffd55e1215dd76
+    m_Address: Assets/Graphics/Mutant Standard/emoji/symbols/symbols.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Symbols
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffaac05f041eadd478575470994b53eb
+    m_Address: Assets/Graphics/Mutant Standard/emoji/objects/objects.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Objects
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 8bbe285daac62a347b48bc34e60230ec, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: bceaff6e234c03b48a3a876ce928b343, type: 2}
+    - {fileID: 11400000, guid: 49364609f93f83f43a39bb33ee87c847, type: 2}

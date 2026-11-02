@@ -82,6 +82,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[4]'
+      value: Extra
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[5]'
+      value: Food
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[6]'
+      value: Gender
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[7]'
+      value: Hands
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[8]'
+      value: Objects
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[9]'
+      value: Nature
+      objectReference: {fileID: 0}
+    - target: {fileID: 6770654084735589597, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
+      propertyPath: 'emojiCategoryLabels.Array.data[10]'
+      value: Semi Body Expressions
+      objectReference: {fileID: 0}
     - target: {fileID: 8424993154199087742, guid: d6ed85354bd8b474ea17c2a51e1db910, type: 3}
       propertyPath: m_Name
       value: Sprite Lookup

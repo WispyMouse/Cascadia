@@ -129,6 +129,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1239178635904160358}
     m_Modifications:
+    - target: {fileID: 1005174833380208893, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005174833380208893, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 1005174833380208893, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -25
+      objectReference: {fileID: 0}
     - target: {fileID: 2243542773929290942, guid: 9f4e90179ce757a41948099b739d1a7d, type: 3}
       propertyPath: m_fontSize
       value: 56.9

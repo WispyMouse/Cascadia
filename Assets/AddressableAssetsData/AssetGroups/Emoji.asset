@@ -105,6 +105,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Symbols
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f55c8892ef1f35040bb15cf051421264
+    m_Address: Assets/Graphics/Mutant Standard/emoji/classic/classic.spriteatlasv2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Classic
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ffaac05f041eadd478575470994b53eb
     m_Address: Assets/Graphics/Mutant Standard/emoji/objects/objects.spriteatlasv2
     m_ReadOnly: 0

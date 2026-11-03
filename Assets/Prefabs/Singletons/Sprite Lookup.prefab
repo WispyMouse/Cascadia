@@ -45,17 +45,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.SpriteLookup
   emojiCategoryLabels:
+  - Classic
   - Activities
   - Activities People
   - Animals
   - Ears
-  - Flags
   - Extra
   - Food
   - Gender
   - Hands
   - Objects
   - Nature
+  - Semi Body Expressions
   - Smilies
   - Symbols
   - Travel

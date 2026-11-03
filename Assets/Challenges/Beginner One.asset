@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
+  m_Name: Beginner One
+  m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  ChallengeName: Beginner One
+  AICores:
+  - {fileID: 11400000, guid: 6c7f2627ff412084fa40009fa8559dc6, type: 2}
+  AISprites:
+  - {fileID: 8868729072188591806, guid: a156475207f16194fbed7e63941be2cc, type: 3}
+  Width: 5
+  Height: 5
+  StallTurn: 0
+  ForceOrderlyTurnRaw: -1

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
+  m_Name: Hassler
+  m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  ChallengeName: Hassler
+  AICores:
+  - {fileID: 11400000, guid: 6f2ebc54e56191d4cafaa35288ab903a, type: 2}
+  - {fileID: 11400000, guid: 1fa4f5e37ee0f9147b39e97cf7d1faa3, type: 2}
+  AISprites:
+  - {fileID: -51924951195659840, guid: e7622955e4dba374cb6672f34321d765, type: 3}
+  - {fileID: -8863779464223986014, guid: 0b46c9a1359bfa542ba65b1aa9fb345e, type: 3}
+  Width: 6
+  Height: 6
+  StallTurn: 3
+  ForceOrderlyTurnRaw: -1

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
+  m_Name: Clueless Forest
+  m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  ChallengeName: Clueless Forest
+  AICores:
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: 6f2ebc54e56191d4cafaa35288ab903a, type: 2}
+  AISprites:
+  - {fileID: 7415938858341908338, guid: 0945f41c7695fb1438b856654cca1b3a, type: 3}
+  - {fileID: 7367808777163505026, guid: 8af546ba75c17d4449f8ca1cdde0cf25, type: 3}
+  - {fileID: 7679083508794041174, guid: 20c1edd7fa130d44dbcbf74db1ed9654, type: 3}
+  - {fileID: -2768315375425617515, guid: 09d7d27ad4d4dba48b22d5c7187002f0, type: 3}
+  - {fileID: 5741908708451615163, guid: b589d8e5875e5b047b5ae3d06dfb5efc, type: 3}
+  Width: 7
+  Height: 7
+  StallTurn: 4
+  ForceOrderlyTurnRaw: 1

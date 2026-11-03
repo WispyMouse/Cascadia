@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using Cascadia.Unity.UI;
     using UnityEngine.AddressableAssets;
+    using System.Linq;
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
@@ -81,7 +82,7 @@
         /// other configured index values, so be careful about rearranging.
         /// All of these AIs will appear in the player configuration UI (PlayerConfiguratorSelector)
         /// </summary>
-        public IReadOnlyList<AICore> AICores => this.aiCores;
+        public IList<AICore> AICores => this.aiCores;
 
         /// <summary>
         /// List of all <see cref="AICore"/>s that can be assigned.
@@ -237,12 +238,21 @@
             return this.players[forSide.PlayerProfileIndex];
         }
 
-        public void EnsurePlayerCount(int size)
+        public void EnsurePlayerCount(int size, bool keepFirst = false)
         {
-            this.players.Clear();
+            int start = 0;
+            if (keepFirst && this.players.Any())
+            {
+                this.players.RemoveRange(1, this.players.Count - 1);
+                start = 1;
+            }
+            else
+            {
+                this.players.Clear();
+            }
 
             // Add players until we hit the limit
-            for (int ii = 0; ii < size; ii++)
+            for (int ii = start; ii < size; ii++)
             {
                 this.AddPlayer();
             }

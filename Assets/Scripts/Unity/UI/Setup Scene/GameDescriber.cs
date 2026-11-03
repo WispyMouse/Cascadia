@@ -20,6 +20,27 @@
             this.UpdateDescription(PersistentGameConfiguration.Singleton.GameConfiguration);
         }
 
+        public void UpdateDescription(ChallengeDefinition definition)
+        {
+            StringBuilder description = new();
+
+            description.AppendLine(definition.ChallengeName);
+            description.AppendLine($"{definition.AICores.Count + 1} players");
+            description.AppendLine($"{definition.Width}x{definition.Height}");
+
+            if (definition.StallTurn > 0)
+            {
+                description.AppendLine($"No connections until turn {definition.StallTurn}");
+            }
+
+            for (int ii = 0; ii < definition.AICores.Count; ii++)
+            {
+                description.Append($"vs {definition.AICores[ii].name}");
+            }
+
+            this.DescriptionText.text = description.ToString();
+        }
+
         public void UpdateDescription(GameConfiguration newConfiguration)
         {
             StringBuilder description = new();
@@ -46,6 +67,11 @@
             }
 
             this.DescriptionText.text = description.ToString();
+        }
+
+        public void Clear()
+        {
+            this.DescriptionText.text = string.Empty;
         }
     }
 }

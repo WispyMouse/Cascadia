@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
+  m_Name: Clueless Party
+  m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  ChallengeName: Clueless Party
+  AICores:
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  AISprites:
+  - {fileID: -6444940296795206775, guid: a6002df03b224ed4c87e81bd8fc70658, type: 3}
+  - {fileID: -8257872195225029354, guid: 40cdb1cf74609124999039b125d31105, type: 3}
+  - {fileID: -2243670528772958142, guid: 95edd534148dcf04db516c0240d4ea92, type: 3}
+  - {fileID: -6921130654863852129, guid: 39503ab8b90db084fb66923417804d48, type: 3}
+  - {fileID: 6746774203354177421, guid: 7daeafd5288967742b1e8e4eb74c647c, type: 3}
+  Width: 10
+  Height: 10
+  StallTurn: 4
+  ForceOrderlyTurnRaw: 1

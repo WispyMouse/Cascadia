@@ -8,6 +8,7 @@
     [CreateAssetMenu(fileName = "Challenge.asset", menuName = "COSTCO/Challenge Definition")]
     public class ChallengeDefinition : ScriptableObject
     {
+        public string Identifier;
         public string ChallengeName;
         public List<AICore> AICores = new();
         public List<Sprite> AISprites = new();

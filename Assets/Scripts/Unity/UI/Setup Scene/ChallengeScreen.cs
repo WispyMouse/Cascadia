@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Threading;
     using Cascadia.AIs;
+    using Cascadia.DataStructures;
     using Cascadia.Unity.UI.SetupScene;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -30,9 +33,13 @@
 
         private bool firstTimeSetup { get; set; } = false;
         private ChallengeDefinition currentDefinition { get; set; }
+        private List<ChallengeScreenButton> buttons { get; set; } = new();
+        private SaveGame saveGame { get; set; }
 
-        private void OnEnable()
+        private async void OnEnable()
         {
+            this.saveGame = await SaveGameManager.Singleton.GetSave();
+
             if (!this.firstTimeSetup)
             {
                 for (int ii = this.challengeListParent.childCount - 1; ii >= 0; ii--)
@@ -44,7 +51,13 @@
                 {
                     ChallengeScreenButton newButton = Instantiate(this.challengeScreenButtonPF, this.challengeListParent);
                     newButton.SetDefinition(this.challenges[ii], this.SelectDefinition);
+                    this.buttons.Add(newButton);
                 }
+            }
+
+            for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
+            {
+                this.buttons[ii].SetClear(this.saveGame.CompletedChallengesIds.Contains(this.challenges[ii].Identifier));
             }
 
             this.currentDefinition = null;
@@ -55,7 +68,7 @@
         private void SelectDefinition(ChallengeDefinition definition)
         {
             this.currentDefinition = definition;
-            this.challengeDescriber.UpdateDescription(definition);
+            this.challengeDescriber.UpdateDescription(definition, this.saveGame.CompletedChallengesIds.Contains(definition.Identifier));
             this.playButton.SetActive(true);
         }
 

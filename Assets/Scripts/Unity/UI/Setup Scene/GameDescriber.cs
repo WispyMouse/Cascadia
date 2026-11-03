@@ -4,13 +4,18 @@
     using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.UI;
 
     /// <summary>
     /// Describes the current game configuration and outputs it in the Game Setup menu.
     /// </summary>
     public class GameDescriber : MonoBehaviour
     {
-        public TMP_Text DescriptionText;
+        [Header("Internal Components")]
+        [SerializeReference]
+        private TMP_Text descriptionText;
+        [SerializeReference]
+        private Image completedSymbol;
 
         public void OnEnable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
         public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
@@ -20,7 +25,7 @@
             this.UpdateDescription(PersistentGameConfiguration.Singleton.GameConfiguration);
         }
 
-        public void UpdateDescription(ChallengeDefinition definition)
+        public void UpdateDescription(ChallengeDefinition definition, bool completed)
         {
             StringBuilder description = new();
 
@@ -33,12 +38,16 @@
                 description.AppendLine($"No connections until turn {definition.StallTurn}");
             }
 
+            string appendSpace = string.Empty;
+
             for (int ii = 0; ii < definition.AICores.Count; ii++)
             {
-                description.Append($"vs {definition.AICores[ii].name}");
+                description.Append($"{appendSpace}vs {definition.AICores[ii].name}");
+                appendSpace = " ";
             }
 
-            this.DescriptionText.text = description.ToString();
+            this.descriptionText.text = description.ToString();
+            this.completedSymbol.gameObject.SetActive(completed);
         }
 
         public void UpdateDescription(GameConfiguration newConfiguration)
@@ -66,12 +75,13 @@
                 appendVs = true;
             }
 
-            this.DescriptionText.text = description.ToString();
+            this.descriptionText.text = description.ToString();
         }
 
         public void Clear()
         {
-            this.DescriptionText.text = string.Empty;
+            this.descriptionText.text = string.Empty;
+            this.completedSymbol.gameObject.SetActive(false);
         }
     }
 }

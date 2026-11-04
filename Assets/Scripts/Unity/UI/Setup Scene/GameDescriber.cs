@@ -23,8 +23,16 @@
         [SerializeReference]
         private List<Sprite> clearSprites;
 
-        public void OnEnable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
-        public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
+        public void OnEnable()
+        {
+            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
+            PersistentGameConfiguration.Singleton.OnChallengeSettingsUpdated += this.UpdateDescription;
+        }
+        public void OnDisable()
+        {
+            PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
+            PersistentGameConfiguration.Singleton.OnChallengeSettingsUpdated -= this.UpdateDescription;
+        }
 
         public void UpdateDescriptionFromCurrentConfiguration()
         {

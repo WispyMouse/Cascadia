@@ -57,7 +57,7 @@
 
             for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
             {
-                int clearCount = this.saveGame.GetClearCount(this.challenges[0].Identifier);
+                int clearCount = this.saveGame.GetClearCount(this.challenges[ii].Identifier);
                 this.buttons[ii].SetClear(clearCount);
             }
 

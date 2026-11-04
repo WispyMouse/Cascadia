@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
   m_Name: Intermediate One
   m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  Identifier: intermediateone
   ChallengeName: Intermediate One
   AICores:
   - {fileID: 11400000, guid: 705d14de934870d4fb0c437448a61f92, type: 2}

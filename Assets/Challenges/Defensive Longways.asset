@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
   m_Name: Defensive Longways
   m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  Identifier: defensivelongways
   ChallengeName: Defensive Longways
   AICores:
   - {fileID: 11400000, guid: 1fa4f5e37ee0f9147b39e97cf7d1faa3, type: 2}

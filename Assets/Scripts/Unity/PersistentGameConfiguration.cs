@@ -11,8 +11,10 @@
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
-        public delegate void GameplaySettingsUpdated(GameConfiguration newConfiguration);
-        public GameplaySettingsUpdated OnGameplaySettingsUpdated;
+        public delegate void GameplaySettingsUpdatedDelegate(GameConfiguration newConfiguration);
+        public GameplaySettingsUpdatedDelegate OnGameplaySettingsUpdated;
+        public delegate void ChallengeDefinitionSelectedDelegate(ChallengeDefinition newChallenge, int clearCount);
+        public ChallengeDefinitionSelectedDelegate OnChallengeSettingsUpdated;
 
         public const string HUMAN = "Human";
         public static PersistentGameConfiguration Singleton { get; private set; } = null;
@@ -135,6 +137,12 @@
 
         private async Awaitable Start()
         {
+            // If the singleton was set, and this isn't it, cancel out of the Start
+            if (Singleton != this)
+            {
+                return;
+            }
+
             await Addressables.InitializeAsync().Task;
 
             // After starting, send up the event that the game configuration has changed
@@ -222,11 +230,23 @@
             return newProfile;
         }
 
-        public void ForceSetConfig(GameConfiguration configuration)
+        public void ForceSetConfig(GameConfiguration configuration, bool challengeMode = false)
         {
             this.gameConfiguration = configuration;
 
-            this.EnsurePlayerCount(configuration.PlayerCount);
+            this.EnsurePlayerCount(configuration.PlayerCount, challengeMode);
+
+            if (challengeMode)
+            {
+                this.Players[0].AICoreIndex = null;
+
+                for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
+                {
+                    PersistentGameConfiguration.Singleton.Players[ii + 1].AICoreIndex = PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]);
+                    PersistentGameConfiguration.Singleton.Players[ii + 1].Sprite = new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?");
+                }
+            }
+
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
         }
 
@@ -242,10 +262,10 @@
             return this.players[forSide.PlayerProfileIndex];
         }
 
-        public void EnsurePlayerCount(int size, bool keepFirst = false)
+        public void EnsurePlayerCount(int size, bool setFirstToHuman = false)
         {
             int start = 0;
-            if (keepFirst && this.players.Any())
+            if (setFirstToHuman && this.players.Any())
             {
                 this.players.RemoveRange(1, this.players.Count - 1);
                 start = 1;
@@ -275,20 +295,12 @@
             this.currentChallenge = null;
         }
 
-        public void SetChallenge(ChallengeDefinition definition)
+        public async void SetChallenge(ChallengeDefinition definition)
         {
             this.currentChallenge = definition;
 
-            this.ForceSetConfig(this.currentChallenge.GetGameConfiguration());
-            this.EnsurePlayerCount(this.currentChallenge.AICores.Count + 1, true);
-
-            this.Players[0].AICoreIndex = null;
-
-            for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
-            {
-                PersistentGameConfiguration.Singleton.Players[ii + 1].AICoreIndex = PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]);
-                PersistentGameConfiguration.Singleton.Players[ii + 1].Sprite = new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?");
-            }
+            this.ForceSetConfig(this.currentChallenge.GetGameConfiguration(), true);
+            this.OnChallengeSettingsUpdated?.Invoke(definition, await SaveGameManager.Singleton.GetClearCount(definition));
         }
     }
 }

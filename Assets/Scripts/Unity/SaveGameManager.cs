@@ -25,6 +25,8 @@ namespace Cascadia.Unity
                 return;
             }
 
+            this.transform.SetParent(null);
+            DontDestroyOnLoad(this.gameObject);
             Singleton = this;
 
             await this.loadSaveSemaphore.WaitAsync();
@@ -81,12 +83,22 @@ namespace Cascadia.Unity
                 await Task.Yield();
             }
 
+            if (string.IsNullOrWhiteSpace(challenge.Identifier))
+            {
+                Debug.LogError($"Challenge named {challenge.ChallengeName} file name {challenge.name} does not have an identifier.");
+            }
+
             return this.activeSaveGame.GetClearCount(challenge.Identifier);
         }
 
         public async Task SaveChallengeWin(ChallengeDefinition challenge)
         {
             await this.loadSaveSemaphore.WaitAsync();
+
+            if (string.IsNullOrWhiteSpace(challenge.Identifier))
+            {
+                Debug.LogError($"Challenge named {challenge.ChallengeName} file name {challenge.name} does not have an identifier.");
+            }
 
             ChallengeClearData existingClearData = this.activeSaveGame.ChallengeClearData.FirstOrDefault(x => x.ChallengeId == challenge.Identifier);
 

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
   m_Name: Hassler
   m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  Identifier: hassler
   ChallengeName: Hassler
   AICores:
   - {fileID: 11400000, guid: 6f2ebc54e56191d4cafaa35288ab903a, type: 2}

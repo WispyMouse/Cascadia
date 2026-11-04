@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5513d94989a204a82d2cae6e0af5ff, type: 3}
   m_Name: Beginner One
   m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.ChallengeDefinition
+  Identifier: beginnerone
   ChallengeName: Beginner One
   AICores:
   - {fileID: 11400000, guid: 6c7f2627ff412084fa40009fa8559dc6, type: 2}

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6358655378128936294}
   - component: {fileID: 1085806304986284368}
   - component: {fileID: 8383667007450586361}
-  - component: {fileID: 372472804904929086}
   m_Layer: 5
   m_Name: Description
   m_TagString: Untagged
@@ -138,21 +137,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &372472804904929086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103035385427163310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7404586382944ed4384e583a04df21a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.SetupScene.GameDescriber
-  descriptionText: {fileID: 0}
-  completedSymbol: {fileID: 0}
-  clearSprites: []
 --- !u!1 &1262974646521842872
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,7 +22,7 @@
 
         private async void Start()
         {
-            if (PersistentGameConfiguration.Singleton.ChallengeIsSet)
+            if (!PersistentGameConfiguration.Singleton.ChallengeIsSet)
             {
                 this.bannerParent.gameObject.SetActive(false);
                 return;

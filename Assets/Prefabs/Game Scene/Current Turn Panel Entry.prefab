@@ -362,7 +362,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: -50, y: 0}
-  m_SizeDelta: {x: 300, y: 400}
+  m_SizeDelta: {x: 25, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9194986289552344190
 CanvasRenderer:
@@ -448,9 +448,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  ColorA: {r: 1, g: 0, b: 0, a: 1}
-  ColorB: {r: 0.2830189, g: 0, b: 0, a: 1}
-  SecondsPerCycle: 1
+  ColorA: {r: 0.40914354, g: 0.764151, b: 0.06127627, a: 0.80784315}
+  ColorB: {r: 0.039384037, g: 0.28235295, b: 0, a: 0.11372549}
+  SecondsPerCycle: 3
 --- !u!1 &3799141086599872300
 GameObject:
   m_ObjectHideFlags: 0

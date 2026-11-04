@@ -19,6 +19,10 @@
 
         public GameConfiguration GameConfiguration => this.gameConfiguration;
         private GameConfiguration gameConfiguration;
+        public ChallengeDefinition CurrentChallenge => this.currentChallenge;
+        private ChallengeDefinition currentChallenge;
+        public bool ChallengeIsSet => !ReferenceEquals(this.currentChallenge, null);
+
         public int Width => this.GameConfiguration.Width;
         public int Height => this.GameConfiguration.Height;
 
@@ -264,6 +268,27 @@
             Debug.Log($"Adding AICore {toAdd.name} to index {nextIndex}", this);
             this.aiCores.Add(toAdd);
             return nextIndex;
+        }
+
+        public void ClearChallenge()
+        {
+            this.currentChallenge = null;
+        }
+
+        public void SetChallenge(ChallengeDefinition definition)
+        {
+            this.currentChallenge = definition;
+
+            this.ForceSetConfig(this.currentChallenge.GetGameConfiguration());
+            this.EnsurePlayerCount(this.currentChallenge.AICores.Count + 1, true);
+
+            this.Players[0].AICoreIndex = null;
+
+            for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
+            {
+                PersistentGameConfiguration.Singleton.Players[ii + 1].AICoreIndex = PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]);
+                PersistentGameConfiguration.Singleton.Players[ii + 1].Sprite = new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?");
+            }
         }
     }
 }

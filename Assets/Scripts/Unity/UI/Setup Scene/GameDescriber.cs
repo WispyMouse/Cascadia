@@ -1,5 +1,7 @@
 ﻿namespace Cascadia.Unity.UI.SetupScene
 {
+    using System;
+    using System.Collections.Generic;
     using System.Text;
     using Cascadia.DataStructures;
     using TMPro;
@@ -17,6 +19,10 @@
         [SerializeReference]
         private Image completedSymbol;
 
+        [Header("Data Resources")]
+        [SerializeReference]
+        private List<Sprite> clearSprites;
+
         public void OnEnable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated += this.UpdateDescription;
         public void OnDisable() => PersistentGameConfiguration.Singleton.OnGameplaySettingsUpdated -= this.UpdateDescription;
 
@@ -25,7 +31,7 @@
             this.UpdateDescription(PersistentGameConfiguration.Singleton.GameConfiguration);
         }
 
-        public void UpdateDescription(ChallengeDefinition definition, bool completed)
+        public void UpdateDescription(ChallengeDefinition definition, int clearCount)
         {
             StringBuilder description = new();
 
@@ -47,7 +53,17 @@
             }
 
             this.descriptionText.text = description.ToString();
-            this.completedSymbol.gameObject.SetActive(completed);
+
+            if (clearCount == 0)
+            {
+                this.completedSymbol.gameObject.SetActive(false);
+            }
+            else
+            {
+                this.completedSymbol.gameObject.SetActive(true);
+                int clampedIndex = Math.Min(clearCount - 1, this.clearSprites.Count);
+                this.completedSymbol.sprite = this.clearSprites[clampedIndex];
+            }
         }
 
         public void UpdateDescription(GameConfiguration newConfiguration)

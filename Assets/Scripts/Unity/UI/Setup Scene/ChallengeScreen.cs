@@ -57,7 +57,8 @@
 
             for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
             {
-                this.buttons[ii].SetClear(this.saveGame.CompletedChallengesIds.Contains(this.challenges[ii].Identifier));
+                int clearCount = this.saveGame.GetClearCount(this.challenges[0].Identifier);
+                this.buttons[ii].SetClear(clearCount);
             }
 
             this.currentDefinition = null;
@@ -68,22 +69,13 @@
         private void SelectDefinition(ChallengeDefinition definition)
         {
             this.currentDefinition = definition;
-            this.challengeDescriber.UpdateDescription(definition, this.saveGame.CompletedChallengesIds.Contains(definition.Identifier));
+            this.challengeDescriber.UpdateDescription(definition, this.saveGame.GetClearCount(definition.Identifier));
             this.playButton.SetActive(true);
         }
 
         public void PlayPressed()
         {
-            PersistentGameConfiguration.Singleton.ForceSetConfig(this.currentDefinition.GetGameConfiguration());
-            PersistentGameConfiguration.Singleton.EnsurePlayerCount(this.currentDefinition.AICores.Count + 1, true);
-
-            PersistentGameConfiguration.Singleton.Players[0].AICoreIndex = null;
-
-            for (int ii = 0; ii < this.currentDefinition.AICores.Count; ii++)
-            {
-                PersistentGameConfiguration.Singleton.Players[ii + 1].AICoreIndex = PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentDefinition.AICores[ii]);
-                PersistentGameConfiguration.Singleton.Players[ii + 1].Sprite = new PlayerProfileSprite(this.currentDefinition.AISprites[ii], "?");
-            }
+            PersistentGameConfiguration.Singleton.SetChallenge(this.currentDefinition);
 
             // HACK: Assumes play mode screen is the 1th entry
             SceneManager.LoadScene(1);

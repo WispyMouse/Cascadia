@@ -92,6 +92,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: TicTacCOSTCO.Unity.UI::TicTacCOSTCO.Unity.UI.GameDescriber
   descriptionText: {fileID: 5808614126837158535}
   completedSymbol: {fileID: 3047588148600211015}
+  clearSprites:
+  - {fileID: 2111727716445480112, guid: 20ebd4171c57791458ae7031ef54ed3c, type: 3}
+  - {fileID: -4161280609430139373, guid: 4a1a56766b267e6458f08c86ace28147, type: 3}
+  - {fileID: 6976136930249556005, guid: 255177c480138de409ff25579faf4611, type: 3}
 --- !u!1 &3067573475434324040
 GameObject:
   m_ObjectHideFlags: 0

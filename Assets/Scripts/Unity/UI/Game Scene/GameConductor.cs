@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using Cascadia.Unity.UI.Audio;
     using Cascadia.Unity.UI.Reusable;
@@ -43,6 +44,8 @@
         private WinnerBannerIconShower winnerBannerIconShower;
         [SerializeReference]
         public GameObject rewindButtonHolder;
+        [SerializeReference]
+        private ChallengeBanner challengeBanner;
 
         public Dictionary<Coordinate, Cell> PositionsToCells { get; set; } = new Dictionary<Coordinate, Cell>();
 
@@ -53,6 +56,8 @@
         private Dictionary<CellsConnection, LineRenderer> connectionToRenderer { get; set; } = new Dictionary<CellsConnection, LineRenderer>();
 
         public BoardState CurrentBoardState { get; set; }
+
+        private bool canAwardChallengeWin { get; set; } = true;
 
         public async Awaitable Start()
         {
@@ -85,7 +90,7 @@
             this.winnerBannerIconShower.HideIcons();
 
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
-            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.DeclarePlayerVictorious;
+            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += async (PlayerSide player) => { await this.DeclarePlayerVictorious(player); };
             this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.stallBanner.Clear;
             this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.currentTurnPanel.UpdateToNewTurn;
             this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.currentTurnPanel.RestorePlayer;
@@ -93,6 +98,8 @@
             this.PositionsToCells = this.gridPainter.Paint();
             this.currentTurnPanel.ResetGame();
             this.cascadeBanner.ResetGame();
+
+            this.canAwardChallengeWin = true;
 
             this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
@@ -219,7 +226,7 @@
             this.connectionToRenderer.Add(connection, newRenderer);
         }
 
-        public void DeclarePlayerVictorious(PlayerSide winner)
+        public async Task DeclarePlayerVictorious(PlayerSide winner)
         {
             if (winner == null)
             {
@@ -248,6 +255,15 @@
             this.winnerBannerIconShower.ShowIcons(player);
 
             this.scoreBoard.AddToScoreboard(player);
+
+            // If the player won a "challenge", we should save that progress and visualize it
+            if (this.canAwardChallengeWin && PersistentGameConfiguration.Singleton.ChallengeIsSet
+                && winner != null && winner.PlayerProfileIndex == 0)
+            {
+                this.canAwardChallengeWin = false;
+                await SaveGameManager.Singleton.SaveChallengeWin(PersistentGameConfiguration.Singleton.CurrentChallenge);
+                this.challengeBanner.UpdateIconForClearCount(await SaveGameManager.Singleton.GetClearCount(PersistentGameConfiguration.Singleton.CurrentChallenge));
+            }
         }
 
         public void MainMenu() => SceneManager.LoadScene(0);

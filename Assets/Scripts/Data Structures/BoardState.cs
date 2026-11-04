@@ -490,7 +490,8 @@
                 return true;
             }
 
-            return this.CurrentRound >= this.BasedOnConfiguration.StallTurn;
+            // We stall up to the target turn. If StallTurn is 1, that would block plays until turn 2
+            return this.CurrentRound > this.BasedOnConfiguration.StallTurn;
         }
 
         public bool MoveCommandLegalToPlay(MoveCommand toApply)

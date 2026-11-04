@@ -2,6 +2,7 @@
 using System.IO;
 namespace Cascadia.Unity
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Cascadia.DataStructures;
@@ -71,6 +72,37 @@ namespace Cascadia.Unity
             }
 
             return this.activeSaveGame;
+        }
+
+        public async Task<int> GetClearCount(ChallengeDefinition challenge)
+        {
+            while (!this.loaded)
+            {
+                await Task.Yield();
+            }
+
+            return this.activeSaveGame.GetClearCount(challenge.Identifier);
+        }
+
+        public async Task SaveChallengeWin(ChallengeDefinition challenge)
+        {
+            await this.loadSaveSemaphore.WaitAsync();
+
+            ChallengeClearData existingClearData = this.activeSaveGame.ChallengeClearData.FirstOrDefault(x => x.ChallengeId == challenge.Identifier);
+
+            if (existingClearData != null)
+            {
+                existingClearData.ClearCountLevel++;
+            }
+            else
+            {
+                this.activeSaveGame.ChallengeClearData.Add(new ChallengeClearData() { ChallengeId = challenge.Identifier, ClearCountLevel = 1 });
+            }
+
+            string saveString = JsonUtility.ToJson(this.activeSaveGame);
+            await File.WriteAllTextAsync(saveGameLocation, saveString);
+
+            this.loadSaveSemaphore.Release();
         }
     }
 }

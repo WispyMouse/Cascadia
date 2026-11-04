@@ -1,5 +1,7 @@
 ﻿namespace Cascadia.Unity.UI
 {
+    using System;
+    using System.Collections.Generic;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
@@ -14,6 +16,12 @@
         private Button button;
         [SerializeReference]
         private Transform clearIconParent;
+        [SerializeReference]
+        private Image clearIcon;
+
+        [Header("Data Resources")]
+        [SerializeField]
+        private List<Sprite> clearSprites;
 
         public ChallengeDefinition RepresentedDefinition { get; private set; }
 
@@ -26,9 +34,15 @@
             this.clearIconParent.gameObject.SetActive(false);
         }
 
-        public void SetClear(bool clear = true)
+        public void SetClear(int clearCount)
         {
-            this.clearIconParent.gameObject.SetActive(clear);
+            this.clearIconParent.gameObject.SetActive(clearCount > 0);
+
+            if (clearCount > 0)
+            {
+                int clampedIndex = Math.Min(clearCount - 1, this.clearSprites.Count);
+                this.clearIcon.sprite = this.clearSprites[clampedIndex];
+            }
         }
     }
 }

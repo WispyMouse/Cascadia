@@ -350,3 +350,8 @@ MonoBehaviour:
   nameLabel: {fileID: 8622217049032852666}
   button: {fileID: 6662121992031329428}
   clearIconParent: {fileID: 7350764070754078248}
+  clearIcon: {fileID: 6709562565160031007}
+  clearSprites:
+  - {fileID: 2111727716445480112, guid: 20ebd4171c57791458ae7031ef54ed3c, type: 3}
+  - {fileID: -4161280609430139373, guid: 4a1a56766b267e6458f08c86ace28147, type: 3}
+  - {fileID: 6976136930249556005, guid: 255177c480138de409ff25579faf4611, type: 3}

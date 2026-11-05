@@ -3768,7 +3768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConductor
   clickCamera: {fileID: 519420031}
   turnOrderHolder: {fileID: 1596149086}
-  gridPainter: {fileID: 1894085269}
+  gridPainter: {fileID: 0}
   currentTurnPanel: {fileID: 1075755431}
   scoreBoard: {fileID: 1655775203}
   winnerPanel: {fileID: 902168029}
@@ -3828,7 +3828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Scripts::HintController
   GameConductor: {fileID: 1339510086}
   TurnOrderHolder: {fileID: 1596149086}
-  GridPainter: {fileID: 1894085269}
+  GridPainter: {fileID: 0}
 --- !u!4 &1423148171
 Transform:
   m_ObjectHideFlags: 0
@@ -5726,15 +5726,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1894085267}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5799df390e7fb2641bc91571f1963df4, type: 3}
+  m_Script: {fileID: 11500000, guid: 3dd22a6c6b399e24aa1304f714a40400, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridPainter
-  CellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
-  GridCamera: {fileID: 519420031}
-  OrthographicSizeBase: 1.05
-  OrthographicSizeScalar: 0.5
-  WidthOrthographicViewMultiplier: 1
-  GameConductor: {fileID: 1339510086}
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.GameplayGridPainter
+  gridParent: {fileID: 1894085268}
+  cellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
+  gridCamera: {fileID: 519420031}
+  orthographicSizeBase: 1
+  orthographicSizeScalar: 0.5
+  widthOrthographicViewMultiplier: 1
 --- !u!1 &1962995605
 GameObject:
   m_ObjectHideFlags: 0

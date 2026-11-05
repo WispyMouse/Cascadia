@@ -53,6 +53,9 @@
                     newButton.SetDefinition(this.challenges[ii], this.SelectDefinition);
                     this.buttons.Add(newButton);
                 }
+
+                // Select the first challenge button when we navigate to this screen
+                this.buttons[0].Click();
             }
 
             for (int ii = 0, count = this.challenges.Count; ii < count; ii++)

@@ -44,5 +44,10 @@
                 this.clearIcon.sprite = this.clearSprites[clampedIndex];
             }
         }
+
+        public void Click()
+        {
+            this.button.onClick?.Invoke();
+        }
     }
 }

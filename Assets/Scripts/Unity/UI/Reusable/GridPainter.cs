@@ -10,51 +10,42 @@
     /// </summary>
     public class GridPainter : MonoBehaviour
     {
-        public Cell CellPF;
+        [Header("Internal Components")]
+        [SerializeReference]
+        private Transform gridParent;
 
-        public Camera GridCamera;
-        public float OrthographicSizeBase;
-        public float OrthographicSizeScalar;
-
-        public float WidthOrthographicViewMultiplier = 1.5f;
+        [Header("Prefabs")]
+        [SerializeReference]
+        private Cell cellPF;
 
         private List<Cell> instantiatedCells { get; set; } = new List<Cell>();
-        public GameConductor GameConductor;
 
-        /// <summary>
-        /// If this is called, we need to reconstruct the game.
-        /// </summary>
-        public void Paint(float _) => this.GameConductor.ResetGame();
-
-        public Dictionary<Coordinate, Cell> Paint()
+        public virtual Dictionary<Coordinate, Cell> Paint(GameConfiguration configuration)
         {
-            Dictionary<Coordinate, Cell> cells = new(this.GameConductor.CurrentBoardState.BasedOnConfiguration.MaximumDimensions);
+            Dictionary<Coordinate, Cell> cells = new(configuration.MaximumDimensions);
 
             for (int ii = this.instantiatedCells.Count - 1; ii >= 0; ii--)
             {
                 Destroy(this.instantiatedCells[ii].gameObject);
             }
+
             this.instantiatedCells.Clear();
 
-            float xOffset = this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width / 2f;
-            float yOffset = this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height / 2f;
+            float xOffset = configuration.Width / 2f;
+            float yOffset = configuration.Height / 2f;
 
-            for (int xx = 0; xx < this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width; xx++)
+            for (int xx = 0; xx < configuration.Width; xx++)
             {
-                for (int yy = 0; yy < this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height; yy++)
+                for (int yy = 0; yy < configuration.Height; yy++)
                 {
                     Coordinate position = new(xx, yy);
-                    Cell newCell = Instantiate(this.CellPF, this.transform);
+                    Cell newCell = Instantiate(this.cellPF, this.gridParent);
                     newCell.Position = position;
                     newCell.transform.localPosition = new Vector2(xx - xOffset, yy - yOffset);
                     this.instantiatedCells.Add(newCell);
                     cells.Add(position, newCell);
                 }
             }
-
-            this.GridCamera.orthographicSize = this.OrthographicSizeBase
-                + (Mathf.Max(this.GameConductor.CurrentBoardState.BasedOnConfiguration.Width * this.WidthOrthographicViewMultiplier, this.GameConductor.CurrentBoardState.BasedOnConfiguration.Height)
-                * this.OrthographicSizeScalar);
 
             return cells;
         }

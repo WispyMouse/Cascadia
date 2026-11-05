@@ -7,53 +7,56 @@
 
     public class Cell : MonoBehaviour
     {
-        public SpriteRenderer CellSpriteRenderer;
-        public SpriteRenderer IconSpriteRenderer;
+        [Header("Internal Components")]
+        [SerializeReference]
+        private SpriteRenderer cellSpriteRenderer;
+        [SerializeReference]
+        private SpriteRenderer iconSpriteRenderer;
+        [SerializeReference]
+        private Sprite defaultBorder;
+        [SerializeReference]
+        private Sprite recentBorder;
+        [SerializeReference]
+        private GameObject hintHolder;
+        [SerializeReference]
+        private TMP_Text hintNumber;
 
-        public Sprite DefaultBorder;
-        public Sprite RecentBorder;
-
-        public GameObject HintHolder;
-        public TMP_Text HintNumber;
-
-        public bool AlreadyPlaced { get; set; } = false;
-
-        public int? SideIndex { get; private set; }
+        public PlayerProfile ControlledProfile { get; private set; }
+        public bool AlreadyPlaced => this.SideIndex.HasValue;
+        public int? SideIndex => this.ControlledProfile?.Index;
         public Coordinate Position { get; set; }
 
         private void Awake()
         {
             this.SetHighlightStatus(false);
-            this.HintHolder.SetActive(false);
+            this.hintHolder.SetActive(false);
         }
 
         public void SetSide(PlayerProfile player)
         {
-            this.SideIndex = player.Index;
-            this.IconSpriteRenderer.sprite = player.Sprite.Sprite;
-            this.AlreadyPlaced = true;
+            this.ControlledProfile = player;
+            this.iconSpriteRenderer.sprite = player.Sprite.Sprite;
         }
 
-        public void SetHighlightStatus(bool toHighlight) => this.CellSpriteRenderer.sprite = toHighlight ? this.RecentBorder : this.DefaultBorder;
+        public void SetHighlightStatus(bool toHighlight) => this.cellSpriteRenderer.sprite = toHighlight ? this.recentBorder : this.defaultBorder;
 
         public void SetHint(int amount)
         {
             if (amount == 0)
             {
-                this.HintHolder.SetActive(false);
+                this.hintHolder.SetActive(false);
             }
             else
             {
-                this.HintHolder.SetActive(true);
-                this.HintNumber.text = amount.ToString();
+                this.hintHolder.SetActive(true);
+                this.hintNumber.text = amount.ToString();
             }
         }
 
         public void Clear()
         {
-            this.SideIndex = 0;
-            this.IconSpriteRenderer.sprite = null;
-            this.AlreadyPlaced = false;
+            this.ControlledProfile = null;
+            this.iconSpriteRenderer.sprite = null;
             this.SetHighlightStatus(false);
         }
     }

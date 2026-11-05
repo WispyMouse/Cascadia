@@ -95,7 +95,7 @@
             this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.currentTurnPanel.UpdateToNewTurn;
             this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.currentTurnPanel.RestorePlayer;
 
-            this.PositionsToCells = this.gridPainter.Paint();
+            this.PositionsToCells = this.gridPainter.Paint(PersistentGameConfiguration.Singleton.GameConfiguration);
             this.currentTurnPanel.ResetGame();
             this.cascadeBanner.ResetGame();
 

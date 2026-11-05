@@ -18,6 +18,8 @@
         private TMP_Text descriptionText;
         [SerializeReference]
         private Image completedSymbol;
+        [SerializeReference]
+        private DescriberGridPainter describerGridPainter;
 
         [Header("Data Resources")]
         [SerializeReference]
@@ -44,23 +46,10 @@
             StringBuilder description = new();
 
             description.AppendLine(definition.ChallengeName);
-            description.AppendLine($"{definition.AICores.Count + 1} players");
-            description.AppendLine($"{definition.Width}x{definition.Height}");
 
-            if (definition.StallTurn > 0)
-            {
-                description.AppendLine($"No connections until turn {definition.StallTurn}");
-            }
-
-            string appendSpace = string.Empty;
-
-            for (int ii = 0; ii < definition.AICores.Count; ii++)
-            {
-                description.Append($"{appendSpace}vs {definition.AICores[ii].name}");
-                appendSpace = " ";
-            }
-
-            this.descriptionText.text = description.ToString();
+            GameConfiguration configuration = definition.GetGameConfiguration();
+            this.descriptionText.text = GenerateTextDescription(configuration, PersistentGameConfiguration.Singleton.Players);
+            this.describerGridPainter.Paint(configuration);
 
             if (clearCount == 0)
             {
@@ -76,18 +65,24 @@
 
         public void UpdateDescription(GameConfiguration newConfiguration)
         {
+            this.descriptionText.text = GenerateTextDescription(newConfiguration, PersistentGameConfiguration.Singleton.Players);
+            this.describerGridPainter.Paint(newConfiguration);
+        }
+
+        public static string GenerateTextDescription(GameConfiguration newConfiguration, IReadOnlyList<PlayerProfile> players)
+        {
             StringBuilder description = new();
 
-            description.AppendLine($"{PersistentGameConfiguration.Singleton.Players.Count} players");
-            description.AppendLine($"{PersistentGameConfiguration.Singleton.Width}x{PersistentGameConfiguration.Singleton.Height}");
+            description.AppendLine($"{newConfiguration.PlayerCount} players");
+            description.AppendLine($"{newConfiguration.Width}x{newConfiguration.Height}");
 
-            if (PersistentGameConfiguration.Singleton.StallTurn > 0)
+            if (newConfiguration.StallTurn > 0)
             {
-                description.AppendLine($"No connections until turn {PersistentGameConfiguration.Singleton.StallTurn}");
+                description.AppendLine($"No connections until turn {newConfiguration.StallTurn}");
             }
 
             bool appendVs = false;
-            foreach (PlayerProfile curPlayer in PersistentGameConfiguration.Singleton.Players)
+            foreach (PlayerProfile curPlayer in players)
             {
                 if (appendVs)
                 {
@@ -99,7 +94,7 @@
                 appendVs = true;
             }
 
-            this.descriptionText.text = description.ToString();
+            return description.ToString();
         }
 
         public void Clear()

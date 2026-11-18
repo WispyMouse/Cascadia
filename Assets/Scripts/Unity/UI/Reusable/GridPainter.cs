@@ -8,25 +8,21 @@
     /// <summary>
     /// Draws a grid on command.
     /// </summary>
-    public class GridPainter : MonoBehaviour
+    public abstract class GridPainter<TCell> : MonoBehaviour where TCell : ICellRenderer
     {
         [Header("Internal Components")]
         [SerializeReference]
         private Transform gridParent;
 
-        [Header("Prefabs")]
-        [SerializeReference]
-        private Cell cellPF;
+        private List<TCell> instantiatedCells { get; set; } = new List<TCell>();
 
-        private List<Cell> instantiatedCells { get; set; } = new List<Cell>();
-
-        public virtual Dictionary<Coordinate, Cell> Paint(GameConfiguration configuration)
+        public virtual void Paint(GameConfiguration configuration)
         {
-            Dictionary<Coordinate, Cell> cells = new(configuration.MaximumDimensions);
+            Dictionary<Coordinate, TCell> cells = new(configuration.MaximumDimensions);
 
             for (int ii = this.instantiatedCells.Count - 1; ii >= 0; ii--)
             {
-                Destroy(this.instantiatedCells[ii].gameObject);
+                Destroy(this.instantiatedCells[ii].SelfGameObject);
             }
 
             this.instantiatedCells.Clear();
@@ -39,15 +35,15 @@
                 for (int yy = 0; yy < configuration.Height; yy++)
                 {
                     Coordinate position = new(xx, yy);
-                    Cell newCell = Instantiate(this.cellPF, this.gridParent);
-                    newCell.Position = position;
-                    newCell.transform.localPosition = new Vector2(xx - xOffset, yy - yOffset);
+                    TCell newCell = Instantiate(this.GetCellPF().SelfGameObject, this.gridParent).GetComponent<TCell>();
+                    this.SetNewCellPosition(newCell, position, configuration);
                     this.instantiatedCells.Add(newCell);
                     cells.Add(position, newCell);
                 }
             }
-
-            return cells;
         }
+
+        protected abstract void SetNewCellPosition(ICellRenderer toPosition, Coordinate coordinate, GameConfiguration forConfiguration);
+        protected abstract TCell GetCellPF();
     }
 }

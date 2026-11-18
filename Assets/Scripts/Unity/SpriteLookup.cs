@@ -51,7 +51,7 @@
 
             if (randomAtlas.spriteCount == 0)
             {
-                throw new System.Exception($"Atlase {randomAtlas} has no sprites.");
+                throw new System.Exception($"Atlas {randomAtlas} has no sprites.");
             }
 
             Sprite[] sprites = new Sprite[randomAtlas.spriteCount];

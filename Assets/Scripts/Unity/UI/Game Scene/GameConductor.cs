@@ -21,7 +21,7 @@
         [SerializeReference]
         private TurnOrderHolder turnOrderHolder;
         [SerializeReference]
-        private GridPainter gridPainter;
+        private GameplayGridPainter gridPainter;
         [SerializeReference]
         private CurrentTurnPanel currentTurnPanel;
         [SerializeReference]
@@ -43,11 +43,11 @@
         [SerializeReference]
         private WinnerBannerIconShower winnerBannerIconShower;
         [SerializeReference]
-        public GameObject rewindButtonHolder;
+        private GameObject rewindButtonHolder;
         [SerializeReference]
         private ChallengeBanner challengeBanner;
 
-        public Dictionary<Coordinate, Cell> PositionsToCells { get; set; } = new Dictionary<Coordinate, Cell>();
+        public IReadOnlyDictionary<Coordinate, GameCellRenderer> PositionsToCells { get; set; } = new Dictionary<Coordinate, GameCellRenderer>();
 
         [SerializeReference]
         private LineRenderer lineRendererPF;
@@ -95,7 +95,9 @@
             this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.currentTurnPanel.UpdateToNewTurn;
             this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.currentTurnPanel.RestorePlayer;
 
-            this.PositionsToCells = this.gridPainter.Paint(PersistentGameConfiguration.Singleton.GameConfiguration);
+            this.gridPainter.Paint(PersistentGameConfiguration.Singleton.GameConfiguration);
+            this.PositionsToCells = this.gridPainter.PositionToCells;
+
             this.currentTurnPanel.ResetGame();
             this.cascadeBanner.ResetGame();
 
@@ -124,13 +126,13 @@
 
         public void ChooseCell(Coordinate toChoose) => this.ChooseCell(this.PositionsToCells[toChoose]);
 
-        public void ChooseCell(Cell toChoose)
+        public void ChooseCell(GameCellRenderer toChoose)
         {
-            Debug.Log($"Attempting to choose cell {toChoose.Position}", this);
+            Debug.Log($"Attempting to choose cell {toChoose.Coordinate}", this);
 
             PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
-            MoveCommand command = new(takingTurn, toChoose.Position);
+            MoveCommand command = new(takingTurn, toChoose.Coordinate);
 
             if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
             {
@@ -139,7 +141,7 @@
                 return;
             }
 
-            foreach (Cell curCell in this.PositionsToCells.Values)
+            foreach (GameCellRenderer curCell in this.PositionsToCells.Values)
             {
                 curCell.SetHighlightStatus(false);
             }
@@ -202,7 +204,7 @@
                 return;
             }
 
-            if (!raycast.collider.TryGetComponent(out Cell getCell))
+            if (!raycast.collider.TryGetComponent(out GameCellRenderer getCell))
             {
                 return;
             }
@@ -325,7 +327,7 @@
             this.winnerAnimation.gameObject.SetActive(false);
             this.winnerPanel.transform.parent.gameObject.SetActive(false);
 
-            foreach (Cell curCell in this.PositionsToCells.Values)
+            foreach (ICellRenderer curCell in this.PositionsToCells.Values)
             {
                 curCell.SetHighlightStatus(false);
             }

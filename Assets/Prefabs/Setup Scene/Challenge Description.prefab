@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 18
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -236,18 +236,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649840711679486414}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1234904592564007402}
   m_Father: {fileID: 8742204503849675844}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 540, y: 0}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &9090411943417543541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,10 +261,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 233c1b36a08c13b4a8a43de3d01948ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.DescriberGridPainter
-  gridParent: {fileID: 3503923613975026122}
-  cellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
-  scalableTransform: {fileID: 3503923613975026122}
+  gridParent: {fileID: 1234904592564007402}
+  scalableTransform: {fileID: 1234904592564007402}
+  cellPF: {fileID: 7544911185928186874, guid: 586718f2032f99448addbe1a79806624, type: 3}
+  rootScale: 1
   scalePerWidth: 0.5
+  distanceBetweenCells: 50
 --- !u!1 &4832087133791643333
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,8 +360,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.SetupScene.GameDescriber
   descriptionText: {fileID: 8383667007450586361}
   completedSymbol: {fileID: 167526540794367468}
-  describerGridPainter: {fileID: 0}
+  describerGridPainter: {fileID: 9090411943417543541}
   clearSprites:
   - {fileID: 2111727716445480112, guid: 20ebd4171c57791458ae7031ef54ed3c, type: 3}
   - {fileID: -4161280609430139373, guid: 4a1a56766b267e6458f08c86ace28147, type: 3}
   - {fileID: 6976136930249556005, guid: 255177c480138de409ff25579faf4611, type: 3}
+--- !u!1 &7837665867996650247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1234904592564007402}
+  m_Layer: 5
+  m_Name: Grid Painter Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1234904592564007402
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7837665867996650247}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3503923613975026122}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}

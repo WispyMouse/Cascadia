@@ -1,11 +1,11 @@
 ﻿namespace Cascadia.Unity.UI.Reusable
 {
-    using Cascadia.DataStructures;
     using Cascadia.Unity;
+    using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
 
-    public class Cell : MonoBehaviour
+    public class GameCellRenderer : MonoBehaviour, ICellRenderer
     {
         [Header("Internal Components")]
         [SerializeReference]
@@ -24,7 +24,9 @@
         public PlayerProfile ControlledProfile { get; private set; }
         public bool AlreadyPlaced => this.SideIndex.HasValue;
         public int? SideIndex => this.ControlledProfile?.Index;
-        public Coordinate Position { get; set; }
+        public Coordinate Coordinate { get; private set; }
+
+        public GameObject SelfGameObject => this.gameObject;
 
         private void Awake()
         {
@@ -38,7 +40,10 @@
             this.iconSpriteRenderer.sprite = player.Sprite.Sprite;
         }
 
-        public void SetHighlightStatus(bool toHighlight) => this.cellSpriteRenderer.sprite = toHighlight ? this.recentBorder : this.defaultBorder;
+        public void SetHighlightStatus(bool toHighlight)
+        {
+            this.cellSpriteRenderer.sprite = toHighlight ? this.recentBorder : this.defaultBorder;
+        }
 
         public void SetHint(int amount)
         {
@@ -58,6 +63,12 @@
             this.ControlledProfile = null;
             this.iconSpriteRenderer.sprite = null;
             this.SetHighlightStatus(false);
+        }
+
+        public void SetLocalPosition(Vector2 position, Coordinate coordinate)
+        {
+            this.transform.localPosition = position;
+            this.Coordinate = coordinate;
         }
     }
 }

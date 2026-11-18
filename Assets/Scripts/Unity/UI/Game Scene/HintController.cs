@@ -8,7 +8,7 @@
     {
         public GameConductor GameConductor;
         public TurnOrderHolder TurnOrderHolder;
-        public GridPainter GridPainter;
+        public GridPainter<GameCellRenderer> GridPainter;
 
         private bool isOn { get; set; } = false;
 
@@ -19,7 +19,7 @@
 
         public void ShowHints(PlayerSide side)
         {
-            foreach (Cell cell in this.GameConductor.PositionsToCells.Values)
+            foreach (GameCellRenderer cell in this.GameConductor.PositionsToCells.Values)
             {
                 cell.SetHint(0);
 
@@ -28,14 +28,14 @@
                     continue;
                 }
 
-                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new(side, cell.Position)).ConnectionsMade.Count);
+                cell.SetHint(this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new(side, cell.Coordinate)).ConnectionsMade.Count);
             }
             this.isOn = true;
         }
 
         public void HideHints()
         {
-            foreach (Cell cell in this.GameConductor.PositionsToCells.Values)
+            foreach (GameCellRenderer cell in this.GameConductor.PositionsToCells.Values)
             {
                 cell.SetHint(0);
             }

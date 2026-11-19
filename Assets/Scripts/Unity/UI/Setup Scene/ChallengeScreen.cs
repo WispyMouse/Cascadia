@@ -39,6 +39,7 @@
         private async void OnEnable()
         {
             this.saveGame = await SaveGameManager.Singleton.GetSave();
+            this.challengeDescriber.Clear();
 
             if (!this.firstTimeSetup)
             {
@@ -53,9 +54,6 @@
                     newButton.SetDefinition(this.challenges[ii], this.SelectDefinition);
                     this.buttons.Add(newButton);
                 }
-
-                // Select the first challenge button when we navigate to this screen
-                this.buttons[0].Click();
             }
 
             for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
@@ -67,6 +65,21 @@
             this.currentDefinition = null;
             this.challengeDescriber.Clear();
             this.playButton.SetActive(false);
+
+            // Are we navigating here from a challenge? if so, select it
+            if (PersistentGameConfiguration.Singleton.ChallengeIsSet)
+            {
+                // Find the challenge button and click it
+                // TODO: make the button in view; this will click a button lower on the list in unintuitive ways
+                for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
+                {
+                    if (ReferenceEquals(this.challenges[ii], PersistentGameConfiguration.Singleton.CurrentChallenge))
+                    {
+                        this.buttons[ii].Click();
+                        break;
+                    }
+                }
+            }
         }
 
         private void SelectDefinition(ChallengeDefinition definition)

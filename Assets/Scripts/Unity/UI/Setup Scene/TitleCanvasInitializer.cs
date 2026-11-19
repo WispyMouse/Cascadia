@@ -6,6 +6,12 @@
 
     public class TitleCanvasInitializer : MonoBehaviour
     {
+        [Header("Scene Managers")]
+        [SerializeReference]
+        private ChallengeScreen challengeScreen;
+        [SerializeReference]
+        private GameObject mainTitleScreen;
+
         public string KeepOpen = Findable.TITLE.CANVASNAMES.TITLE;
 
         private void Awake()
@@ -26,6 +32,15 @@
                 }
 
                 panel.gameObject.SetActive(match);
+            }
+        }
+
+        private void Start()
+        {
+            if (PersistentGameConfiguration.Singleton.ChallengeIsSet)
+            {
+                this.mainTitleScreen.SetActive(false);
+                this.challengeScreen.gameObject.SetActive(true);
             }
         }
     }

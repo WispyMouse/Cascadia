@@ -101,6 +101,7 @@
         {
             this.descriptionText.text = string.Empty;
             this.completedSymbol.gameObject.SetActive(false);
+            this.describerGridPainter.Clear();
         }
     }
 }

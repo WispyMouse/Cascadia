@@ -33,6 +33,14 @@
             }
 
             base.Paint(configuration);
+
+            this.cells.Clear();
+            this.cells.EnsureCapacity(this.InstantiatedCells.Count);
+
+            foreach (GameCellRenderer curCell in this.InstantiatedCells)
+            {
+                this.cells.Add(curCell.Coordinate, curCell);
+            }
         }
 
         protected override GameCellRenderer GetCellPF()

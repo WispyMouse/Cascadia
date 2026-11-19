@@ -23,6 +23,9 @@
         [SerializeField]
         private float distanceBetweenCells = 50f;
 
+        [Header("Private Properties")]
+        private List<DescriberCellRenderer> drawnCells { get; set; } = new();
+
         public override void Paint(GameConfiguration configuration)
         {
             this.scalableTransform.localScale = (this.rootScale + (configuration.Width * this.scalePerWidth)) * Vector3.one;

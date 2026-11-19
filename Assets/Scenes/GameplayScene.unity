@@ -3768,7 +3768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConductor
   clickCamera: {fileID: 519420031}
   turnOrderHolder: {fileID: 1596149086}
-  gridPainter: {fileID: 0}
+  gridPainter: {fileID: 1894085269}
   currentTurnPanel: {fileID: 1075755431}
   scoreBoard: {fileID: 1655775203}
   winnerPanel: {fileID: 902168029}
@@ -5730,11 +5730,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.GameplayGridPainter
   gridParent: {fileID: 1894085268}
-  cellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
   gridCamera: {fileID: 519420031}
+  cellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
   orthographicSizeBase: 1
   orthographicSizeScalar: 0.5
-  widthOrthographicViewMultiplier: 1
 --- !u!1 &1962995605
 GameObject:
   m_ObjectHideFlags: 0

@@ -225,6 +225,7 @@ GameObject:
   - component: {fileID: 6929952248749231387}
   - component: {fileID: 6662121992031329428}
   - component: {fileID: 5208947602131020110}
+  - component: {fileID: 2308929684458418676}
   m_Layer: 5
   m_Name: Challenge Button
   m_TagString: Untagged
@@ -334,7 +335,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6929952248749231387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2308929684458418676}
+        m_TargetAssemblyTypeName: Cascadia.Unity.UI.Audio.BlipPlayerInvoker, Cascadia.Unity.UI
+        m_MethodName: PlayBlip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5208947602131020110
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,3 +368,15 @@ MonoBehaviour:
   - {fileID: 2111727716445480112, guid: 20ebd4171c57791458ae7031ef54ed3c, type: 3}
   - {fileID: -4161280609430139373, guid: 4a1a56766b267e6458f08c86ace28147, type: 3}
   - {fileID: 6976136930249556005, guid: 255177c480138de409ff25579faf4611, type: 3}
+--- !u!114 &2308929684458418676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3445902401744184601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24c1e5cee4867a54b8cce51eca032a68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.Audio.BlipPlayerInvoker

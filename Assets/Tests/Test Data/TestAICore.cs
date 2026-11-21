@@ -19,7 +19,7 @@
             return this;
         }
 
-        public override Coordinate DetermineMove(PlayerSide forSide, BoardState currentGameState)
+        public override Coordinate? DetermineMove(PlayerSide forSide, BoardState currentGameState)
         {
             if (this.CoordinatesToPlay.Count > 0)
             {

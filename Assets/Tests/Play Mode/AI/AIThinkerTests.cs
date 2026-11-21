@@ -4,13 +4,17 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
+    using Cascadia.AIs;
     using Cascadia.DataStructures;
     using Cascadia.TestData;
     using Cascadia.Unity;
     using Cascadia.Unity.UI;
     using Cascadia.Unity.UI.GameScene;
     using NUnit.Framework;
+    using UnityEditor;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
     using UnityEngine.TestTools;
     using static Cascadia.TestData.GameResultTestData;
     using static Cascadia.TestData.TestUtilities;
@@ -85,9 +89,17 @@
 
                 foreach (UndoTestsData.UndoTests_UndosAtEnd_DataSource_Object data in UndoTestsData.UndoTests_UndosAtEnd_DataSource)
                 {
-                    // For each permutation of missing place, add it to the list
+                    // For each permutation of missing player side, add it to the list
                     foreach (IEnumerable<int> permutation in GameResultTestData.FastPowerSet(data.GameConfiguration.PlayerCount))
                     {
+                        int powerSetSize = permutation.Count();
+
+                        // Ignore the part of the power set that contains no users; other tests should cover this
+                        if (powerSetSize == 0)
+                        {
+                            continue;
+                        }
+
                         coordinates.Add(new(permutation, data));
                     }
                 }
@@ -96,15 +108,28 @@
             }
         }
 
-        [UnityTest]
-        public IEnumerator ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] AITest_CoordinatesToPlay_DataSource_Object plan)
+        [TearDown]
+        public async Task TearDownClear()
         {
-            yield return PlayModeTestUtility.LoadStartScene();
+            // TODO: Deduplicate this code
+            // Load the "3" Blank Scene
+            await SceneManager.LoadSceneAsync(3);
+
+            // Delete everything that remains
+            foreach (GameObject remainingObject in GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                GameObject.Destroy(remainingObject);
+            }
+        }
+
+        [Test]
+        public async Task ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] AITest_CoordinatesToPlay_DataSource_Object plan)
+        {
+            await PlayModeTestUtility.LoadStartScene();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-            config.HumanitizeForTests();
+            await config.HumanitizeForTests();
             config.ForceSetConfig(plan.BaseData.GameConfiguration);
-            config.AnimationSpeedModifier = .05f;
 
             for (int ii = 0; ii < plan.BaseData.GameConfiguration.PlayerCount; ii++)
             {
@@ -125,10 +150,10 @@
                 }
 
                 TestExactChoiceAICore core = ScriptableObject.CreateInstance<TestExactChoiceAICore>().SetPlays(coordinatesToPlay);
-                config.Players[ii].AICoreIndex = config.AddAICore(core);
+                config.Players[ii].SetAICore(config.AddAICore(core));
             }
 
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplayScene();
 
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
             CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);
@@ -146,7 +171,7 @@
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
                     Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 // If it is an AI's turn, then they should already be aware that the must act
@@ -168,7 +193,7 @@
 
                     while (!turnTaken && waitingTimeLeft > 0)
                     {
-                        yield return null;
+                        await Task.Delay(1);
                         waitingTimeLeft -= Time.deltaTime;
                     }
 
@@ -194,15 +219,15 @@
             Assert.AreEqual(plan.BaseData.Winner, gameConductor.CurrentBoardState.Winner?.PlayerProfileIndex, $"Expecting a predicted winner / null lack of winner.");
         }
 
-        [UnityTest]
-        public IEnumerator UndoTests([ValueSource(nameof(UndoTests_DataSource))] AITest_UndoTests_DataSource_Object plan)
+        [Test]
+        public async Task UndoTests([ValueSource(nameof(UndoTests_DataSource))] AITest_UndoTests_DataSource_Object plan)
         {
-            yield return PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartScene();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
             config.HumanitizeForTests();
             config.ForceSetConfig(plan.BaseData.GameConfiguration);
-            config.AnimationSpeedModifier = .05f;
+            List<TestExactChoiceAICore> testAICores = new();
 
             for (int ii = 0; ii < plan.BaseData.GameConfiguration.PlayerCount; ii++)
             {
@@ -223,10 +248,11 @@
                 }
 
                 TestExactChoiceAICore core = ScriptableObject.CreateInstance<TestExactChoiceAICore>().SetPlays(coordinatesToPlay);
-                config.Players[ii].AICoreIndex = config.AddAICore(core);
+                config.Players[ii].SetAICore(config.AddAICore(core));
+                testAICores.Add(core);
             }
 
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplayScene();
 
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
             CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);
@@ -244,7 +270,7 @@
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
                     Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorArrow.activeInHierarchy, $"Move {ii}, Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 // If it is an AI's turn, then they should already be aware that the must act
@@ -266,7 +292,7 @@
 
                     while (!turnTaken && waitingTimeLeft > 0)
                     {
-                        yield return null;
+                        await Task.Delay(1);
                         waitingTimeLeft -= Time.deltaTime;
                     }
 
@@ -288,13 +314,23 @@
                 Assert.AreEqual(expectedActionCount, gameConductor.CurrentBoardState.MoveCommandsApplied.Count, $"Move {ii}, Expecting that a specific number of actions has been applied. Either it isn't applying or too many moves are being applied in one step. Is the AI taking extra actions?");
             }
 
-            for (int ii = 0; ii < plan.BaseData.UndosAtEnd; ii += 1)
+            // Inform the test core AIs to stop thinking
+            foreach (TestExactChoiceAICore core in testAICores)
             {
-                ii += gameConductor.Rewind() - 1;
+                Assert.AreEqual(0, core.CoordinatesToPlay.Count, $"Expected that each TestExactChocieAICore to have no remaining moves.");
+                core.AutoPlay = false;
             }
 
-            // how do we validate that the correct player is in the correct state,
-            // knowing that the first player might decide to start playing when the game gets reset back to their turn
+            // Undo statements until we've undone all relevant pieces
+            for (int ii = 0; ii < plan.BaseData.UndosAtEnd; ii++)
+            {
+                gameConductor.Rewind(forceRewindToPlayer: false);
+            }
+
+            Assert.AreEqual(plan.BaseData.ExpectedGameStateEnum, gameConductor.CurrentBoardState.CurrentGameState, $"Expecting game state to be in specific status");
+            Assert.AreEqual(plan.BaseData.ExpectedPlayerIndex, gameConductor.CurrentBoardState.CurrentPlayerTurnIndex, $"Expecting current player index to be specific");
+            Assert.AreEqual(plan.BaseData.ExpectedCascade, gameConductor.CurrentBoardState.CurrentCascadeLevel, $"Expecting cascade to be specific");
+            Assert.AreEqual(plan.BaseData.ExpectedRemainingPlayers, gameConductor.CurrentBoardState.PlayerSidesStillInGame.Count, $"Expecting remaining player count to be specific");
         }
     }
 }

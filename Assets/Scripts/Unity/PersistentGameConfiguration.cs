@@ -8,6 +8,7 @@
     using Cascadia.Unity.UI;
     using UnityEngine.AddressableAssets;
     using System.Linq;
+    using System.Threading;
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
@@ -37,38 +38,12 @@
         /// <summary>
         /// All animation times are multiplied by this to determine their duration.
         /// </summary>
-        public float AnimationSpeedModifier = 1f;
-
-        #region Debug Values
-        [Header("Debug Values")]
-
-        /// When starting the game from in editor, set <see cref="GameConfiguration.Width"/> to this.
-        [Range(3, 12)]
-        [SerializeField]
-        private int debugWidth = 5;
-
-        /// When starting the game from in editor, set <see cref="GameConfiguration.Height"/> to this.
-        [Range(3, 12)]
-        [SerializeField]
-        private int debugHeight = 5;
-
-        /// When starting the game from in editor, set <see cref="GameConfiguration.PlayerCount"/> to this.
-        [Range(BoardState.MINIMUMPLAYERS, BoardState.MAXIMUMPLAYERS)]
-        [SerializeField]
-        private int debugPlayerCount = 2;
-
-        /// When starting the game from in editor, set <see cref="GameConfiguration.StallTurn"/> to this.
-        [Range(0, 8)]
-        [SerializeField]
-        private int debugStallTurn = 0;
-
-        /// <summary>
-        /// For each player (counting up to <see cref="debugPlayerCount"/>), assign them the AICore.
-        /// present at the corresponding index in <see cref="AICores"/>.
-        /// </summary>
-        [SerializeField]
-        private List<int> debugAICores = new();
-        #endregion
+        public float AnimationSpeedModifier =>
+#if UNITY_INCLUDE_TESTS
+                .001f;
+#else
+                return 1f;
+#endif
 
         public IReadOnlyList<PlayerProfile> Players => this.players;
         private readonly List<PlayerProfile> players = new();
@@ -112,27 +87,7 @@
             this.transform.SetParent(null);
             DontDestroyOnLoad(this.gameObject);
 
-            this.gameConfiguration = new GameConfiguration(this.debugWidth, this.debugHeight, 0, 3, this.debugStallTurn, forceOrderlyTurn: null);
-
-            int playerCount = BoardState.MINIMUMPLAYERS;
-
-#if UNITY_EDITOR
-            playerCount = this.debugPlayerCount;
-#endif
-
-            for (int ii = 0; ii < playerCount; ii++)
-            {
-                PlayerProfile newProfile = this.AddPlayer();
-
-#if UNITY_EDITOR
-                // Quick AI core test; assign AI cores to players based on editor-only debug variables
-                if (this.debugAICores.Count > ii && this.debugAICores[ii] >= 0)
-                {
-                    newProfile.AICoreIndex = this.debugAICores[ii];
-                    newProfile.PlayerName = this.AICores[this.debugAICores[ii]].name;
-                }
-#endif
-            }
+            this.gameConfiguration = GameConfiguration.GetDefaultConfiguration();
         }
 
         private async Awaitable Start()
@@ -145,10 +100,16 @@
 
             await Addressables.InitializeAsync().Task;
 
+            int playerCount = BoardState.MINIMUMPLAYERS;
+
+            for (int ii = 0; ii < playerCount; ii++)
+            {
+                PlayerProfile newProfile = await this.AddPlayer();
+            }
+
             // After starting, send up the event that the game configuration has changed
             // This will help UI items decide to update, which should assign in OnEnable
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
-
             this.ConfigurationLoaded = true;
         }
 
@@ -209,19 +170,17 @@
         /// will already have the appropriate <see cref="PlayerProfile.Index"/>.
         /// </summary>
         /// <returns></returns>
-        public PlayerProfile AddPlayer()
+        public async Task<PlayerProfile> AddPlayer()
         {
             // Start looking up an icon for them; asynchronous action
             PlayerProfile newProfile = new()
             {
-                Index = this.players.Count,
-                Sprite = PlayerProfileSprite.GetNeedsResolution()
+                Index = this.players.Count
             };
-
-            SpriteLookup.AssignRandomSpriteFromAddressablesAsync(newProfile);
+            await SpriteLookup.AssignRandomSpriteFromAddressablesAsync(newProfile);
 
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
-            newProfile.AICoreIndex = null;
+            newProfile.SetAICore(null);
             newProfile.PlayerName = HUMAN;
 
             this.players.Add(newProfile);
@@ -238,23 +197,22 @@
 
             if (challengeMode)
             {
-                this.Players[0].AICoreIndex = null;
+                this.Players[0].SetAICore(null);
 
                 for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
                 {
-                    PersistentGameConfiguration.Singleton.Players[ii + 1].AICoreIndex = PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]);
-                    PersistentGameConfiguration.Singleton.Players[ii + 1].Sprite = new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?");
+                    PersistentGameConfiguration.Singleton.Players[ii + 1].SetAICore(PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]));
+                    PersistentGameConfiguration.Singleton.Players[ii + 1].UpdateSprite(new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?"));
                 }
             }
 
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
         }
 
-        public void HumanitizeForTests()
+        public async Task HumanitizeForTests()
         {
-            this.debugAICores.Clear();
             this.aiCores.Clear();
-            this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
+            await this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
         }
 
         public PlayerProfile GetPlayerProfile(PlayerSide forSide)
@@ -262,7 +220,7 @@
             return this.players[forSide.PlayerProfileIndex];
         }
 
-        public void EnsurePlayerCount(int size, bool setFirstToHuman = false)
+        public async Task EnsurePlayerCount(int size, bool setFirstToHuman = false)
         {
             int start = 0;
             if (setFirstToHuman && this.players.Any())
@@ -278,7 +236,7 @@
             // Add players until we hit the limit
             for (int ii = start; ii < size; ii++)
             {
-                this.AddPlayer();
+                await this.AddPlayer();
             }
         }
 

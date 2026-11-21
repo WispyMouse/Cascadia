@@ -1,5 +1,7 @@
 ﻿namespace Cascadia.Unity.UI.GameScene
 {
+    using System.Threading;
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
@@ -18,7 +20,6 @@
         private Image iconOfPlayer;
         [SerializeReference]
         private TMP_Text textOfPlayer;
-
         [SerializeReference]
         private GameObject configureButtonBase;
         [SerializeReference]
@@ -37,6 +38,9 @@
         public Button MinusButton => this.minusButton;
         public Button ConfigureButton => this.configureButton;
 
+        [Header("Private Properties")]
+        private SemaphoreSlim getPlayerSemaphore { get; set; } = new SemaphoreSlim(1);
+
         public PlayerProfile PlayerProfile { get; private set; }
         public bool IsShowingConfiguration => this.configureButtonBase.activeInHierarchy;
 
@@ -49,21 +53,8 @@
             // Don't show minus for minimum players
             this.minusButtonBase.SetActive(PersistentGameConfiguration.Singleton.Players.Count > BoardState.MINIMUMPLAYERS);
 
-            // If we're still loading the icon, don't show it
-            if (!profile.Sprite.NeedsResolution)
-            {
-                this.iconOfPlayer.sprite = profile.Sprite.Sprite;
-                this.iconRepresenterBase.SetActive(true);
-            }
-            else
-            {
-                this.iconOfPlayer.gameObject.SetActive(false);
-                this.iconRepresenterBase.SetActive(true);
-                this.iconOfPlayer.sprite = null;
-
-                // Resolution not complete; wait for it and update it when it's finished
-                profile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
-            }
+            this.iconOfPlayer.sprite = profile.Sprite.Sprite;
+            this.iconRepresenterBase.SetActive(true);
 
             this.textOfPlayer.gameObject.SetActive(true);
             this.textOfPlayer.text = profile.PlayerName;
@@ -82,44 +73,31 @@
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
         }
 
-        public void OnPlus()
+        public async void OnPlus()
         {
-            // If we're already subscribed, remove the callback for icon finishing
-            if (this.PlayerProfile != null)
-            {
-                this.PlayerProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
-            }
+            await this.OnPlusAsync();
+        }
 
-            PlayerProfile newProfile = PersistentGameConfiguration.Singleton.AddPlayer();
+        public async Task OnPlusAsync()
+        {
+            await this.getPlayerSemaphore.WaitAsync();
+
+            PlayerProfile newProfile = await PersistentGameConfiguration.Singleton.AddPlayer();
 
             this.SetFromProfile(newProfile);
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
 
-            newProfile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
+            this.getPlayerSemaphore.Release();
         }
 
         public void Deactivate(bool showPlus)
         {
-            if (this.PlayerProfile != null)
-            {
-                this.PlayerProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
-            }
-
             this.PlayerProfile = null;
             this.configureButtonBase.SetActive(false);
             this.plusButtonBase.SetActive(showPlus);
             this.minusButtonBase.SetActive(false);
             this.iconRepresenterBase.SetActive(false);
             this.textOfPlayer.gameObject.SetActive(false);
-        }
-
-        private void OnIconDoneLoading()
-        {
-            this.PlayerProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
-
-            this.iconOfPlayer.sprite = this.PlayerProfile.Sprite.Sprite;
-            this.iconOfPlayer.gameObject.SetActive(true);
-            this.iconRepresenterBase.SetActive(true);
         }
 
         public void ShowMinusButton(bool show = true)

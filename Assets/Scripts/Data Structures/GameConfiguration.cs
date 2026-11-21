@@ -135,5 +135,10 @@
 
             this.AllCoordinates = coordinates;
         }
+
+        public static GameConfiguration GetDefaultConfiguration()
+        {
+            return new(5, 5, 2, 3, 0, null);
+        }
     }
 }

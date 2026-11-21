@@ -41,7 +41,7 @@
 
         [Header("Exposed Properties")]
         public GameObject IsCurrentTurnIndicatorPanel => this.isCurrentTurnIndicatorPanel;
-        public GameObject IsCurrnetTurnIndicatorArrow => this.IsCurrnetTurnIndicatorArrow;
+        public GameObject IsCurrentTurnIndicatorArrow => this.isCurrentTurnIndicatorArrow;
         public Image PlayerIcon => this.playerIcon;
 
         [Header("Private Fields")]
@@ -77,29 +77,12 @@
                 this.nameText.gameObject.SetActive(true);
             }
 
-            // If we're still loading the icon, don't show it
-            if (!this.RepresentedProfile.Sprite.NeedsResolution)
-            {
-                this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
-                this.playerIcon.gameObject.SetActive(true);
-            }
-            else
-            {
-                this.playerIcon.gameObject.SetActive(false);
-                this.playerIcon.sprite = null;
-
-                // Resolution not complete; wait for it and update it when it's finished
-                this.RepresentedProfile.OnPlayerProfileSpriteUpdated += this.OnIconDoneLoading;
-            }
+            this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
+            this.playerIcon.gameObject.SetActive(true);
         }
 
         public void Clear()
         {
-            if (this.RepresentedProfile != null)
-            {
-                this.RepresentedProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
-            }
-
             this.RepresentedProfile = null;
             this.cascadeLevelTextHolder.SetActive(false);
             this.isCurrentTurnIndicatorPanel.SetActive(false);
@@ -175,13 +158,5 @@
         public void ShowHints() => this.OnShowHints?.Invoke(this.RepresentedSide);
 
         public void HideHints() => this.OnHideHints?.Invoke();
-
-        private void OnIconDoneLoading()
-        {
-            this.RepresentedProfile.OnPlayerProfileSpriteUpdated -= this.OnIconDoneLoading;
-
-            this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
-            this.playerIcon.gameObject.SetActive(true);
-        }
     }
 }

@@ -76,7 +76,7 @@
         /// </summary>
         /// <param name="forProfile"></param>
         /// <returns></returns>
-        public static async void AssignRandomSpriteFromAddressablesAsync(PlayerProfile forProfile)
+        public static async Task AssignRandomSpriteFromAddressablesAsync(PlayerProfile forProfile)
         {
             PlayerProfileSprite sprite;
             bool unique;
@@ -86,12 +86,6 @@
                 unique = true;
 
                 sprite = await SpriteLookup.Singleton.GetRandomSpriteFromAnyCategory();
-
-                // Must have been set somehow else
-                if (!forProfile.Sprite.NeedsResolution)
-                {
-                    return;
-                }
 
                 // Ensure no one else has this same icon
                 for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
@@ -104,12 +98,6 @@
                 }
             }
             while (!unique);
-
-            // Must have been set somehow else
-            if (!forProfile.Sprite.NeedsResolution)
-            {
-                return;
-            }
 
             Debug.Log($"Loading saturated icon {sprite.Sprite.name}");
 

@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Text;
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using Cascadia.Unity;
     using Cascadia.Unity.UI;
@@ -25,47 +26,20 @@
         public const string GAMEPLAYSCENE = "GameplayScene";
         public const string TITLESCENE = "TitleScene";
 
-        public static IEnumerator LoadStartScene()
+        public static async Task LoadStartScene()
         {
-            AsyncOperation loadOp = SceneManager.LoadSceneAsync(PlayModeTestUtility.TESTINGSTARTSCENE);
-            while (!loadOp.isDone)
-            {
-                yield return null;
-            }
-
-            yield return new WaitForFixedUpdate();
+            await SceneManager.LoadSceneAsync(PlayModeTestUtility.TESTINGSTARTSCENE);
         }
 
-        public static IEnumerator LoadInToTitleScene()
+        public static async Task LoadInToTitleScene()
         {
-            yield return LoadStartScene();
-
-            // HACK: We want all of the player's icons to be loaded before continuing
-            // Ideally, we shouldn't be wasting processing power by loading tons of real icons!
-            // For now, patiently wait to reduce errors; it matches human reaction times anyways
-            while (PersistentGameConfiguration.Singleton.Players.Any(x => x.Sprite.NeedsResolution))
-            {
-                yield return null;
-            }
-
-            AsyncOperation loadOp = SceneManager.LoadSceneAsync(PlayModeTestUtility.TITLESCENE);
-            while (!loadOp.isDone)
-            {
-                yield return null;
-            }
-
-            yield return new WaitForFixedUpdate();
+            await LoadStartScene();
+            await SceneManager.LoadSceneAsync(PlayModeTestUtility.TITLESCENE);
         }
 
-        public static IEnumerator LoadGameplayScene()
+        public static async Task LoadGameplayScene()
         {
-            AsyncOperation loadOp = SceneManager.LoadSceneAsync(PlayModeTestUtility.GAMEPLAYSCENE);
-            while (!loadOp.isDone)
-            {
-                yield return null;
-            }
-
-            yield return new WaitForFixedUpdate();
+            await SceneManager.LoadSceneAsync(PlayModeTestUtility.GAMEPLAYSCENE);
         }
 
         public static IEnumerator ClickOnButton(string buttonFindableName)
@@ -139,7 +113,7 @@
 
                 // Make sure the top element is this
                 GameObject clickedObject = GetUIElementAtScreenPosition(center);
-                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}]. Was instead {clickedObject?.name}");
+                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}]. Was instead {clickedObject.name}");
 
                 currentMouse.position.WriteValueIntoEvent<Vector2>(center, ptr);
                 InputSystem.QueueEvent(ptr);

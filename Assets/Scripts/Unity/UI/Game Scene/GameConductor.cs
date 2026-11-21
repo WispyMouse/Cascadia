@@ -276,10 +276,10 @@
         /// </summary>
         public void RewindButton()
         {
-            this.Rewind();
+            this.Rewind(forceRewindToPlayer: true);
         }
 
-        public int Rewind()
+        public int Rewind(bool forceRewindToPlayer = false)
         {
             int turnsRewound = 0;
 
@@ -290,7 +290,8 @@
                 this.scoreBoard.RemoveRecentWin();
             }
 
-            // Rewind until we reach the last human move, or the beginning of the game.
+            // With forceRewindToPlayer, rewind until we reach the last human move, or the beginning of the game.
+            // With the flag off, rewind one move at a time, even if the destination would be an AI
             while (this.CurrentBoardState.MoveCommandsApplied.Count > 0)
             {
                 MoveCommandConsequences undoneCommand = this.CurrentBoardState.ReversePreviousMoveCommand();
@@ -316,7 +317,7 @@
                 // When we reach a non-ai human player, stop
                 // This way we'll "undo" AI turns until we paint over them.
                 // If we don't, our undo might get re-done by the AI
-                if (!PersistentGameConfiguration.Singleton.GetPlayerProfile(this.CurrentBoardState.CurrentPlayerSide).IsAI)
+                if (!forceRewindToPlayer || !PersistentGameConfiguration.Singleton.GetPlayerProfile(this.CurrentBoardState.CurrentPlayerSide).IsAI)
                 {
                     break;
                 }

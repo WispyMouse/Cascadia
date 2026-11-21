@@ -16,18 +16,9 @@
 
         public void ShowIcons(PlayerProfile winner)
         {
-            // TODO: If the sprite hasn't loaded for some reason (is this a unit test?) we don't want to null ref
-            // what should we do?
-            if (!winner.Sprite.NeedsResolution)
-            {
-                this.holder.gameObject.SetActive(true);
-                this.leftWinner.sprite = winner.Sprite.Sprite;
-                this.rightWinner.sprite = winner.Sprite.Sprite;
-            }
-            else
-            {
-                Debug.Log($"Attempted to show winner banner icons, but the sprite hasn't resolved yet.", this);
-            }
+            this.holder.gameObject.SetActive(true);
+            this.leftWinner.sprite = winner.Sprite.Sprite;
+            this.rightWinner.sprite = winner.Sprite.Sprite;
         }
 
         public void HideIcons()

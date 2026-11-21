@@ -83,12 +83,12 @@
 
             if (toggleAI)
             {
-                this.ShowingProfile.AICoreIndex = 0;
+                this.ShowingProfile.SetAICore(0);
                 this.ShowingProfile.PlayerName = this.ShowingProfile.AICore.name;
             }
             else
             {
-                this.ShowingProfile.AICoreIndex = null;
+                this.ShowingProfile.SetAICore(null);
                 this.ShowingProfile.PlayerName = PersistentGameConfiguration.HUMAN;
             }
 
@@ -124,13 +124,13 @@
 
         public void NextAICore()
         {
-            this.ShowingProfile.AICoreIndex = (this.ShowingProfile.AICoreIndex + 1) % PersistentGameConfiguration.Singleton.AICores.Count;
+            this.ShowingProfile.SetAICore((this.ShowingProfile.AICoreIndex + 1) % PersistentGameConfiguration.Singleton.AICores.Count);
             this.UpdateAICore();
         }
 
         public void PreviousAICore()
         {
-            this.ShowingProfile.AICoreIndex = (this.ShowingProfile.AICoreIndex + PersistentGameConfiguration.Singleton.AICores.Count - 1) % PersistentGameConfiguration.Singleton.AICores.Count;
+            this.ShowingProfile.SetAICore((this.ShowingProfile.AICoreIndex + PersistentGameConfiguration.Singleton.AICores.Count - 1) % PersistentGameConfiguration.Singleton.AICores.Count);
             this.UpdateAICore();
         }
 

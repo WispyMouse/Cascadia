@@ -25,17 +25,8 @@
             this.turnOrderText.text = $"Round {roundNumber}";
 
             PlayerProfileSprite sprite = PersistentGameConfiguration.Singleton.GetPlayerProfile(playerSide).Sprite;
-
-            if (sprite.NeedsResolution)
-            {
-                // TODO: Wait for this to load then show it
-                this.currentTurnImage.gameObject.SetActive(false);
-            }
-            else
-            {
-                this.currentTurnImage.sprite = sprite.Sprite;
-                this.currentTurnImage.gameObject.SetActive(true);
-            }
+            this.currentTurnImage.sprite = sprite.Sprite;
+            this.currentTurnImage.gameObject.SetActive(true);
         }
     }
 }

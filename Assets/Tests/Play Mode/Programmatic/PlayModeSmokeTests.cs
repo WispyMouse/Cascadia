@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using Cascadia.PlayModeTests;
     using Cascadia.TestData;
@@ -22,6 +23,20 @@
         public static GameResultTestData.CoordinatesToPlay_DataSource_Object[] CoordinatesToPlay_DataSource => GameResultTestData.CoordinatesToPlay_DataSource;
         public static KnockoutTestsData.Knockout_ExpectedPlayer_DataSource_Object[] KnockoutToPlay_DataSource => KnockoutTestsData.Knockout_ExpectedPlayer_DataSource;
         public static IEnumerable<int> PlayerCounts_DataSource => TestUtilities.PlayerCountConfigurations;
+
+        [TearDown]
+        public async Task TearDownClear()
+        {
+            // TODO: Deduplicate this code
+            // Load the "3" Blank Scene
+            await SceneManager.LoadSceneAsync(3);
+
+            // Delete everything that remains
+            foreach (GameObject remainingObject in GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                GameObject.Destroy(remainingObject);
+            }
+        }
 
         /// <summary>
         /// Are we able to navigate to the gameplay scene without errors being printed?
@@ -88,7 +103,7 @@
                 {
                     bool shouldBeActive = currentTurn.RepresentedProfile.Index == coordinateBySide.Side;
                     Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorPanel.activeInHierarchy, $"Expecting the current turn indicator panel to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
-                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrnetTurnIndicatorArrow.activeInHierarchy, $"Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
+                    Assert.AreEqual(shouldBeActive, currentTurn.IsCurrentTurnIndicatorArrow.activeInHierarchy, $"Expecting the current turn indicator arrow to correctly indicate current turn status of {coordinateBySide.Side} ({shouldBeActive})");
                 }
 
                 gameConductor.ChooseCell(coordinateBySide.Placement);

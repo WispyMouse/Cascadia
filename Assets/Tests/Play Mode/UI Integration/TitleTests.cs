@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using System.Linq;
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using Cascadia.Unity.UI;
     using Cascadia.Unity.UI.GameScene;
@@ -9,12 +10,27 @@
     using Cascadia.Unity.UI.SetupScene;
     using NUnit.Framework;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
     using UnityEngine.TestTools;
     using UnityEngine.UI;
     using static UnityEngine.ParticleSystem;
 
     public class TitleTests
     {
+        [TearDown]
+        public async Task TearDownClear()
+        {
+            // TODO: Deduplicate this code
+            // Load the "3" Blank Scene
+            await SceneManager.LoadSceneAsync(3);
+
+            // Delete everything that remains
+            foreach (GameObject remainingObject in GameObject.FindObjectsByType<GameObject>(FindObjectsSortMode.None))
+            {
+                GameObject.Destroy(remainingObject);
+            }
+        }
+
         [UnityTest]
         public IEnumerator CanLoadTitle()
         {

@@ -1,6 +1,7 @@
 ﻿namespace Cascadia.Unity.UI
 {
     using System.Collections;
+    using Cascadia.AIs;
     using Cascadia.DataStructures;
     using Cascadia.Unity.UI.GameScene;
     using UnityEngine;
@@ -99,16 +100,29 @@
 
             this.thinkingCoroutine = null;
 
-            Coordinate move =
+            AICore core = PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore;
+            if (core.AutoPlay)
+            {
+                Coordinate? move =
                 PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore
                 .DetermineMove(side, this.GameConductor.CurrentBoardState);
 
+                if (!move.HasValue)
+                {
+                    Debug.LogError($"AICore {PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name} has determined no valid move available.");
+                }
+
 #if UNITY_EDITOR
-            MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move));
-            Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections", this);
+                MoveCommandConsequences command = this.GameConductor.CurrentBoardState.GenerateConsequencesFromMoveCommand(new MoveCommand(side, move.Value));
+                Debug.Log($"({PersistentGameConfiguration.Singleton.GetPlayerProfile(side).AICore.name}) Making move at {move}, expecting {command.ConnectionsMade.Count} connections", this);
 #endif
 
-            this.GameConductor.ChooseCell(move);
+                this.GameConductor.ChooseCell(move.Value);
+            }
+            else
+            {
+                Debug.Log($"AICore {this.name} has AutoPlay off, so the AI will terminate making moves here now.");
+            }
         }
     }
 }

@@ -17,13 +17,19 @@
 
         [SerializeField]
         private List<AIHeuristic> aIHeuristics = new();
+        public bool AutoPlay { get; set; } = true;
 
-        public virtual Coordinate DetermineMove(PlayerSide forSide, BoardState currentGameState)
+        public virtual Coordinate? DetermineMove(PlayerSide forSide, BoardState currentGameState)
         {
+            if (!this.AutoPlay)
+            {
+                return null;
+            }
+
             if (!currentGameState.AnyLegalMovesRemainForPlayer(forSide, out IReadOnlyList<Coordinate> possibleMoves))
             {
                 // TODO: This shouldn't be called in this state, but how do we signal that?
-                return Coordinate.Zero;
+                return null;
             }
 
             // Determine the heuristic value for every possible move

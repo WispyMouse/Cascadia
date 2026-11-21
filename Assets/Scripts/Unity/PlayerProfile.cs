@@ -6,9 +6,6 @@
 
     public class PlayerProfile
     {
-        public delegate void PlayerProfileSpriteUpdated();
-        public PlayerProfileSpriteUpdated OnPlayerProfileSpriteUpdated;
-
         public int Index;
         public string PlayerName;
         public bool IsAI => this.AICoreIndex.HasValue;
@@ -17,14 +14,22 @@
 
         public Color KnockoutColor;
 
-        public int? AICoreIndex;
+        public int? AICoreIndex { get; private set; }
 
         public AICore AICore => this.IsAI ? PersistentGameConfiguration.Singleton.AICores[this.AICoreIndex.Value] : null;
+
+        public void SetAICore(int? coreIndex)
+        {
+            this.AICoreIndex = coreIndex;
+        }
 
         public void UpdateSprite(PlayerProfileSprite sprite)
         {
             this.Sprite = sprite;
-            this.OnPlayerProfileSpriteUpdated?.Invoke();
+            if (this.AICore != null)
+            {
+                this.PlayerName = sprite.SpriteName;
+            }
         }
 
         public bool MatchesSprite(Sprite sprite)

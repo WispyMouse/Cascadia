@@ -60,8 +60,6 @@
                 this.nameInputField.SetTextWithoutNotify(this.ShowingProfile.PlayerName);
             }
 
-            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Value.Sprite;
-
             if (this.ShowingProfile.IsAI)
             {
                 this.aIPanel.SetActive(true);
@@ -73,8 +71,16 @@
                 this.humanPanel.SetActive(true);
             }
 
-            this.UpdateIcon();
             this.UpdateAICore();
+
+            if (this.ShowingProfile.HasSprite)
+            {
+                this.UpdateIcon();
+            }
+            else
+            {
+                this.ShowingProfile.OnPlayerProfileSpriteLoaded += (PlayerProfile profile) => this.UpdateIcon();
+            }
         }
 
         public void ToggleHumanAI()
@@ -112,7 +118,9 @@
                     continue;
                 }
 
-                if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Value.Sprite, this.ShowingProfile.Sprite.Value.Sprite))
+                PlayerProfile profile = PersistentGameConfiguration.Singleton.Players[ii];
+
+                if (profile.HasSprite && ReferenceEquals(profile.Sprite.Value.Sprite, this.ShowingProfile.Sprite.Value.Sprite))
                 {
                     countWithIndex++;
                 }

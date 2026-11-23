@@ -29,7 +29,27 @@
             {
                 WinnerAnimationItem newItem = Instantiate(this.winnerAnimationItemPF, this.transform);
                 newItem.GetComponent<RectTransform>().anchoredPosition = Random.insideUnitCircle * this.distanceOut;
-                newItem.Image.sprite = this.ToDisplay.Sprite.Sprite;
+
+                if (this.ToDisplay.HasSprite)
+                {
+                    newItem.Image.sprite = this.ToDisplay.Sprite.Value.Sprite;
+                }
+                else
+                {
+                    void LoadInSpriteWhenDone(PlayerProfile profile)
+                    {
+                        // Ensure that this GameObject isn't null-ish
+                        // Check this in case we've navigated scenes before the profile sprite was done
+                        if (this == null)
+                        {
+                            return;
+                        }
+
+                        newItem.Image.sprite = profile.Sprite.Value.Sprite;
+                    }
+                    this.ToDisplay.OnPlayerProfileSpriteLoaded += LoadInSpriteWhenDone;
+                }
+
                 this.winnerAnimations.Add(newItem);
             }
         }

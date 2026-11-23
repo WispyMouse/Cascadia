@@ -42,7 +42,7 @@
         {
             this.gameObject.SetActive(true);
             this.ShowingForProfile = showingForProfile;
-            await this.ShowCategory(showingForProfile.Sprite.Category);
+            await this.ShowCategory(showingForProfile.Sprite.Value.Category);
         }
 
         private void EstablishCategories()
@@ -56,7 +56,7 @@
             {
                 ChooseEmojiCategory categoryButton = Instantiate(this.chooseEmojiCategoryPF, this.categoryParent);
                 categoryButton.SetCategory(category);
-                categoryButton.OnCategoryClicked.AddListener((string category) => this.StartShowCategory(category));
+                categoryButton.OnCategoryClicked.AddListener(category => this.StartShowCategory(category));
             }
         }
 
@@ -123,7 +123,7 @@
                 icon.SetSelectionStatus(this.ShowingForProfile.MatchesSprite(thisSprite));
             }
 
-            if (this.ShowingForProfile.Sprite.Category == this.SelectedCategory)
+            if (this.ShowingForProfile.Sprite.Value.Category == this.SelectedCategory)
             {
                 foreach (ChooseEmojiIcon icon in this.icons)
                 {
@@ -145,9 +145,7 @@
 
         public void SelectEmoji(ChooseEmojiIcon selected)
         {
-            this.ShowingForProfile.Sprite.Category = this.SelectedCategory;
-            this.ShowingForProfile.Sprite.Sprite = selected.RepresentedEmoji;
-            this.ShowingForProfile.Sprite.SpriteName = selected.RepresentedEmoji.name;
+            this.ShowingForProfile.UpdateSprite(new PlayerProfileSprite(selected.RepresentedEmoji, this.SelectedCategory));
 
             foreach (ChooseEmojiIcon icon in this.icons)
             {

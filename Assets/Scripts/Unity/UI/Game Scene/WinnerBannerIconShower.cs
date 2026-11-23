@@ -16,9 +16,30 @@
 
         public void ShowIcons(PlayerProfile winner)
         {
-            this.holder.gameObject.SetActive(true);
-            this.leftWinner.sprite = winner.Sprite.Sprite;
-            this.rightWinner.sprite = winner.Sprite.Sprite;
+            if (winner.HasSprite)
+            {
+                this.holder.gameObject.SetActive(true);
+                this.leftWinner.sprite = winner.Sprite.Value.Sprite;
+                this.rightWinner.sprite = winner.Sprite.Value.Sprite;
+            }
+            else
+            {
+                void SetWinnerIcons(PlayerProfile profile)
+                {
+                    // Ensure that this GameObject isn't null-ish
+                    // Check this in case we've navigated scenes before the profile sprite was done
+                    if (this == null)
+                    {
+                        return;
+                    }
+
+                    this.holder.gameObject.SetActive(true);
+                    this.leftWinner.sprite = profile.Sprite.Value.Sprite;
+                    this.rightWinner.sprite = profile.Sprite.Value.Sprite;
+                }
+
+                winner.OnPlayerProfileSpriteLoaded += SetWinnerIcons;
+            }
         }
 
         public void HideIcons()

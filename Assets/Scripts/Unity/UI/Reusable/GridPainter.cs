@@ -38,7 +38,7 @@
             }
         }
 
-        protected abstract void SetNewCellPosition(ICellRenderer toPosition, Coordinate coordinate, GameConfiguration forConfiguration);
+        protected abstract void SetNewCellPosition(TCell toPosition, Coordinate coordinate, GameConfiguration forConfiguration);
         protected abstract TCell GetCellPF();
 
         public void Clear()

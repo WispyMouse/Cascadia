@@ -31,10 +31,10 @@
             }
         }
 
-        [UnityTest]
-        public IEnumerator CanLoadTitle()
+        [Test]
+        public async Task CanLoadTitle()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.TITLE);
         }
 
@@ -44,94 +44,94 @@
         /// Close on page 2. Re-open.
         /// Pages should be open or closed as expected.
         /// </summary>
-        [UnityTest]
-        public IEnumerator RulesNavigation()
+        [Test]
+        public async Task RulesNavigation()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESBUTTONNAME);
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.RULESPAGEONE);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMONETOTWOBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMONETOTWOBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.RULESPAGETWO);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMTWOTOONEBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMTWOTOONEBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.RULESPAGEONE);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMONETOTWOBUTTONNAME);
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESRETURNBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESFROMONETOTWOBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESRETURNBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.TITLE);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.RULESBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.RULESPAGEONE);
         }
 
-        [UnityTest]
-        public IEnumerator PressStartOnTitle()
+        [Test]
+        public async Task PressStartOnTitle()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.GAMESETUP);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPBACKBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPBACKBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.TITLE);
         }
 
-        [UnityTest]
-        public IEnumerator SelectBoardScreenOpens()
+        [Test]
+        public async Task SelectBoardScreenOpens()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.GAMESETUP);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTBOARDBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTBOARDBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.SELECTBOARD);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTBOARDBACKBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTBOARDBACKBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.GAMESETUP);
         }
 
-        [UnityTest]
-        public IEnumerator ConfigurePlayersOpens()
+        [Test]
+        public async Task ConfigurePlayersOpens()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.GAMESETUP);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.CONFIGUREPLAYERS);
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBACKBUTTON);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBACKBUTTON);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.GAMESETUP);
 
             // Click back in to the configure players area
             // This is meant to catch obvious errors from navigating back in to this menu
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
 
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.CONFIGUREPLAYERS);
         }
 
-        [UnityTest]
-        public IEnumerator EditPlayerOpens()
+        [Test]
+        public async Task EditPlayerOpens()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.CONFIGUREPLAYERS);
 
             PlayerConfiguratorSelector playerConfiguratorSelector = GameObject.FindFirstObjectByType<PlayerConfiguratorSelector>();
@@ -150,7 +150,11 @@
                 if (ii >= BoardState.MINIMUMPLAYERS)
                 {
                     Assert.NotNull(plusButton, $"Expecting to find a child named Plus Button at a specific path");
-                    yield return PlayModeTestUtility.ClickOn(plusButton.GetComponent<RectTransform>());
+                    await PlayModeTestUtility.ClickOn(plusButton.GetComponent<RectTransform>());
+
+                    // TODO: Accurately wait until after the plus button is done processing / the image has shown up
+                    // Currently this is firing too quickly, the panel hasn't been set yet
+                    // Though really, the panel should be allowing more + and - operations while loading the icon
                     Assert.AreEqual(ii + 1, playerConfiguratorSelector.CurrentlyConfigurablePlayerButtonsCount, $"Expecting a specific amount of visible player buttons");
                 }
                 else
@@ -162,9 +166,9 @@
 
                 Button configureTransform = currentPlayerOperations.ConfigureButton;
 
-                yield return PlayModeTestUtility.ClickOn(configureTransform.GetComponent<RectTransform>());
+                await PlayModeTestUtility.ClickOn(configureTransform.GetComponent<RectTransform>());
                 PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.EDITPLAYER);
-                yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.EDITPLAYERBACKBUTTON);
+                await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.EDITPLAYERBACKBUTTON);
                 PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.CONFIGUREPLAYERS);
             }
 
@@ -175,7 +179,7 @@
 
                 Transform configureTransform = findButton.transform.Find("OperationsButtons/Minus/Minus Button");
                 Assert.NotNull(configureTransform, $"Expecting to find a child named Minus Button at a specific path");
-                yield return PlayModeTestUtility.ClickOn(configureTransform.GetComponent<RectTransform>());
+                await PlayModeTestUtility.ClickOn(configureTransform.GetComponent<RectTransform>());
                 Assert.AreEqual(ii, playerConfiguratorSelector.CurrentlyConfigurablePlayerButtonsCount, $"Expecting a specific amount of visible player buttons after minus-ing");
 
                 Transform plusButton = findButton.transform.Find("Icon Representer/Plus/Plus Button");
@@ -183,17 +187,17 @@
             }
         }
 
-        [UnityTest]
-        public IEnumerator CanPickCategoryAndIcon()
+        [Test]
+        public async Task CanPickCategoryAndIcon()
         {
-            yield return PlayModeTestUtility.LoadInToTitleScene();
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
+            await PlayModeTestUtility.LoadInToTitleSceneAsync();
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.GAMESETUPSTARTBUTTONNAME);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CONFIGUREPLAYERSBUTTONNAME);
             PlayerConfiguratorSelector playerConfiguratorSelector = GameObject.FindObjectsByType<PlayerConfiguratorSelector>(FindObjectsSortMode.None)[0];
             PlayerOperationsButton playerOperationsButton = GameObject.FindObjectsByType<PlayerOperationsButton>(FindObjectsSortMode.None).OrderBy(x => x.transform.GetSiblingIndex()).First();
-            yield return PlayModeTestUtility.ClickOnButton(playerOperationsButton.ConfigureButton);
+            await PlayModeTestUtility.ClickOnButton(playerOperationsButton.ConfigureButton);
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.EDITPLAYER);
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTEMOJIEDITBUTTON);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.SELECTEMOJIEDITBUTTON);
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.CHOOSEEMOJI);
 
             // What category is currently showing?
@@ -201,7 +205,7 @@
             string currentCategory = canvas.SelectedCategory;
 
             // Wait for the screen to populate
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // We want to press a button for some other category in the list; we will definitely achieve that
             // if we click on *two* buttons and check between
@@ -222,20 +226,20 @@
                 category = categories[1];
             }
 
-            yield return PlayModeTestUtility.ClickOnButton(category.Button);
+            await PlayModeTestUtility.ClickOnButton(category.Button);
 
             // Wait a moment for everything to load in; the buttons are asynchronously loaded
             // HACK TODO: This should definitely be a more intelligent wait, can we hook it up to something?
-            yield return new WaitForSeconds(.6f);
+            await Task.Delay(1000);
 
             // We must be in a new category, so clicking on any of these should change it
             Assert.AreEqual(category.RepresentedCategory, canvas.SelectedCategory, $"Expecting that pressing a category button would change the category");
             ChooseEmojiIcon iconButton = GameObject.FindObjectsByType<ChooseEmojiIcon>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).OrderBy(x => x.transform.GetSiblingIndex()).First();
-            yield return PlayModeTestUtility.ClickOnButton(iconButton.Button);
+            await PlayModeTestUtility.ClickOnButton(iconButton.Button);
 
             Assert.IsTrue(canvas.ShowingForProfile.MatchesSprite(iconButton.RepresentedEmoji), $"Expecting that the sprite has been set.");
 
-            yield return PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CHOOSEEMOJIBACKBUTTON);
+            await PlayModeTestUtility.ClickOnButton(Findable.TITLE.BUTTONNAMES.CHOOSEEMOJIBACKBUTTON);
             PlayModeTestUtility.AssertTitleMenuOpenness(Findable.TITLE.CANVASNAMES.EDITPLAYER);
 
             EditPlayerScreen editPlayerScreen = GameObject.FindFirstObjectByType<EditPlayerScreen>();

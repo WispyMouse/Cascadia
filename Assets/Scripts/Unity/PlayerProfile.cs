@@ -1,16 +1,21 @@
 ﻿namespace Cascadia.Unity
 {
-    using UnityEngine;
+    using System;
     using Cascadia.AIs;
     using Cascadia.Unity.UI;
+    using UnityEngine;
 
     public class PlayerProfile
     {
+        public delegate void PlayerProfileDelegate(PlayerProfile profile);
+        public PlayerProfileDelegate OnPlayerProfileSpriteLoaded;
+
         public int Index;
         public string PlayerName;
         public bool IsAI => this.AICoreIndex.HasValue;
 
-        public PlayerProfileSprite Sprite;
+        public PlayerProfileSprite? Sprite { get; private set; }
+        public bool HasSprite => this.Sprite.HasValue;
 
         public Color KnockoutColor;
 
@@ -26,9 +31,21 @@
         public void UpdateSprite(PlayerProfileSprite sprite)
         {
             this.Sprite = sprite;
-            if (this.AICore != null)
+
+            if (this.IsAI)
             {
                 this.PlayerName = sprite.SpriteName;
+            }
+
+            if (this.OnPlayerProfileSpriteLoaded != null)
+            {
+                this.OnPlayerProfileSpriteLoaded.Invoke(this);
+
+                // Clear out all listeners, to avoid having stale images trying to update when this profile updates later
+                foreach (Delegate d in this.OnPlayerProfileSpriteLoaded.GetInvocationList())
+                {
+                    this.OnPlayerProfileSpriteLoaded -= (PlayerProfileDelegate)d;
+                }
             }
         }
 
@@ -40,7 +57,7 @@
                 return false;
             }
 
-            return ReferenceEquals(this.Sprite.Sprite, sprite) || string.Equals(this.Sprite.SpriteName, sprite.name);
+            return ReferenceEquals(this.Sprite.Value.Sprite, sprite) || string.Equals(this.Sprite.Value.SpriteName, sprite.name);
         }
     }
 }

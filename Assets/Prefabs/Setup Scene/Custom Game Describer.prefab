@@ -33,8 +33,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8931335248746562981}
-  - {fileID: 1357375842750222720}
   - {fileID: 6267355912080558939}
+  - {fileID: 1357375842750222720}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.7, y: 0.15}
@@ -376,9 +376,6 @@ MonoBehaviour:
   gridParent: {fileID: 6605448753180963032}
   scalableTransform: {fileID: 6605448753180963032}
   cellPF: {fileID: 7544911185928186874, guid: 586718f2032f99448addbe1a79806624, type: 3}
-  rootScale: 0.9
-  scalePerWidth: -0.02
-  distanceBetweenCells: 50
 --- !u!1 &6510357484346657019
 GameObject:
   m_ObjectHideFlags: 0

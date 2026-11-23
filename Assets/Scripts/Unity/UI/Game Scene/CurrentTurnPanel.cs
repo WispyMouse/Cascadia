@@ -30,7 +30,9 @@
         {
             for (int ii = this.currentTurnPanelEntryParent.childCount - 1; ii >= 0; ii--)
             {
-                Destroy(this.currentTurnPanelEntryParent.GetChild(ii).gameObject);
+                GameObject currentGO = this.currentTurnPanelEntryParent.GetChild(ii).gameObject;
+                currentGO.SetActive(false);
+                Destroy(currentGO);
             }
             this.entries.Clear();
 

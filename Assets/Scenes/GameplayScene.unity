@@ -658,7 +658,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.5, z: -10}
+  m_LocalPosition: {x: -0.5, y: -0.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5734,6 +5734,7 @@ MonoBehaviour:
   cellPF: {fileID: 2686147493415156260, guid: dd69e85feb4420a479d8e933ba4c0f8a, type: 3}
   orthographicSizeBase: 1
   orthographicSizeScalar: 0.5
+  distanceBetweenCells: 1
 --- !u!1 &1962995605
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@
         [Header("Internal Components")]
         [SerializeReference]
         private Image image;
+        [SerializeReference]
+        private RectTransform rectTransform;
 
         [Header("Private Fields")]
         [SerializeReference]
@@ -25,10 +27,14 @@
             this.image.sprite = toHighlight ? this.cellImageHighlighted : this.cellImageDefault;
         }
 
-        public void SetLocalPosition(Vector2 position, Coordinate coordinate)
+        public void SetAnchorPosition(Coordinate coordinate, int maxSize)
         {
-            this.transform.localPosition = position;
-            this.Coordinate = coordinate;
+            float percentilePerPacing = 1f / maxSize;
+            this.rectTransform.anchorMin = new Vector2(percentilePerPacing * coordinate.X, percentilePerPacing * coordinate.Y);
+            this.rectTransform.anchorMax = new Vector2(percentilePerPacing * (coordinate.X + 1), percentilePerPacing * (coordinate.Y + 1));
+            this.rectTransform.offsetMax = Vector2.zero;
+            this.rectTransform.offsetMin = Vector2.zero;
+            this.rectTransform.anchoredPosition = Vector2.zero;
         }
     }
 }

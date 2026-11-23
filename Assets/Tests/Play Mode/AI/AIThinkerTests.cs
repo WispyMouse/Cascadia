@@ -53,7 +53,7 @@
                 foreach (CoordinatesToPlay_DataSource_Object data in GameResultTestData.CoordinatesToPlay_DataSource)
                 {
                     // For each permutation of missing place, add it to the list
-                    foreach (IEnumerable<int> permutation in GameResultTestData.FastPowerSet(data.GameConfiguration.PlayerCount))
+                    foreach (IEnumerable<int> permutation in GameResultTestData.FastPowerSetWithoutEmpty(data.GameConfiguration.PlayerCount))
                     {
                         coordinates.Add(new(permutation, data));
                     }
@@ -90,16 +90,8 @@
                 foreach (UndoTestsData.UndoTests_UndosAtEnd_DataSource_Object data in UndoTestsData.UndoTests_UndosAtEnd_DataSource)
                 {
                     // For each permutation of missing player side, add it to the list
-                    foreach (IEnumerable<int> permutation in GameResultTestData.FastPowerSet(data.GameConfiguration.PlayerCount))
+                    foreach (IEnumerable<int> permutation in GameResultTestData.FastPowerSetWithoutEmpty(data.GameConfiguration.PlayerCount))
                     {
-                        int powerSetSize = permutation.Count();
-
-                        // Ignore the part of the power set that contains no users; other tests should cover this
-                        if (powerSetSize == 0)
-                        {
-                            continue;
-                        }
-
                         coordinates.Add(new(permutation, data));
                     }
                 }
@@ -125,7 +117,7 @@
         [Test]
         public async Task ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] AITest_CoordinatesToPlay_DataSource_Object plan)
         {
-            await PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
             await config.HumanitizeForTests();
@@ -153,10 +145,10 @@
                 config.Players[ii].SetAICore(config.AddAICore(core));
             }
 
-            await PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
 
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
-            CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);
+            CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
 
             for (int ii = 0; ii < plan.BaseData.Coordinates.Count; ii++)
             {
@@ -222,10 +214,10 @@
         [Test]
         public async Task UndoTests([ValueSource(nameof(UndoTests_DataSource))] AITest_UndoTests_DataSource_Object plan)
         {
-            await PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-            config.HumanitizeForTests();
+            await config.HumanitizeForTests();
             config.ForceSetConfig(plan.BaseData.GameConfiguration);
             List<TestExactChoiceAICore> testAICores = new();
 
@@ -252,7 +244,7 @@
                 testAICores.Add(core);
             }
 
-            await PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
 
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
             CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);

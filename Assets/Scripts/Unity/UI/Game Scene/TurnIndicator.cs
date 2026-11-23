@@ -7,6 +7,10 @@
 
     public class TurnIndicator : MonoBehaviour
     {
+        [Header("Scene Managers")]
+        [SerializeReference]
+        private GameConductor gameConductor;
+
         [Header("Internal Components")]
         [SerializeReference]
         private TurnOrderHolder turnOrderHolder;
@@ -24,9 +28,36 @@
         {
             this.turnOrderText.text = $"Round {roundNumber}";
 
-            PlayerProfileSprite sprite = PersistentGameConfiguration.Singleton.GetPlayerProfile(playerSide).Sprite;
-            this.currentTurnImage.sprite = sprite.Sprite;
-            this.currentTurnImage.gameObject.SetActive(true);
+            PlayerProfile profile = PersistentGameConfiguration.Singleton.GetPlayerProfile(playerSide);
+
+            if (profile.HasSprite)
+            {
+                PlayerProfileSprite sprite = profile.Sprite.Value;
+                this.currentTurnImage.sprite = sprite.Sprite;
+                this.currentTurnImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                void SetPlayerProfileSprite(PlayerProfile sprite)
+                {
+                    // Ensure that this GameObject isn't null-ish
+                    // Check this in case we've navigated scenes before the profile sprite was done
+                    if (this == null || this.gameConductor == null)
+                    {
+                        return;
+                    }
+
+                    // Only set the sprite after loading if it is still that player's turn
+                    if (this.gameConductor.CurrentBoardState.CurrentPlayerSide != playerSide)
+                    {
+                        return;
+                    }
+
+                    this.currentTurnImage.sprite = sprite.Sprite.Value.Sprite;
+                    this.currentTurnImage.gameObject.SetActive(true);
+                }
+                profile.OnPlayerProfileSpriteLoaded += SetPlayerProfileSprite;
+            }
         }
     }
 }

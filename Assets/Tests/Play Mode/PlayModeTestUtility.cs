@@ -9,6 +9,7 @@
     using Cascadia.DataStructures;
     using Cascadia.Unity;
     using Cascadia.Unity.UI;
+    using Cascadia.Unity.UI.GameScene;
     using Cascadia.Unity.UI.Reusable;
     using NUnit.Framework;
     using UnityEngine;
@@ -26,23 +27,33 @@
         public const string GAMEPLAYSCENE = "GameplayScene";
         public const string TITLESCENE = "TitleScene";
 
-        public static async Task LoadStartScene()
+        public static async Task LoadStartSceneAsync()
         {
             await SceneManager.LoadSceneAsync(PlayModeTestUtility.TESTINGSTARTSCENE);
         }
 
-        public static async Task LoadInToTitleScene()
+        public static async Task LoadInToTitleSceneAsync()
         {
-            await LoadStartScene();
+            await LoadStartSceneAsync();
             await SceneManager.LoadSceneAsync(PlayModeTestUtility.TITLESCENE);
+            await Awaitable.NextFrameAsync();
         }
 
-        public static async Task LoadGameplayScene()
+        public static async Task LoadGameplaySceneAsync()
         {
             await SceneManager.LoadSceneAsync(PlayModeTestUtility.GAMEPLAYSCENE);
+
+            // Wait until the GameConductor is ready
+            GameConductor conductor = GameObject.FindFirstObjectByType<GameConductor>();
+            while (!conductor.GameConductorWarmedUp)
+            {
+                await Task.Delay(1);
+            }
+
+            await Awaitable.NextFrameAsync();
         }
 
-        public static IEnumerator ClickOnButton(string buttonFindableName)
+        public static async Task ClickOnButton(string buttonFindableName)
         {
             GameObject associatedGameObject = GameObject.Find(buttonFindableName);
 
@@ -56,10 +67,10 @@
                 Assert.Fail($"{buttonFindableName} was found but it was not attached to a Button.");
             }
 
-            yield return ClickOnButton(buttonComponent);
+            await ClickOnButton(buttonComponent);
         }
 
-        public static IEnumerator ClickOnButton(Button button)
+        public static async Task ClickOnButton(Button button)
         {
             if (button == null)
             {
@@ -88,17 +99,15 @@
 
             button.onClick.AddListener(OnClickRunMethod);
 
-            yield return ClickOn(transformWithName);
+            await ClickOn(transformWithName);
 
             button.onClick.RemoveListener(OnClickRunMethod);
 
             Assert.IsTrue(onClickRun, $"Expected that the onclick method would run.");
         }
 
-        public static IEnumerator ClickOn(RectTransform transform)
+        public static async Task ClickOn(RectTransform transform)
         {
-            yield return null;
-
             Mouse currentMouse = InputSystem.AddDevice<Mouse>();
 
             // Move mouse over object
@@ -113,7 +122,8 @@
 
                 // Make sure the top element is this
                 GameObject clickedObject = GetUIElementAtScreenPosition(center);
-                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}]. Was instead {clickedObject.name}");
+                string clickedObjectName = clickedObject != null ? clickedObject.name : "NOTHING";
+                Assert.AreEqual(transform.gameObject, clickedObject, $"Expecting that the top ui element at position is {transform.gameObject.name} [{SpoolOutTransformHierarchy(transform)}]. Was instead {clickedObjectName}");
 
                 currentMouse.position.WriteValueIntoEvent<Vector2>(center, ptr);
                 InputSystem.QueueEvent(ptr);
@@ -122,10 +132,10 @@
             InputSystem.Update();
 
             // Wait one frame so that the mouse can move
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Wait a frame so that the mouse over events activate
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Click it
             using (StateEvent.From(currentMouse, out InputEventPtr ptr))
@@ -138,7 +148,7 @@
             Assert.AreEqual(true, currentMouse.leftButton.isPressed, $"Expecting that we're now pressing the left mouse button.");
 
             // Wait one frame with the mouse button down
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Release it
             using (StateEvent.From(currentMouse, out InputEventPtr ptr))
@@ -151,16 +161,16 @@
             Assert.AreEqual(false, currentMouse.leftButton.isPressed, $"Expecting that we've released the left mouse button.");
 
             // Wait once for the release event to be processed
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Wait for the release event to start processing
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Wait for the release event to have completed firing
-            yield return null;
+            await Awaitable.NextFrameAsync();
 
             // Wait for next visual frame
-            yield return Awaitable.NextFrameAsync();
+            await Awaitable.NextFrameAsync();
 
             InputSystem.RemoveDevice(currentMouse);
         }

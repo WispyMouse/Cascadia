@@ -21,6 +21,9 @@
         private float orthographicSizeBase = 1f;
         [SerializeField]
         private float orthographicSizeScalar = .5f;
+        [SerializeField]
+        private float distanceBetweenCells = 1;
+
         private Dictionary<Coordinate, GameCellRenderer> cells { get; set; } = new();
 
         public override void Paint(GameConfiguration configuration)
@@ -31,6 +34,11 @@
                 float widthOrHeight = Mathf.Max(configuration.Width, configuration.Height);
                 this.gridCamera.orthographicSize = (this.orthographicSizeBase + widthOrHeight) * this.orthographicSizeScalar;
             }
+
+            // We want to "center" the GameplayGridPainter, both horizontal and vertical
+            int maxWidth = configuration.Width;
+            int maxHeight = configuration.Height;
+            this.transform.localPosition = new(-maxWidth * this.distanceBetweenCells / 2f, -maxHeight * this.distanceBetweenCells / 2f);
 
             base.Paint(configuration);
 
@@ -48,11 +56,9 @@
             return this.cellPF;
         }
 
-        protected override void SetNewCellPosition(ICellRenderer toPosition, Coordinate coordinate, GameConfiguration forConfiguration)
+        protected override void SetNewCellPosition(GameCellRenderer toPosition, Coordinate coordinate, GameConfiguration forConfiguration)
         {
-            float xOffset = forConfiguration.Width / 2f;
-            float yOffset = forConfiguration.Height / 2f;
-            toPosition.SetLocalPosition(new Vector2(coordinate.X - xOffset, coordinate.Y - yOffset), coordinate);
+            toPosition.SetLocalPosition(new Vector2(coordinate.X * this.distanceBetweenCells, coordinate.Y * this.distanceBetweenCells), coordinate);
         }
 
         public IReadOnlyDictionary<Coordinate, GameCellRenderer> PositionToCells => this.cells;

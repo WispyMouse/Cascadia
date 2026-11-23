@@ -53,7 +53,7 @@
             // Don't show minus for minimum players
             this.minusButtonBase.SetActive(PersistentGameConfiguration.Singleton.Players.Count > BoardState.MINIMUMPLAYERS);
 
-            this.iconOfPlayer.sprite = profile.Sprite.Sprite;
+            this.iconOfPlayer.sprite = profile.Sprite.Value.Sprite;
             this.iconRepresenterBase.SetActive(true);
 
             this.textOfPlayer.gameObject.SetActive(true);
@@ -82,7 +82,12 @@
         {
             await this.getPlayerSemaphore.WaitAsync();
 
-            PlayerProfile newProfile = await PersistentGameConfiguration.Singleton.AddPlayer();
+            PlayerProfile newProfile = PersistentGameConfiguration.Singleton.AddPlayer();
+
+            while (!newProfile.HasSprite)
+            {
+                await Task.Delay(1);
+            }
 
             this.SetFromProfile(newProfile);
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();

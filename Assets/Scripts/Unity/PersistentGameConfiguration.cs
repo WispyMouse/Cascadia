@@ -100,11 +100,10 @@
 
             await Addressables.InitializeAsync().Task;
 
-            int playerCount = BoardState.MINIMUMPLAYERS;
-
-            for (int ii = 0; ii < playerCount; ii++)
+            // Ensure there are at least enough players to fill out a minimum game
+            for (int ii = this.players.Count; ii < BoardState.MINIMUMPLAYERS; ii++)
             {
-                PlayerProfile newProfile = await this.AddPlayer();
+                this.AddPlayer();
             }
 
             // After starting, send up the event that the game configuration has changed
@@ -170,14 +169,23 @@
         /// will already have the appropriate <see cref="PlayerProfile.Index"/>.
         /// </summary>
         /// <returns></returns>
-        public async Task<PlayerProfile> AddPlayer()
+        public PlayerProfile AddPlayer()
         {
+            // Fire-and-forget way of assigning sprites after they're loaded
+            static async void AssignAddedPlayerASprite(PlayerProfile playerProfile)
+            {
+                await SpriteLookup.AssignRandomSpriteFromAddressablesAsync(playerProfile);
+            }
+
             // Start looking up an icon for them; asynchronous action
             PlayerProfile newProfile = new()
             {
                 Index = this.players.Count
             };
-            await SpriteLookup.AssignRandomSpriteFromAddressablesAsync(newProfile);
+
+            // Fire off async void to eventually assign graphic
+            // We can know if there isn't an assigned graphic yet by asking PlayerProfile.HasSprite
+            AssignAddedPlayerASprite(newProfile);
 
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.SetAICore(null);
@@ -212,7 +220,22 @@
         public async Task HumanitizeForTests()
         {
             this.aiCores.Clear();
-            await this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
+            this.EnsurePlayerCount(BoardState.MINIMUMPLAYERS);
+
+            bool allResolved = false;
+            do
+            {
+                foreach (PlayerProfile profile in this.players)
+                {
+                    if (!profile.HasSprite)
+                    {
+                        await Task.Delay(1);
+                        break;
+                    }
+                }
+
+                allResolved = true;
+            } while (!allResolved);
         }
 
         public PlayerProfile GetPlayerProfile(PlayerSide forSide)
@@ -220,13 +243,14 @@
             return this.players[forSide.PlayerProfileIndex];
         }
 
-        public async Task EnsurePlayerCount(int size, bool setFirstToHuman = false)
+        public void EnsurePlayerCount(int size, bool setFirstToHuman = false)
         {
             int start = 0;
             if (setFirstToHuman && this.players.Any())
             {
                 this.players.RemoveRange(1, this.players.Count - 1);
                 start = 1;
+                this.players[0].SetAICore(null);
             }
             else
             {
@@ -236,7 +260,7 @@
             // Add players until we hit the limit
             for (int ii = start; ii < size; ii++)
             {
-                await this.AddPlayer();
+                this.AddPlayer();
             }
         }
 

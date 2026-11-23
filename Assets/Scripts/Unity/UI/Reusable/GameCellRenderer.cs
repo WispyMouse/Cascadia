@@ -37,7 +37,26 @@
         public void SetSide(PlayerProfile player)
         {
             this.ControlledProfile = player;
-            this.iconSpriteRenderer.sprite = player.Sprite.Sprite;
+
+            if (player.HasSprite)
+            {
+                this.iconSpriteRenderer.sprite = player.Sprite.Value.Sprite;
+            }
+            else
+            {
+                void UpdateSpriteFromProfile(PlayerProfile loaded)
+                {
+                    // Ensure that this GameObject isn't null-ish
+                    // Check this in case we've navigated scenes before the profile sprite was done
+                    if (this == null)
+                    {
+                        return;
+                    }
+
+                    this.iconSpriteRenderer.sprite = loaded.Sprite.Value.Sprite;
+                }
+                player.OnPlayerProfileSpriteLoaded += UpdateSpriteFromProfile;
+            }
         }
 
         public void SetHighlightStatus(bool toHighlight)

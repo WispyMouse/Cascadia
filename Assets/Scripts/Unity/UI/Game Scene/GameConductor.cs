@@ -15,6 +15,8 @@
 
     public class GameConductor : MonoBehaviour
     {
+        public bool GameConductorWarmedUp { get; private set; } = false;
+
         [SerializeReference]
         private Camera clickCamera;
 
@@ -66,7 +68,15 @@
                 await Awaitable.NextFrameAsync();
             }
 
+            // Wait until everyone's sprites are set up
+            while (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite))
+            {
+                await Awaitable.NextFrameAsync();
+            }
+
             this.ResetGame();
+            this.GameConductorWarmedUp = true;
+            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void ResetGame()
@@ -90,7 +100,7 @@
             this.winnerBannerIconShower.HideIcons();
 
             this.CurrentBoardState = new BoardState(PersistentGameConfiguration.Singleton.GameConfiguration);
-            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += async (PlayerSide player) => { await this.DeclarePlayerVictorious(player); };
+            this.CurrentBoardState.BoardStateEvents.OnGameConclusion += async player => { await this.DeclarePlayerVictorious(player); };
             this.CurrentBoardState.BoardStateEvents.OnGameConclusion += this.stallBanner.Clear;
             this.CurrentBoardState.BoardStateEvents.OnPlayerStartTurn += this.currentTurnPanel.UpdateToNewTurn;
             this.CurrentBoardState.BoardStateEvents.OnPlayerRestored += this.currentTurnPanel.RestorePlayer;
@@ -102,8 +112,6 @@
             this.cascadeBanner.ResetGame();
 
             this.canAwardChallengeWin = true;
-
-            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void Update()
@@ -244,8 +252,26 @@
 
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(winner);
 
-            // this.WinnerPanel.transform.parent.gameObject.SetActive(true);
-            this.winnerIcon.sprite = player.Sprite.Sprite;
+            if (player.HasSprite)
+            {
+                this.winnerIcon.sprite = player.Sprite.Value.Sprite;
+            }
+            else
+            {
+                void UpdateWinnerIcon(PlayerProfile loaded)
+                {
+                    // Ensure that this GameObject isn't null-ish
+                    // Check this in case we've navigated scenes before the profile sprite was done
+                    if (this == null)
+                    {
+                        return;
+                    }
+
+                    this.winnerIcon.sprite = loaded.Sprite.Value.Sprite;
+                }
+
+                player.OnPlayerProfileSpriteLoaded += UpdateWinnerIcon;
+            }
 
             string winnerName = player.PlayerName;
             this.winnerAnimation.ToDisplay = player;

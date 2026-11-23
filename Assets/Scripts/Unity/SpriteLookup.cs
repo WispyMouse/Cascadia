@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
+    using System.Threading;
     using System.Threading.Tasks;
     using Cascadia.Unity.UI;
     using UnityEngine;
@@ -17,6 +18,7 @@
         public IReadOnlyList<string> EmojiCategoryLabels => this.emojiCategoryLabels;
         [SerializeField]
         private List<string> emojiCategoryLabels = new();
+        private SemaphoreSlim spriteLoadingSemaphore { get; set; } = new SemaphoreSlim(1);
 
         private void Awake()
         {
@@ -35,6 +37,8 @@
 
         public async Awaitable<IReadOnlyList<Sprite>> GetSpritesFromCategory(string category)
         {
+            await this.spriteLoadingSemaphore.WaitAsync();
+
             Debug.Log($"Random category chosen: {category}", this);
 
             AsyncOperationHandle<IList<SpriteAtlas>> allAtlasWithCategory = Addressables.LoadAssetAsync<IList<SpriteAtlas>>(category);
@@ -56,6 +60,9 @@
 
             Sprite[] sprites = new Sprite[randomAtlas.spriteCount];
             randomAtlas.GetSprites(sprites);
+
+            this.spriteLoadingSemaphore.Release();
+
             return sprites;
         }
 
@@ -90,7 +97,8 @@
                 // Ensure no one else has this same icon
                 for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
                 {
-                    if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite, sprite.Sprite))
+                    if (PersistentGameConfiguration.Singleton.Players[ii].HasSprite
+                        && ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Value.Sprite, sprite.Sprite))
                     {
                         unique = false;
                         break;

@@ -60,7 +60,7 @@
                 this.nameInputField.SetTextWithoutNotify(this.ShowingProfile.PlayerName);
             }
 
-            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
+            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Value.Sprite;
 
             if (this.ShowingProfile.IsAI)
             {
@@ -99,7 +99,7 @@
 
         private void UpdateIcon()
         {
-            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Sprite;
+            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Value.Sprite;
 
             int countWithIndex = 0;
 
@@ -112,7 +112,7 @@
                     continue;
                 }
 
-                if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Sprite, this.ShowingProfile.Sprite.Sprite))
+                if (ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Value.Sprite, this.ShowingProfile.Sprite.Value.Sprite))
                 {
                     countWithIndex++;
                 }

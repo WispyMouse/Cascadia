@@ -1,8 +1,10 @@
 ﻿namespace Cascadia.Unity.UI.GameScene
 {
+    using System.Threading.Tasks;
     using Cascadia.DataStructures;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.Android;
     using UnityEngine.Profiling;
     using UnityEngine.UI;
 
@@ -59,7 +61,6 @@
         private float curCascadeLevelVisibility { get; set; } = 0;
         private float curCascadeTimeLevel { get; set; } = 0;
 
-
         public void RepresentProfile(PlayerProfile toRepresent, PlayerSide side)
         {
             this.Clear();
@@ -77,8 +78,28 @@
                 this.nameText.gameObject.SetActive(true);
             }
 
-            this.playerIcon.sprite = this.RepresentedProfile.Sprite.Sprite;
-            this.playerIcon.gameObject.SetActive(true);
+            if (toRepresent.HasSprite)
+            {
+                this.playerIcon.sprite = this.RepresentedProfile.Sprite.Value.Sprite;
+                this.playerIcon.gameObject.SetActive(true);
+            }
+            else
+            {
+                void SetPlayerProfileSprite(PlayerProfile profile)
+                {
+                    // Ensure that this GameObject isn't null-ish
+                    // Check this in case we've navigated scenes before the profile sprite was done
+                    if (this == null)
+                    {
+                        return;
+                    }
+
+                    this.playerIcon.sprite = profile.Sprite.Value.Sprite;
+                    this.playerIcon.gameObject.SetActive(true);
+                }
+
+                this.RepresentedProfile.OnPlayerProfileSpriteLoaded += SetPlayerProfileSprite;
+            }
         }
 
         public void Clear()

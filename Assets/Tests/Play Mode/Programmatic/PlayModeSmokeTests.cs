@@ -42,11 +42,11 @@
         /// Are we able to navigate to the gameplay scene without errors being printed?
         /// </summary>
         /// <returns></returns>
-        [UnityTest]
-        public IEnumerator LoadGameplayWithoutError()
+        [Test]
+        public async Task LoadGameplayWithoutError()
         {
-            yield return PlayModeTestUtility.LoadStartScene();
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
             Assert.Pass();
         }
 
@@ -54,37 +54,38 @@
         /// Loads up the play scene with the specified number of players.
         /// Ensures their sprites are set as expected, and that they've loaded in completely.
         /// </summary>
-        [UnityTest]
-        public IEnumerator PlaySceneUsesCorrectSprites([ValueSource(nameof(PlayerCounts_DataSource))] int playerCount)
+        [Test]
+        public async Task PlaySceneUsesCorrectSprites([ValueSource(nameof(PlayerCounts_DataSource))] int playerCount)
         {
-            yield return PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-            config.HumanitizeForTests();
+            await config.HumanitizeForTests();
             config.ForceSetConfig(new GameConfiguration(5, 5, playerCount, 3, 0, forceOrderlyTurn: 0));
             Assert.AreEqual(playerCount, config.GameConfiguration.PlayerCount, $"Expecting specific number of players.");
 
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
             CurrentTurnPanel turnPanel = GameObject.FindFirstObjectByType<CurrentTurnPanel>();
 
             Assert.AreEqual(config.GameConfiguration.PlayerCount, turnPanel.Entries.Count, $"Expecting specific number of players.")
     ;
             for (int ii = 0; ii < turnPanel.Entries.Count; ii++)
             {
-                Assert.AreEqual(config.Players[ii].Sprite.Sprite, turnPanel.Entries[ii].PlayerIcon.sprite, $"Expecting the player to have the assigned sprite.");
+                Assert.IsTrue(config.Players[ii].HasSprite, $"Player should have sprite saturated by now");
+                Assert.AreEqual(config.Players[ii].Sprite.Value.Sprite, turnPanel.Entries[ii].PlayerIcon.sprite, $"Expecting the player to have the assigned sprite.");
             }
         }
 
-        [UnityTest]
-        public IEnumerator ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] GameResultTestData.CoordinatesToPlay_DataSource_Object plan)
+        [Test]
+        public async Task ResultChecks([ValueSource(nameof(CoordinatesToPlay_DataSource))] GameResultTestData.CoordinatesToPlay_DataSource_Object plan)
         {
-            yield return PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-            config.HumanitizeForTests();
+            await config.HumanitizeForTests();
             config.ForceSetConfig(plan.GameConfiguration);
 
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
 
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();
             CurrentTurnPanelEntry[] turnEntries = GameObject.FindObjectsByType<CurrentTurnPanelEntry>(FindObjectsSortMode.None);
@@ -114,16 +115,16 @@
             Assert.AreEqual(plan.Winner, gameConductor.CurrentBoardState.Winner?.PlayerProfileIndex, $"Expecting a predicted winner / null lack of winner.");
         }
 
-        [UnityTest]
-        public IEnumerator KnockoutChecks([ValueSource(nameof(KnockoutToPlay_DataSource))] KnockoutTestsData.Knockout_ExpectedPlayer_DataSource_Object plan)
+        [Test]
+        public async Task KnockoutChecks([ValueSource(nameof(KnockoutToPlay_DataSource))] KnockoutTestsData.Knockout_ExpectedPlayer_DataSource_Object plan)
         {
-            yield return PlayModeTestUtility.LoadStartScene();
+            await PlayModeTestUtility.LoadStartSceneAsync();
 
             PersistentGameConfiguration config = Object.FindFirstObjectByType<PersistentGameConfiguration>();
-            config.HumanitizeForTests();
+            await config.HumanitizeForTests();
             config.ForceSetConfig(plan.GameConfiguration);
 
-            yield return PlayModeTestUtility.LoadGameplayScene();
+            await PlayModeTestUtility.LoadGameplaySceneAsync();
 
             CurrentTurnPanel turnPanel = GameObject.FindFirstObjectByType<CurrentTurnPanel>();
             GameConductor gameConductor = Object.FindFirstObjectByType<GameConductor>();

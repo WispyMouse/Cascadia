@@ -5,7 +5,6 @@
 
     public interface ICellRenderer
     {
-        public void SetLocalPosition(Vector2 position, Coordinate coordinate);
         public Coordinate Coordinate { get; }
 
         /// <summary>

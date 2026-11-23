@@ -128,9 +128,9 @@
         /// </summary>
         /// <param name="seq"></param>
         /// <returns></returns>
-        public static int[][] FastPowerSet(int range)
+        public static IEnumerable<int[]> FastPowerSetWithoutEmpty(int range)
         {
-            int[] seq = Enumerable.Range(0, range).ToArray();
+            int[] seq = Enumerable.Range(1, range).ToArray();
 
             int[][] powerSet = new int[1 << seq.Length][];
             powerSet[0] = new int[0]; // starting only with empty set
@@ -151,7 +151,14 @@
                     destination[source.Length] = cur;
                 }
             }
-            return powerSet;
+
+            // Convert the above in to a list, and excise the 0th element
+            // We're currently only using the function to choose what AIs to run, and we
+            // don't want to run an AI Test with no AIs
+            List<int[]> powerSetWithoutEmpty = powerSet.ToList();
+            powerSetWithoutEmpty.RemoveAt(0);
+
+            return powerSetWithoutEmpty;
         }
     }
 }

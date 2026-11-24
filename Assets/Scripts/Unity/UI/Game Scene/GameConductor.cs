@@ -60,6 +60,7 @@
         public BoardState CurrentBoardState { get; set; }
 
         private bool canAwardChallengeWin { get; set; } = true;
+        private GameCellRenderer lastHoveredCell { get; set; } = null;
 
         public async Awaitable Start()
         {
@@ -128,6 +129,7 @@
 
             if (this.turnOrderHolder.PlayerIsHuman(this.CurrentBoardState.CurrentPlayerSide))
             {
+                this.HandleHover();
                 this.HandleLeftClick();
             }
         }
@@ -149,6 +151,13 @@
                 return;
             }
 
+            // When committing a game action, clear the hover
+            if (this.lastHoveredCell != null)
+            {
+                this.lastHoveredCell.SetSide(null, GameCellRenderer.ShowOwnershipStateEnum.NotOwned);
+                this.lastHoveredCell = null;
+            }
+
             foreach (GameCellRenderer curCell in this.PositionsToCells.Values)
             {
                 curCell.SetHighlightStatus(false);
@@ -158,7 +167,7 @@
 
             MoveCommandConsequences consequences = this.CurrentBoardState.GenerateConsequencesFromMoveCommand(command);
 
-            toChoose.SetSide(player);
+            toChoose.SetSide(player, GameCellRenderer.ShowOwnershipStateEnum.Owned);
 
             foreach (CellsConnection solution in consequences.ConnectionsMade)
             {
@@ -185,10 +194,34 @@
             this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
+        public void HoverCell(GameCellRenderer toHover)
+        {
+            Debug.Log($"Attempting to hover cell {toHover.Coordinate}", this);
+
+            PlayerSide takingTurn = this.CurrentBoardState.CurrentPlayerSide;
+            PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(takingTurn);
+            MoveCommand command = new(takingTurn, toHover.Coordinate);
+
+            if (!this.CurrentBoardState.MoveCommandLegalToPlay(command))
+            {
+                // HACK: We probably should not show any errors relating to hovering
+                // Debug.LogError("Can't hover that command! We should tell the user why somehow.", this);
+                // this.stallBanner.CallAttention();
+                return;
+            }
+
+            this.lastHoveredCell = toHover;
+            toHover.SetSide(player, GameCellRenderer.ShowOwnershipStateEnum.Previewed);
+        }
+
         private void HandleLeftClick()
         {
             Vector2 raycastPoint;
-            if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasReleasedThisFrame)
+            {
+                raycastPoint = Touchscreen.current.primaryTouch.position.value;
+            }
+            else if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
@@ -196,10 +229,6 @@
                 }
 
                 raycastPoint = Mouse.current.position.value;
-            }
-            else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-            {
-                raycastPoint = Touchscreen.current.primaryTouch.position.value;
             }
             else
             {
@@ -223,6 +252,53 @@
             }
 
             this.ChooseCell(getCell);
+        }
+
+        private void HandleHover()
+        {
+            Vector2 raycastPoint;
+
+            if (this.lastHoveredCell != null)
+            {
+                this.lastHoveredCell.SetSide(null, GameCellRenderer.ShowOwnershipStateEnum.NotOwned);
+                this.lastHoveredCell = null;
+            }
+
+            if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+            {
+                if (EventSystem.current.IsPointerOverGameObject())
+                {
+                    return;
+                }
+
+                raycastPoint = Touchscreen.current.primaryTouch.position.value;
+            }
+            else if (Mouse.current != null)
+            {
+                raycastPoint = Mouse.current.position.value;
+            }
+            else
+            {
+                return;
+            }
+
+            RaycastHit2D raycast = Physics2D.Raycast(this.clickCamera.ScreenToWorldPoint(raycastPoint), Vector2.zero);
+            if (raycast.collider == null)
+            {
+                return;
+            }
+
+            if (!raycast.collider.TryGetComponent(out GameCellRenderer getCell))
+            {
+                return;
+            }
+
+            if (getCell.AlreadyPlaced)
+            {
+                return;
+            }
+
+            this.HoverCell(getCell);
         }
 
         public void DrawLineBetween(CellsConnection connection, PlayerProfile faction)

@@ -7,11 +7,20 @@
 
     public class GameCellRenderer : MonoBehaviour, ICellRenderer
     {
+        public enum ShowOwnershipStateEnum
+        {
+            NotOwned,
+            Previewed,
+            Owned
+        }
+
         [Header("Internal Components")]
         [SerializeReference]
         private SpriteRenderer cellSpriteRenderer;
         [SerializeReference]
         private SpriteRenderer iconSpriteRenderer;
+        [SerializeReference]
+        private SpriteRenderer previewedSpriteRenderer;
         [SerializeReference]
         private Sprite defaultBorder;
         [SerializeReference]
@@ -21,12 +30,13 @@
         [SerializeReference]
         private TMP_Text hintNumber;
 
-        public PlayerProfile ControlledProfile { get; private set; }
-        public bool AlreadyPlaced => this.SideIndex.HasValue;
-        public int? SideIndex => this.ControlledProfile?.Index;
-        public Coordinate Coordinate { get; private set; }
-
+        [Header("Public Properties")]
         public GameObject SelfGameObject => this.gameObject;
+        public PlayerProfile DisplayedProfile { get; private set; }
+        public bool AlreadyPlaced => this.CurrentOwnershipState == ShowOwnershipStateEnum.Owned && this.SideIndex.HasValue;
+        public int? SideIndex => this.DisplayedProfile?.Index;
+        public Coordinate Coordinate { get; private set; }
+        public ShowOwnershipStateEnum CurrentOwnershipState { get; private set; }
 
         private void Awake()
         {
@@ -34,16 +44,31 @@
             this.hintHolder.SetActive(false);
         }
 
-        public void SetSide(PlayerProfile player)
+        public void SetSide(PlayerProfile player, ShowOwnershipStateEnum newState)
         {
-            this.ControlledProfile = player;
+            // If for some reason we're setting this to NotOwned through this function,
+            // unset the side index and player profile
+            if (newState == ShowOwnershipStateEnum.NotOwned)
+            {
+                this.Clear();
+                return;
+            }
+
+            this.DisplayedProfile = player;
+
+            SpriteRenderer rendererToSelect = newState == ShowOwnershipStateEnum.Previewed ? this.previewedSpriteRenderer : this.iconSpriteRenderer;
+            SpriteRenderer rendererToDeSelect = newState == ShowOwnershipStateEnum.Previewed ? this.iconSpriteRenderer : this.previewedSpriteRenderer;
+
+            rendererToDeSelect.sprite = null;
 
             if (player.HasSprite)
             {
-                this.iconSpriteRenderer.sprite = player.Sprite.Value.Sprite;
+                rendererToSelect.sprite = player.Sprite.Value.Sprite;
             }
             else
             {
+                rendererToSelect.sprite = null;
+
                 void UpdateSpriteFromProfile(PlayerProfile loaded)
                 {
                     // Ensure that this GameObject isn't null-ish
@@ -53,7 +78,7 @@
                         return;
                     }
 
-                    this.iconSpriteRenderer.sprite = loaded.Sprite.Value.Sprite;
+                    rendererToSelect.sprite = loaded.Sprite.Value.Sprite;
                 }
                 player.OnPlayerProfileSpriteLoaded += UpdateSpriteFromProfile;
             }
@@ -79,8 +104,9 @@
 
         public void Clear()
         {
-            this.ControlledProfile = null;
+            this.DisplayedProfile = null;
             this.iconSpriteRenderer.sprite = null;
+            this.previewedSpriteRenderer.sprite = null;
             this.SetHighlightStatus(false);
         }
 

@@ -46,18 +46,22 @@
 
         public void SetSide(PlayerProfile player, ShowOwnershipStateEnum newState)
         {
+            this.CurrentOwnershipState = newState;
+            this.DisplayedProfile = player;
+
             // If for some reason we're setting this to NotOwned through this function,
             // unset the side index and player profile
             if (newState == ShowOwnershipStateEnum.NotOwned)
             {
+                Debug.Log($"{nameof(GameCellRenderer)}.{nameof(SetSide)} {this.Coordinate} Clearing ownership of this cell renderer");
                 this.Clear();
                 return;
             }
 
-            this.DisplayedProfile = player;
-
             SpriteRenderer rendererToSelect = newState == ShowOwnershipStateEnum.Previewed ? this.previewedSpriteRenderer : this.iconSpriteRenderer;
             SpriteRenderer rendererToDeSelect = newState == ShowOwnershipStateEnum.Previewed ? this.iconSpriteRenderer : this.previewedSpriteRenderer;
+
+            Debug.Log($"{nameof(GameCellRenderer)}.{nameof(SetSide)} {this.Coordinate} {nameof(newState)}: {newState}");
 
             rendererToDeSelect.sprite = null;
 

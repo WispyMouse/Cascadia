@@ -4,7 +4,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "AICore.asset", menuName = "COSTCO/AI Core")]
+    [CreateAssetMenu(fileName = "AICore.asset", menuName = "Cascadia/AI Core")]
     public class AICore : ScriptableObject
     {
         /// <summary>

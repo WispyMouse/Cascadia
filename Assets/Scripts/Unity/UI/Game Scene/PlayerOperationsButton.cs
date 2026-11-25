@@ -100,7 +100,7 @@
         {
             await this.getPlayerSemaphore.WaitAsync();
 
-            PlayerProfile newProfile = PersistentGameConfiguration.Singleton.AddPlayer();
+            PlayerProfile newProfile = PersistentGameConfiguration.Singleton.AddPlayer(true);
             this.SetFromProfile(newProfile);
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
 

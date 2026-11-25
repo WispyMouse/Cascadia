@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e826adaef43454d8ebcd3364306299, type: 3}
+  m_Name: Hole Punchers
+  m_EditorClassIdentifier: Cascadia.Unity::Cascadia.Unity.CustomMapChallengeDefinition
+  Identifier: holepunchers
+  ChallengeName: Hole Punchers
+  AICores:
+  - {fileID: 11400000, guid: 705d14de934870d4fb0c437448a61f92, type: 2}
+  - {fileID: 11400000, guid: 705d14de934870d4fb0c437448a61f92, type: 2}
+  - {fileID: 11400000, guid: a9a251d1952d45f419c8701583e6c7ee, type: 2}
+  AISprites:
+  - {fileID: 7645860835654838890, guid: 520f96a42dcb0e94fb2be4fdd0cf384b, type: 3}
+  - {fileID: 2390153700139384611, guid: 97e4cfd1f29fa6f4ba3edd938c494453, type: 3}
+  - {fileID: -5744076067091556608, guid: c232180d2ee55ba48b41a3eb40f1a7db, type: 3}
+  Width: 5
+  Height: 5
+  StallTurn: 0
+  ForceOrderlyTurnRaw: 0
+  Coordinates:
+  - X: 0
+    Y: 0
+  - X: 1
+    Y: 0
+  - X: 2
+    Y: 0
+  - X: 3
+    Y: 0
+  - X: 4
+    Y: 0
+  - X: 0
+    Y: 1
+  - X: 1
+    Y: 1
+  - X: 2
+    Y: 1
+  - X: 3
+    Y: 1
+  - X: 4
+    Y: 1
+  - X: 0
+    Y: 2
+  - X: 1
+    Y: 2
+  - X: 3
+    Y: 2
+  - X: 4
+    Y: 2
+  - X: 0
+    Y: 3
+  - X: 1
+    Y: 3
+  - X: 2
+    Y: 3
+  - X: 3
+    Y: 3
+  - X: 4
+    Y: 3
+  - X: 0
+    Y: 4
+  - X: 1
+    Y: 4
+  - X: 2
+    Y: 4
+  - X: 3
+    Y: 4
+  - X: 4
+    Y: 4

@@ -48,7 +48,7 @@
             description.AppendLine(definition.ChallengeName);
 
             GameConfiguration configuration = definition.GetGameConfiguration();
-            this.descriptionText.text = GenerateTextDescription(configuration, PersistentGameConfiguration.Singleton.Players);
+            this.descriptionText.text = GenerateTextDescription(configuration, definition.GetPlayerProfiles());
             this.describerGridPainter.Paint(configuration);
 
             if (clearCount == 0)

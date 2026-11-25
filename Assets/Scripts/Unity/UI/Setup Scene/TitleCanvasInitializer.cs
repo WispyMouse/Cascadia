@@ -12,16 +12,21 @@
         [SerializeReference]
         private GameObject mainTitleScreen;
 
-        public string KeepOpen = Findable.TITLE.CANVASNAMES.TITLE;
+        private string panelToStartOpen { get; set; } = Findable.TITLE.CANVASNAMES.TITLE;
 
-        private void Awake()
+        private void Start()
         {
+            if (PersistentGameConfiguration.Singleton.ChallengeIsSet)
+            {
+                this.panelToStartOpen = Findable.TITLE.CANVASNAMES.CHALLENGES;
+            }
+
             bool anyOpened = false;
             Findable[] panels = GameObject.FindObjectsByType<Findable>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             foreach (string panelName in Findable.TITLE.CANVASNAMES.TITLEMENUWINDOWS)
             {
-                bool match = this.KeepOpen == panelName;
+                bool match = this.panelToStartOpen == panelName;
                 anyOpened |= match;
                 Findable panel = panels.FirstOrDefault(x => x.name == panelName);
 
@@ -33,10 +38,7 @@
 
                 panel.gameObject.SetActive(match);
             }
-        }
 
-        private void Start()
-        {
             if (PersistentGameConfiguration.Singleton.ChallengeIsSet)
             {
                 this.mainTitleScreen.SetActive(false);

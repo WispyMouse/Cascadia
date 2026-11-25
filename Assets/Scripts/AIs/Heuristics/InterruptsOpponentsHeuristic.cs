@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Interupts Opponent Heuristic.asset", menuName = "COSTCO/AI Heuristic/Interrupts Opponent")]
+    [CreateAssetMenu(fileName = "Interupts Opponent Heuristic.asset", menuName = "Cascadia/AI Heuristic/Interrupts Opponent")]
     public class InterruptsOpponentHeuristic : AIHeuristic
     {
         /// <summary>

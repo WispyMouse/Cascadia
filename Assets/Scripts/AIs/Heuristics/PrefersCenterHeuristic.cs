@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Prefer Center Heuristic.asset", menuName = "COSTCO/AI Heuristic/Prefer Center")]
+    [CreateAssetMenu(fileName = "Prefer Center Heuristic.asset", menuName = "Cascadia/AI Heuristic/Prefer Center")]
     public class PrefersCenterHeuristic : AIHeuristic
     {
         private int maxX;

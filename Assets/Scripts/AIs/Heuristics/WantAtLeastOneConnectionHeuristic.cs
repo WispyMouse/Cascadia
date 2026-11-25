@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Wants At Least One Connection Heuristic.asset", menuName = "COSTCO/AI Heuristic/Wants At Least One Connection")]
+    [CreateAssetMenu(fileName = "Wants At Least One Connection Heuristic.asset", menuName = "Cascadia/AI Heuristic/Wants At Least One Connection")]
     public class WantsAtLeastConnectionsHeuristic : AIHeuristic
     {
         /// <summary>

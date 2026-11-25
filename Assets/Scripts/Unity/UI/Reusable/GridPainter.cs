@@ -1,6 +1,7 @@
 ﻿namespace Cascadia.Unity.UI.Reusable
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Cascadia.DataStructures;
     using Cascadia.Unity.UI.GameScene;
     using UnityEngine;
@@ -30,6 +31,18 @@
                 for (int yy = 0; yy < configuration.Height; yy++)
                 {
                     Coordinate position = new(xx, yy);
+
+                    // If this isn't a square map, only consider painting coordinates that are part of the map
+                    if (!configuration.IsSquare && !configuration.AllCoordinates.Contains(position))
+                    {
+                        continue;
+                    }
+
+                    if (cells.ContainsKey(position))
+                    {
+                        Debug.LogError($"Attempted to place unexpected extra coordinate {position}.");
+                    }
+
                     TCell newCell = Instantiate(this.GetCellPF().SelfGameObject, this.gridParent).GetComponent<TCell>();
                     this.SetNewCellPosition(newCell, position, configuration);
                     this.InstantiatedCells.Add(newCell);

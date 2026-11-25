@@ -10,6 +10,8 @@
     using Cascadia.Unity.UI.SetupScene;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using UnityEngine.UI;
+    using UnityEngine.UIElements;
 
     public class ChallengeScreen : MonoBehaviour
     {
@@ -22,6 +24,8 @@
         private Transform challengeListParent;
         [SerializeReference]
         private GameDescriber challengeDescriber;
+        [SerializeReference]
+        private ScrollRect challengeScrollView;
 
         [Header("Prefabs")]
         [SerializeReference]
@@ -47,6 +51,8 @@
                 {
                     Destroy(this.challengeListParent.GetChild(ii).gameObject);
                 }
+
+                this.buttons.Clear();
 
                 for (int ii = 0, count = this.challenges.Count; ii < count; ii++)
                 {
@@ -76,6 +82,9 @@
                     if (ReferenceEquals(this.challenges[ii], PersistentGameConfiguration.Singleton.CurrentChallenge))
                     {
                         this.buttons[ii].Click();
+
+                        this.challengeScrollView.verticalScrollbar.SetValueWithoutNotify(this.buttons[ii].transform.localPosition.y);
+
                         break;
                     }
                 }
@@ -95,6 +104,11 @@
 
             // HACK: Assumes play mode screen is the 1th entry
             SceneManager.LoadScene(1);
+        }
+
+        public void ClearChallenge()
+        {
+            PersistentGameConfiguration.Singleton.ClearChallenge();
         }
     }
 }

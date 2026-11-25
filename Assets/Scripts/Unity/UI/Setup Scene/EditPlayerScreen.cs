@@ -90,18 +90,16 @@
             if (toggleAI)
             {
                 this.ShowingProfile.SetAICore(0);
-                this.ShowingProfile.PlayerName = this.ShowingProfile.AICore.name;
             }
             else
             {
                 this.ShowingProfile.SetAICore(null);
-                this.ShowingProfile.PlayerName = PersistentGameConfiguration.HUMAN;
             }
 
             this.OpenFromPlayer(this.ShowingProfile);
         }
 
-        public void NameChanged(string newName) => this.ShowingProfile.PlayerName = newName;
+        public void NameChanged(string newName) => this.ShowingProfile.SetName(newName);
 
         private void UpdateIcon()
         {
@@ -147,7 +145,6 @@
             if (this.ShowingProfile.IsAI)
             {
                 this.aICoreLabel.gameObject.SetActive(true);
-                this.ShowingProfile.PlayerName = this.ShowingProfile.AICore.name;
                 this.aICoreLabel.text = this.ShowingProfile.AICore.name;
             }
             else

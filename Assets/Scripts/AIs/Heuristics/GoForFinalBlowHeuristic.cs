@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Go For Final Blow Heuristic.asset", menuName = "COSTCO/AI Heuristic/Go For Final Blow Heuristic")]
+    [CreateAssetMenu(fileName = "Go For Final Blow Heuristic.asset", menuName = "Cascadia/AI Heuristic/Go For Final Blow Heuristic")]
     public class GoForFinalBlowHeuristic : AIHeuristic
     {
         private int mostOpponentConnections { get; set; } = 0;

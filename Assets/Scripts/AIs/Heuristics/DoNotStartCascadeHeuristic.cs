@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Do Not Start Cascade Heuristic.asset", menuName = "COSTCO/AI Heuristic/Do Not Start Cascade")]
+    [CreateAssetMenu(fileName = "Do Not Start Cascade Heuristic.asset", menuName = "Cascadia/AI Heuristic/Do Not Start Cascade")]
     public class DoNotStartCascadeHeuristic : AIHeuristic
     {
         [Range(0, 4)]

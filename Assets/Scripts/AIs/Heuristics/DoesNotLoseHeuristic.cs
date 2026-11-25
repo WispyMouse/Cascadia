@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "COSTCO/AI Heuristic/Does Not Lose")]
+    [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "Cascadia/AI Heuristic/Does Not Lose")]
     public class DoesNotLoseHeuristic : AIHeuristic
     {
         public override float ScorePosition(PlayerSide forSide, IReadOnlyBoardState currentGameState, Coordinate position)

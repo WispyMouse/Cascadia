@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    // [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "COSTCO/AI Heuristic")]
+    // [CreateAssetMenu(fileName = "AIHeuristic.asset", menuName = "Cascadia/AI Heuristic")]
     public abstract class AIHeuristic : ScriptableObject
     {
         public float Weight = 1f;

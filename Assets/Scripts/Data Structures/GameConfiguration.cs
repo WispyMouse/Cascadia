@@ -16,7 +16,7 @@
             set
             {
                 this.width = value;
-                this.SaturateCoordinates();
+                this.SaturateSquareCoordinates();
             }
         }
         private int width { get; set; }
@@ -27,7 +27,7 @@
             set
             {
                 this.height = value;
-                this.SaturateCoordinates();
+                this.SaturateSquareCoordinates();
             }
         }
         private int height { get; set; }
@@ -35,6 +35,7 @@
         public int PlayerCount;
         public int InARowToSolve;
         public int StallTurn;
+        public bool IsSquare { get; private set; }
 
         public IReadOnlyCollection<Coordinate> AllCoordinates;
 
@@ -59,20 +60,25 @@
             this.ForceOrderlyTurn = forceOrderlyTurn;
 
             this.AllCoordinates = Array.Empty<Coordinate>();
-            this.SaturateCoordinates();
+            this.IsSquare = true;
+            this.SaturateSquareCoordinates();
         }
 
         public GameConfiguration(IReadOnlyCollection<Coordinate> coordinates, int playerCount, int inARowToSolve, int stallTurn, int? forceOrderlyTurn)
         {
-            int width = 0, height = 0;
+            int calculatedWidth = 0, calculatedHeight = 0;
             foreach (Coordinate coordinate in coordinates)
             {
-                width = Math.Max(width, coordinate.X);
-                height = Math.Max(height, coordinate.Y);
+                // A map that is 1x1 would have only one coordinate, {0, 0}
+                // That map would have a width and height of 1
+                // When calculating the width and height, add one to the coordinate's position
+                calculatedWidth = Math.Max(calculatedWidth, coordinate.X + 1);
+                calculatedHeight = Math.Max(calculatedHeight, coordinate.Y + 1);
             }
-            this.width = width;
-            this.height = height;
+            this.width = calculatedWidth;
+            this.height = calculatedHeight;
 
+            this.IsSquare = false;
             this.AllCoordinates = coordinates;
 
             this.PlayerCount = playerCount;
@@ -108,21 +114,20 @@
 
         public readonly IEnumerable<Coordinate> GetAllCoordinatesInMapDimensions()
         {
-            List<Coordinate> coordinates = new(this.MaximumDimensions);
-
-            for (int xx = 0; xx < this.Width; xx++)
-            {
-                for (int yy = 0; yy < this.Height; yy++)
-                {
-                    coordinates.Add(new Coordinate(xx, yy));
-                }
-            }
-
-            return coordinates;
+            return this.AllCoordinates;
         }
 
-        private void SaturateCoordinates()
+        /// <summary>
+        /// Assuming this map is perfectly square, with no gaps in it, then we can calculate
+        /// all of the coordinates that would be on the map by iterating over width and height.
+        /// </summary>
+        private void SaturateSquareCoordinates()
         {
+            if (!this.IsSquare)
+            {
+                return;
+            }
+
             HashSet<Coordinate> coordinates = new(this.Width * this.Height);
 
             for (int xx = 0; xx < this.Width; xx++)

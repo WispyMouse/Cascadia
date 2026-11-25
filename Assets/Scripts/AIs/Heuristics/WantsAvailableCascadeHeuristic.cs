@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Wants At Cascade Level Heuristic.asset", menuName = "COSTCO/AI Heuristic/Wants At Least Cacade Level")]
+    [CreateAssetMenu(fileName = "Wants At Cascade Level Heuristic.asset", menuName = "Cascadia/AI Heuristic/Wants At Least Cacade Level")]
     public class WantsAvailableCascadeHeuristic : AIHeuristic
     {
         /// <summary>

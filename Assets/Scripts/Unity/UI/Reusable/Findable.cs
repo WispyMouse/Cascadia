@@ -26,6 +26,7 @@
                     CONFIGUREPLAYERS,
                     EDITPLAYER,
                     CHOOSEEMOJI,
+                    CHALLENGES,
 
                     RULESPAGEONE,
                     RULESPAGETWO,
@@ -39,6 +40,7 @@
                 public const string RULESPAGEONE = "[FINDABLE] Rules Page One";
                 public const string RULESPAGETWO = "[FINDABLE] Rules Page Two";
                 public const string CHOOSEEMOJI = "[FINDABLE] Choose Emoji Canvas";
+                public const string CHALLENGES = "[FINDABLE] Challenges Canvas";
             }
 
             public static class BUTTONNAMES

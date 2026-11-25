@@ -4372,7 +4372,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Cascadia.Unity.UI::Cascadia.Unity.UI.TitleCanvasInitializer
   challengeScreen: {fileID: 2000722017}
   mainTitleScreen: {fileID: 183811480}
-  KeepOpen: '[FINDABLE] Title Canvas'
 --- !u!4 &616521362
 Transform:
   m_ObjectHideFlags: 0
@@ -9030,6 +9029,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 2000722017}
+        m_TargetAssemblyTypeName: Cascadia.Unity.UI.ChallengeScreen, Cascadia.Unity.UI
+        m_MethodName: ClearChallenge
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 2000722010}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -9883,6 +9894,7 @@ MonoBehaviour:
   playButton: {fileID: 268034677}
   challengeListParent: {fileID: 414014997}
   challengeDescriber: {fileID: 677478052}
+  challengeScrollView: {fileID: 1041282645}
   challengeScreenButtonPF: {fileID: 5208947602131020110, guid: 92f354e9723ff2548b39bb0cb9ad7b0c, type: 3}
   challenges:
   - {fileID: 11400000, guid: 39d0736803ee35746a1039e08f623b4e, type: 2}
@@ -9892,6 +9904,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 340b0a7bf86653c4e99dcfeb602ad974, type: 2}
   - {fileID: 11400000, guid: c6b4c0e694af969418ab1ffbdcb077e0, type: 2}
   - {fileID: 11400000, guid: 689c5bac2398f064a8bdb54532d88815, type: 2}
+  - {fileID: 11400000, guid: 90e9811f725e49041bf8af8059625d39, type: 2}
 --- !u!1 &2046313998
 GameObject:
   m_ObjectHideFlags: 0

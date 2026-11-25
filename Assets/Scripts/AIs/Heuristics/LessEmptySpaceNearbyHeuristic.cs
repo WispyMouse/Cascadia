@@ -4,7 +4,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Less Nearby Space Heuristic.asset", menuName = "COSTCO/AI Heuristic/Less Nearby Space")]
+    [CreateAssetMenu(fileName = "Less Nearby Space Heuristic.asset", menuName = "Cascadia/AI Heuristic/Less Nearby Space")]
     public class LessEmptySpaceNearbyHeuristic : AIHeuristic
     {
         public int Radius = 1;

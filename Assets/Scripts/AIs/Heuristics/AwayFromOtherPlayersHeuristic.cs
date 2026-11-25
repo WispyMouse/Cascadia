@@ -3,7 +3,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Away From Other Players Heuristic.asset", menuName = "COSTCO/AI Heuristic/Away From Player")]
+    [CreateAssetMenu(fileName = "Away From Other Players Heuristic.asset", menuName = "Cascadia/AI Heuristic/Away From Player")]
     public class AwayFromOtherPlayersHeuristic : AIHeuristic
     {
         /// <summary>

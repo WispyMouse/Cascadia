@@ -4,7 +4,7 @@
     using Cascadia.DataStructures;
     using UnityEngine;
 
-    [CreateAssetMenu(fileName = "Develops Origin Directionalities Heuristic.asset", menuName = "COSTCO/AI Heuristic/Develops Origin Directionalities")]
+    [CreateAssetMenu(fileName = "Develops Origin Directionalities Heuristic.asset", menuName = "Cascadia/AI Heuristic/Develops Origin Directionalities")]
     public class DevelopsOriginDirectionalitiesHeuristic : AIHeuristic
     {
         /// <summary>

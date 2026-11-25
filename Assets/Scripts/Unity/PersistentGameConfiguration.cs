@@ -1,14 +1,15 @@
 ﻿namespace Cascadia.Unity
 {
     using System.Collections.Generic;
-    using Cascadia.DataStructures;
-    using Cascadia.AIs;
-    using UnityEngine;
-    using System.Threading.Tasks;
-    using Cascadia.Unity.UI;
-    using UnityEngine.AddressableAssets;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
+    using Cascadia.AIs;
+    using Cascadia.DataStructures;
+    using Cascadia.Unity.UI;
+    using UnityEngine;
+    using UnityEngine.AddressableAssets;
+    using static UnityEngine.Audio.GeneratorInstance;
 
     public class PersistentGameConfiguration : MonoBehaviour
     {
@@ -103,7 +104,7 @@
             // Ensure there are at least enough players to fill out a minimum game
             for (int ii = this.players.Count; ii < BoardState.MINIMUMPLAYERS; ii++)
             {
-                this.AddPlayer();
+                this.AddPlayer(true);
             }
 
             // After starting, send up the event that the game configuration has changed
@@ -150,6 +151,8 @@
                 // If this is what we're trying to remove, snip it
                 if (this.Players[ii] == toRemove)
                 {
+                    Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(RemovePlayer)} Removing player {toRemove.PlayerName} at index {ii}");
+
                     startRemoving = true;
                     this.players.RemoveAt(ii);
                     this.gameConfiguration.PlayerCount = this.players.Count;
@@ -169,8 +172,10 @@
         /// will already have the appropriate <see cref="PlayerProfile.Index"/>.
         /// </summary>
         /// <returns></returns>
-        public PlayerProfile AddPlayer()
+        public PlayerProfile AddPlayer(bool setSprite)
         {
+            Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(AddPlayer)} Adding new player, index {this.players.Count}");
+
             // Fire-and-forget way of assigning sprites after they're loaded
             static async void AssignAddedPlayerASprite(PlayerProfile playerProfile)
             {
@@ -183,13 +188,15 @@
                 Index = this.players.Count
             };
 
-            // Fire off async void to eventually assign graphic
-            // We can know if there isn't an assigned graphic yet by asking PlayerProfile.HasSprite
-            AssignAddedPlayerASprite(newProfile);
+            if (setSprite)
+            {
+                // Fire off async void to eventually assign graphic
+                // We can know if there isn't an assigned graphic yet by asking PlayerProfile.HasSprite
+                AssignAddedPlayerASprite(newProfile);
+            }
 
             newProfile.KnockoutColor = this.knockoutColorsForTurns[newProfile.Index];
             newProfile.SetAICore(null);
-            newProfile.PlayerName = HUMAN;
 
             this.players.Add(newProfile);
             this.gameConfiguration.PlayerCount = this.players.Count;
@@ -199,6 +206,8 @@
 
         public void ForceSetConfig(GameConfiguration configuration, bool challengeMode = false)
         {
+            Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(ForceSetConfig)} Asked to force set config for custom gameplay.");
+
             this.gameConfiguration = configuration;
 
             this.EnsurePlayerCount(configuration.PlayerCount, challengeMode);
@@ -209,9 +218,25 @@
 
                 for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
                 {
-                    PersistentGameConfiguration.Singleton.Players[ii + 1].SetAICore(PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]));
-                    PersistentGameConfiguration.Singleton.Players[ii + 1].UpdateSprite(new PlayerProfileSprite(this.currentChallenge.AISprites[ii], "?"));
+                    PersistentGameConfiguration.Singleton.Players[ii + 1].SetAICore(PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]), this.currentChallenge.AISprites[ii]);
                 }
+            }
+
+            this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
+        }
+
+        public void ForceSetConfig(ChallengeDefinition challenge)
+        {
+            Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(ForceSetConfig)} Asked to force set config for challenge {challenge.ChallengeName}");
+
+            this.gameConfiguration = challenge.GetGameConfiguration();
+            this.EnsurePlayerCount(this.gameConfiguration.PlayerCount, true);
+
+            this.Players[0].SetAICore(null);
+
+            for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
+            {
+                PersistentGameConfiguration.Singleton.Players[ii + 1].SetAICore(PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]), this.currentChallenge.AISprites[ii]);
             }
 
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
@@ -245,6 +270,8 @@
 
         public void EnsurePlayerCount(int size, bool setFirstToHuman = false)
         {
+            Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(EnsurePlayerCount)} Ensuring player size is at least {size}");
+
             int start = 0;
             if (setFirstToHuman && this.players.Any())
             {
@@ -260,7 +287,7 @@
             // Add players until we hit the limit
             for (int ii = start; ii < size; ii++)
             {
-                this.AddPlayer();
+                this.AddPlayer(false);
             }
         }
 
@@ -281,7 +308,8 @@
         {
             this.currentChallenge = definition;
 
-            this.ForceSetConfig(this.currentChallenge.GetGameConfiguration(), true);
+            this.ForceSetConfig(this.currentChallenge);
+
             this.OnChallengeSettingsUpdated?.Invoke(definition, await SaveGameManager.Singleton.GetClearCount(definition));
         }
     }

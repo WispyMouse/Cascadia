@@ -9,10 +9,11 @@
     /// This is split out so that we can refer to a coordinate without using Unity's core module.
     /// Caches the HashCode so that this can be used for lookup frequently.
     /// </summary>
-    public readonly struct Coordinate : IEquatable<Coordinate>, IFormattable
+    [Serializable]
+    public struct Coordinate : IEquatable<Coordinate>, IFormattable
     {
-        public readonly int X;
-        public readonly int Y;
+        public int X;
+        public int Y;
 
         public Coordinate(int x, int y)
         {

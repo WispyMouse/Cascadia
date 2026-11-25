@@ -70,9 +70,13 @@
             }
 
             // Wait until everyone's sprites are set up
-            while (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite))
+            if (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite))
             {
-                await Awaitable.NextFrameAsync();
+                Debug.Log($"Waiting for players that don't have an assigned sprite yet");
+                do
+                {
+                    await Awaitable.NextFrameAsync();
+                } while (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite));
             }
 
             this.ResetGame();

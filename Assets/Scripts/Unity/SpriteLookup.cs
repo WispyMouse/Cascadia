@@ -39,7 +39,7 @@
         {
             await this.spriteLoadingSemaphore.WaitAsync();
 
-            Debug.Log($"Random category chosen: {category}", this);
+            Debug.Log($"Category chosen: {category}", this);
 
             AsyncOperationHandle<IList<SpriteAtlas>> allAtlasWithCategory = Addressables.LoadAssetAsync<IList<SpriteAtlas>>(category);
             await allAtlasWithCategory.Task;
@@ -66,11 +66,11 @@
             return sprites;
         }
 
-        public async Awaitable<PlayerProfileSprite> GetRandomSpriteFromAnyCategory()
+        public async Awaitable<Sprite> GetRandomSpriteFromAnyCategory()
         {
             string chosenCategory = this.ChooseRandomCategory();
             IReadOnlyList<Sprite> sprites = await this.GetSpritesFromCategory(chosenCategory);
-            return new(sprites[Random.Range(0, sprites.Count)], chosenCategory);
+            return sprites[Random.Range(0, sprites.Count)];
         }
 
         public string ChooseRandomCategory()
@@ -85,20 +85,22 @@
         /// <returns></returns>
         public static async Task AssignRandomSpriteFromAddressablesAsync(PlayerProfile forProfile)
         {
-            PlayerProfileSprite sprite;
+            Sprite sprite;
+            string category;
             bool unique;
 
             do
             {
+                category = Singleton.ChooseRandomCategory();
+                IReadOnlyList<Sprite> sprites = await Singleton.GetSpritesFromCategory(category);
+                sprite = sprites[Random.Range(0, sprites.Count)];
                 unique = true;
-
-                sprite = await SpriteLookup.Singleton.GetRandomSpriteFromAnyCategory();
 
                 // Ensure no one else has this same icon
                 for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
                 {
-                    if (PersistentGameConfiguration.Singleton.Players[ii].HasSprite
-                        && ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite.Value.Sprite, sprite.Sprite))
+                    if (PersistentGameConfiguration.Singleton.Players[ii].SpriteStatus == PlayerProfile.PlayerProfileSpriteStatus.Saturated
+                        && ReferenceEquals(PersistentGameConfiguration.Singleton.Players[ii].Sprite, sprite))
                     {
                         unique = false;
                         break;
@@ -107,9 +109,9 @@
             }
             while (!unique);
 
-            Debug.Log($"Loading saturated icon {sprite.Sprite.name}");
+            Debug.Log($"Loading saturated icon {sprite.name}");
 
-            forProfile.UpdateSprite(sprite);
+            forProfile.UpdateSprite(sprite, category);
         }
     }
 }

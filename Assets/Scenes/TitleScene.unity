@@ -10461,6 +10461,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 293311330865039711, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3312798837105470071, guid: 120c51b902cf847438f7691f879fb52f, type: 3}
     - target: {fileID: 2456275654115017598, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_Name
       value: '[FINDABLE] Edit Player Canvas'
@@ -10549,6 +10553,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4254242431941285746, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 9184959684750031955, guid: 5ec626883d0b3cf408c76328535b252b, type: 3}
     - target: {fileID: 4768650004271073570, guid: 7b7d250f35933284eab4421a2d7dae31, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 

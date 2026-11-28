@@ -30,7 +30,7 @@
 
             // Add the human profile
             // Should always be the first entry
-            PersistentGameConfiguration.Singleton.EnsurePlayerCount(this.AICores.Count + 1, true);
+            PersistentGameConfiguration.Singleton.EnsurePlayerCount(this.AICores.Count + 1, true, false);
             profiles.Add(PersistentGameConfiguration.Singleton.Players[0]);
 
             for (int ii = 0; ii < this.AICores.Count; ii++)

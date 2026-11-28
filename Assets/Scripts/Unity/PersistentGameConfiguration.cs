@@ -41,7 +41,7 @@
         /// </summary>
         public float AnimationSpeedModifier =>
 #if UNITY_INCLUDE_TESTS
-                .001f;
+                .01f;
 #else
                 return 1f;
 #endif
@@ -204,23 +204,13 @@
             return newProfile;
         }
 
-        public void ForceSetConfig(GameConfiguration configuration, bool challengeMode = false)
+        public void ForceSetConfig(GameConfiguration configuration)
         {
             Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(ForceSetConfig)} Asked to force set config for custom gameplay.");
 
             this.gameConfiguration = configuration;
 
-            this.EnsurePlayerCount(configuration.PlayerCount, challengeMode);
-
-            if (challengeMode)
-            {
-                this.Players[0].SetAICore(null);
-
-                for (int ii = 0; ii < this.currentChallenge.AICores.Count; ii++)
-                {
-                    PersistentGameConfiguration.Singleton.Players[ii + 1].SetAICore(PersistentGameConfiguration.Singleton.AICores.IndexOf(this.currentChallenge.AICores[ii]), this.currentChallenge.AISprites[ii]);
-                }
-            }
+            this.EnsurePlayerCount(configuration.PlayerCount);
 
             this.OnGameplaySettingsUpdated?.Invoke(this.gameConfiguration);
         }
@@ -252,7 +242,7 @@
             {
                 foreach (PlayerProfile profile in this.players)
                 {
-                    if (!profile.HasSprite)
+                    if (profile.SpriteStatus != PlayerProfile.PlayerProfileSpriteStatus.Saturated)
                     {
                         await Task.Delay(1);
                         break;
@@ -268,7 +258,7 @@
             return this.players[forSide.PlayerProfileIndex];
         }
 
-        public void EnsurePlayerCount(int size, bool setFirstToHuman = false)
+        public void EnsurePlayerCount(int size, bool setFirstToHuman = false, bool setSprite = true)
         {
             Debug.Log($"{nameof(PersistentGameConfiguration)} {nameof(EnsurePlayerCount)} Ensuring player size is at least {size}");
 
@@ -287,7 +277,7 @@
             // Add players until we hit the limit
             for (int ii = start; ii < size; ii++)
             {
-                this.AddPlayer(false);
+                this.AddPlayer(setSprite);
             }
         }
 
@@ -302,6 +292,7 @@
         public void ClearChallenge()
         {
             this.currentChallenge = null;
+            this.EnsurePlayerCount(2, true);
         }
 
         public async void SetChallenge(ChallengeDefinition definition)

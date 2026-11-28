@@ -56,26 +56,9 @@
             this.textOfPlayer.gameObject.SetActive(true);
             this.textOfPlayer.text = profile.PlayerName;
 
-            if (profile.HasSprite)
-            {
-                this.iconOfPlayer.sprite = profile.Sprite.Value.Sprite;
-                this.iconRepresenterBase.SetActive(true);
-            }
-            else
-            {
-                void SetSpriteAfterLoad(PlayerProfile loaded)
-                {
-                    if (this.iconOfPlayer == null)
-                    {
-                        return;
-                    }
-
-                    this.iconOfPlayer.sprite = loaded.Sprite.Value.Sprite;
-                    this.iconRepresenterBase.SetActive(true);
-                }
-
-                profile.OnPlayerProfileSpriteLoaded += SetSpriteAfterLoad;
-            }
+            this.iconOfPlayer.sprite = null;
+            profile.AssignSpriteWhenReady(this.iconOfPlayer);
+            this.iconRepresenterBase.SetActive(true);
         }
 
         public void OnMinus()
@@ -104,7 +87,7 @@
             this.SetFromProfile(newProfile);
             this.playerConfiguratorSelector.UpdateFromMinusOrPlus();
 
-            while (!newProfile.HasSprite)
+            while (newProfile.SpriteStatus != PlayerProfile.PlayerProfileSpriteStatus.Saturated)
             {
                 await Task.Delay(1);
             }

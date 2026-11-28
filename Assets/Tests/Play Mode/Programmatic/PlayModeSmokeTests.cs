@@ -71,8 +71,8 @@
     ;
             for (int ii = 0; ii < turnPanel.Entries.Count; ii++)
             {
-                Assert.IsTrue(config.Players[ii].HasSprite, $"Player should have sprite saturated by now");
-                Assert.AreEqual(config.Players[ii].Sprite.Value.Sprite, turnPanel.Entries[ii].PlayerIcon.sprite, $"Expecting the player to have the assigned sprite.");
+                Assert.IsTrue(config.Players[ii].SpriteStatus == PlayerProfile.PlayerProfileSpriteStatus.Saturated, $"Player should have sprite saturated by now");
+                Assert.AreEqual(config.Players[ii].Sprite, turnPanel.Entries[ii].PlayerIcon.sprite, $"Expecting the player to have the assigned sprite.");
             }
         }
 

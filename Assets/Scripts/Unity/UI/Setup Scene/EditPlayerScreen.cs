@@ -72,15 +72,7 @@
             }
 
             this.UpdateAICore();
-
-            if (this.ShowingProfile.HasSprite)
-            {
-                this.UpdateIcon();
-            }
-            else
-            {
-                this.ShowingProfile.OnPlayerProfileSpriteLoaded += (PlayerProfile profile) => this.UpdateIcon();
-            }
+            profile.AssignSpriteWhenReady(this.playerSpriteDisplay);
         }
 
         public void ToggleHumanAI()
@@ -100,33 +92,6 @@
         }
 
         public void NameChanged(string newName) => this.ShowingProfile.SetName(newName);
-
-        private void UpdateIcon()
-        {
-            this.playerSpriteDisplay.sprite = this.ShowingProfile.Sprite.Value.Sprite;
-
-            int countWithIndex = 0;
-
-            // Check to see if there are any other players using the same icon; if they are, then we can't leave this screen yet!
-            for (int ii = 0, count = PersistentGameConfiguration.Singleton.Players.Count; ii < count; ii++)
-            {
-                // Count everything else
-                if (ii == this.ShowingProfile.Index)
-                {
-                    continue;
-                }
-
-                PlayerProfile profile = PersistentGameConfiguration.Singleton.Players[ii];
-
-                if (profile.HasSprite && ReferenceEquals(profile.Sprite.Value.Sprite, this.ShowingProfile.Sprite.Value.Sprite))
-                {
-                    countWithIndex++;
-                }
-            }
-
-            // If there was more than one with this icon, we can't allow you to select it
-            this.alreadyTakenPanel.SetActive(countWithIndex > 1);
-        }
 
         public void NextAICore()
         {

@@ -1,21 +1,36 @@
 ﻿namespace Cascadia.Unity
 {
     using System;
+    using System.Collections.Generic;
     using Cascadia.AIs;
     using Cascadia.Unity.UI;
     using UnityEngine;
+    using UnityEngine.Events;
+    using UnityEngine.UI;
 
     public class PlayerProfile
     {
-        public delegate void PlayerProfileDelegate(PlayerProfile profile);
-        public PlayerProfileDelegate OnPlayerProfileSpriteLoaded;
+        public enum PlayerProfileSpriteStatus
+        {
+            NotRequested = 0,
+            Requested = 1,
+            Saturated = 2
+        }
+
+        /// <summary>
+        /// When a PlayerProfile is initially setup, it may not yet have a Sprite.
+        /// If there's already a Sprite, we can pop this immediately.
+        /// If there isn't already a sprite, we'll pop it when the Sprite loads.
+        /// </summary>
+        private readonly UnityEvent<Sprite, string> pendingSpriteLoadActions = new();
 
         public int Index;
         public string PlayerName { get; private set; }
         public bool IsAI => this.AICoreIndex.HasValue;
 
-        public PlayerProfileSprite? Sprite { get; private set; }
-        public bool HasSprite => this.Sprite.HasValue;
+        public Sprite Sprite { get; private set; }
+        public string SpriteCategory { get; private set; }
+        public PlayerProfileSpriteStatus SpriteStatus { get; set; } = PlayerProfileSpriteStatus.NotRequested;
 
         public Color KnockoutColor;
 
@@ -29,7 +44,8 @@
 
             if (setSprite != null)
             {
-                this.Sprite = new() { Sprite = setSprite, Category = "???", SpriteName = setSprite.name };
+                this.Sprite = setSprite;
+                this.SpriteStatus = PlayerProfileSpriteStatus.Saturated;
             }
 
             if (!coreIndex.HasValue)
@@ -45,29 +61,71 @@
         public void SetAICore(int coreIndex, Sprite sprite)
         {
             this.AICoreIndex = coreIndex;
-            this.Sprite = new PlayerProfileSprite(sprite);
-            this.PlayerName = this.Sprite.Value.SpriteName;
+            this.Sprite = sprite;
+            this.PlayerName = this.Sprite.name;
+            this.SpriteStatus = PlayerProfileSpriteStatus.Saturated;
+            this.SpriteCategory = "???";
         }
 
-        public void UpdateSprite(PlayerProfileSprite sprite)
+        public void AssignSpriteWhenReady(Image imageToApply)
+        {
+            if (this.SpriteStatus == PlayerProfileSpriteStatus.Saturated)
+            {
+                imageToApply.sprite = this.Sprite;
+                return;
+            }
+
+            this.SpriteStatus = PlayerProfileSpriteStatus.Requested;
+
+            this.pendingSpriteLoadActions.AddListener((newSprite, category) =>
+            {
+                // Null check in case the image is not no longer with us
+                if (imageToApply == null)
+                {
+                    return;
+                }
+
+                this.SpriteCategory = category;
+                imageToApply.sprite = newSprite;
+            });
+        }
+
+        public void AssignSpriteWhenReady(SpriteRenderer spriteRendererToApply)
+        {
+            if (this.SpriteStatus == PlayerProfileSpriteStatus.Saturated)
+            {
+                spriteRendererToApply.sprite = this.Sprite;
+                return;
+            }
+
+            this.SpriteStatus = PlayerProfileSpriteStatus.Requested;
+
+            this.pendingSpriteLoadActions.AddListener((newSprite, category) =>
+            {
+                // Null check in case the image is not no longer with us
+                if (spriteRendererToApply == null)
+                {
+                    return;
+                }
+
+                this.SpriteCategory = category;
+                spriteRendererToApply.sprite = newSprite;
+            });
+        }
+
+        public void UpdateSprite(Sprite sprite, string category)
         {
             this.Sprite = sprite;
+            this.SpriteCategory = category;
 
             if (this.IsAI)
             {
-                this.PlayerName = sprite.SpriteName;
+                this.PlayerName = sprite.name;
             }
 
-            if (this.OnPlayerProfileSpriteLoaded != null)
-            {
-                this.OnPlayerProfileSpriteLoaded.Invoke(this);
-
-                // Clear out all listeners, to avoid having stale images trying to update when this profile updates later
-                foreach (Delegate d in this.OnPlayerProfileSpriteLoaded.GetInvocationList())
-                {
-                    this.OnPlayerProfileSpriteLoaded -= (PlayerProfileDelegate)d;
-                }
-            }
+            this.SpriteStatus = PlayerProfileSpriteStatus.Saturated;
+            this.pendingSpriteLoadActions?.Invoke(sprite, category);
+            this.pendingSpriteLoadActions?.RemoveAllListeners();
         }
 
         public bool MatchesSprite(Sprite sprite)
@@ -78,7 +136,7 @@
                 return false;
             }
 
-            return ReferenceEquals(this.Sprite.Value.Sprite, sprite) || string.Equals(this.Sprite.Value.SpriteName, sprite.name);
+            return ReferenceEquals(this.Sprite, sprite) || string.Equals(this.Sprite.name, sprite.name);
         }
 
         public void SetName(string newName)

@@ -1,6 +1,7 @@
 ﻿namespace Cascadia.Unity.UI.SetupScene
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using UnityEngine;
@@ -42,7 +43,7 @@
         {
             this.gameObject.SetActive(true);
             this.ShowingForProfile = showingForProfile;
-            await this.ShowCategory(showingForProfile.Sprite.Value.Category);
+            await this.ShowCategory(showingForProfile.SpriteCategory);
         }
 
         private void EstablishCategories()
@@ -123,7 +124,7 @@
                 icon.SetSelectionStatus(this.ShowingForProfile.MatchesSprite(thisSprite));
             }
 
-            if (this.ShowingForProfile.Sprite.Value.Category == this.SelectedCategory)
+            if (this.ShowingForProfile.SpriteCategory == this.SelectedCategory)
             {
                 foreach (ChooseEmojiIcon icon in this.icons)
                 {
@@ -145,7 +146,7 @@
 
         public void SelectEmoji(ChooseEmojiIcon selected)
         {
-            this.ShowingForProfile.UpdateSprite(new PlayerProfileSprite(selected.RepresentedEmoji, this.SelectedCategory));
+            this.ShowingForProfile.UpdateSprite(selected.RepresentedEmoji, this.SelectedCategory);
 
             foreach (ChooseEmojiIcon icon in this.icons)
             {

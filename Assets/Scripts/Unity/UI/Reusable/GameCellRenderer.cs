@@ -64,28 +64,7 @@
             Debug.Log($"{nameof(GameCellRenderer)}.{nameof(SetSide)} {this.Coordinate} {nameof(newState)}: {newState}");
 
             rendererToDeSelect.sprite = null;
-
-            if (player.HasSprite)
-            {
-                rendererToSelect.sprite = player.Sprite.Value.Sprite;
-            }
-            else
-            {
-                rendererToSelect.sprite = null;
-
-                void UpdateSpriteFromProfile(PlayerProfile loaded)
-                {
-                    // Ensure that this GameObject isn't null-ish
-                    // Check this in case we've navigated scenes before the profile sprite was done
-                    if (this == null)
-                    {
-                        return;
-                    }
-
-                    rendererToSelect.sprite = loaded.Sprite.Value.Sprite;
-                }
-                player.OnPlayerProfileSpriteLoaded += UpdateSpriteFromProfile;
-            }
+            player.AssignSpriteWhenReady(rendererToSelect);
         }
 
         public void SetHighlightStatus(bool toHighlight)

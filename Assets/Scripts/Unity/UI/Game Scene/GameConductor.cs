@@ -70,18 +70,16 @@
             }
 
             // Wait until everyone's sprites are set up
-            if (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite))
+            if (PersistentGameConfiguration.Singleton.Players.Any(x => x.SpriteStatus != PlayerProfile.PlayerProfileSpriteStatus.Saturated))
             {
                 Debug.Log($"Waiting for players that don't have an assigned sprite yet");
                 do
                 {
                     await Awaitable.NextFrameAsync();
-                } while (PersistentGameConfiguration.Singleton.Players.Any(x => !x.HasSprite));
+                } while (PersistentGameConfiguration.Singleton.Players.Any(x => x.SpriteStatus != PlayerProfile.PlayerProfileSpriteStatus.Saturated));
             }
 
             this.ResetGame();
-            this.GameConductorWarmedUp = true;
-            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void ResetGame()
@@ -117,6 +115,9 @@
             this.cascadeBanner.ResetGame();
 
             this.canAwardChallengeWin = true;
+
+            this.GameConductorWarmedUp = true;
+            this.turnOrderHolder.OnTurnStarted?.Invoke(this.CurrentBoardState.CurrentPlayerSide, this.CurrentBoardState.CurrentRound);
         }
 
         public void ChooseCell(Coordinate toChoose) => this.ChooseCell(this.PositionsToCells[toChoose]);
@@ -199,26 +200,8 @@
 
             PlayerProfile player = PersistentGameConfiguration.Singleton.GetPlayerProfile(winner);
 
-            if (player.HasSprite)
-            {
-                this.winnerIcon.sprite = player.Sprite.Value.Sprite;
-            }
-            else
-            {
-                void UpdateWinnerIcon(PlayerProfile loaded)
-                {
-                    // Ensure that this GameObject isn't null-ish
-                    // Check this in case we've navigated scenes before the profile sprite was done
-                    if (this == null)
-                    {
-                        return;
-                    }
-
-                    this.winnerIcon.sprite = loaded.Sprite.Value.Sprite;
-                }
-
-                player.OnPlayerProfileSpriteLoaded += UpdateWinnerIcon;
-            }
+            this.winnerIcon.sprite = null;
+            player.AssignSpriteWhenReady(this.winnerIcon);
 
             string winnerName = player.PlayerName;
             this.winnerAnimation.ToDisplay = player;
